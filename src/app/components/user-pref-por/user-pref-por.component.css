@@ -1,0 +1,54 @@
+/* Specific field width CSS */
+@media(min-width: 576px) {
+  .req-number {
+   max-width: 16rem;
+   padding-bottom: 1rem;
+  }
+  .created-date /* input */ {
+    max-width: 16rem;
+  }
+  .purchase-category {
+    max-width: 37rem;
+    padding-bottom: 1rem;
+  }
+  .vendor {
+    max-width: 40rem;
+    min-width: 40rem;
+    padding-bottom: 1rem;
+  }
+  .lang {
+    max-width: 24rem;
+    min-width: 24rem;
+    padding-bottom: 1rem;
+  }
+  .ad-user /* input */ {
+    max-width: 40rem;
+    padding-bottom: 1rem;
+  }
+  .company {
+    max-width: 40rem;
+    min-width: 40rem;
+    padding-bottom: 1rem;
+  }
+  .status {
+    max-width: 17rem;
+    padding-bottom: 1rem;
+  }
+  ::ng-deep span.ng-value-label.ng-star-inserted {
+    max-width: 31rem;
+    overflow: hidden;
+  }
+}
+
+@media (max-width:600px) {
+  .input-width {
+    max-width: 270px;
+  }
+  .vendor {
+    max-width: 270px;
+  }
+  ::ng-deep span.ng-value-label.ng-star-inserted {
+    width: 10px;
+    background-color: white;
+  }
+}

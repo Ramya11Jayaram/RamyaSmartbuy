@@ -1,0 +1,128 @@
+<div class="jumbofix jumbotron bg-light align-items-center">
+  <div class="jumbo-content">
+    <!-- <span class="float-left clearfix" ><i class="pe-7s-box2"></i></span> -->
+    <div class="icon float-left clearfix shadow-lg">
+      <i class="pe-7s-box2"></i>
+    </div>
+    <div class="jumbo-info">
+      <h4 class="text-dark" *ngIf="poBRtoggle.value.typeToggle == 'por'" i18n="@@dashTitle">Purchase Order Requests</h4>
+      <h4 class="text-dark" *ngIf="poBRtoggle.value.typeToggle == 'br'" i18n="@@dashTitle1">Budget Authority Approver Requests</h4>
+      <p class="text-secondary" *ngIf="poBRtoggle.value.typeToggle == 'por'" i18n="@@dashSubTitle">
+        List of order requests you have submitted or waiting for your approval
+      </p>
+      <p class="text-secondary" *ngIf="poBRtoggle.value.typeToggle == 'br'" i18n="@@dashSubTitle1">
+        List of budget authority approval requests you have submitted or waiting for your approval
+      </p>
+    </div>
+    <div class="inbox container">
+      <app-search-por></app-search-por>
+    </div>
+
+    <form class="row justify-content-between" [formGroup]="poBRtoggle">
+      <div class="col-lg-3">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" formControlName="typeToggle" id="typeToggleRadio1" value="por" (change)="onTypeToggle()">
+          <label class="form-check-label" for="typeToggleRadio1" i18n="@@dashNPORadio">Purchase Order Request {{returnPORTotal()}}</label>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" formControlName="typeToggle" id="typeToggleRadio2" value="br" (change)="onTypeToggle()">
+          <label class="form-check-label" for="typeToggleRadio2" i18n="@@dashNBudgetRadio">Budget Authority Approver Request {{budgetTotal ? '(' + budgetTotal + ')' : ''}}</label>
+        </div>
+      </div>
+      <div class="col-lg-6">
+
+      </div>
+
+    </form>
+  </div>
+</div>
+<br>
+<button (click)="showSettings = !showSettings" class="btn btn-primary button-fix" i18n="@@dashNSections">Inbox Settings</button>
+<div class="row" *ngIf="showSettings">
+  <div class="col-lg-5">
+    <table class="table setting table-striped table-bordered">
+      <thead>
+        <tr>
+          <th i18n="@@dashNField">Field</th>
+          <th class="w70" i18n="@@dashNShow">Show?</th>
+          <th class="w70" i18n="@@dashNOrder">Order</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="poBRtoggle.controls.typeToggle.value == 'por'">
+        <tr *ngFor="let order of orderPrefPOR; let i = index">
+          <td class="text-wrap">{{ errTransService.returnMsg(order.display, true)}}</td>
+          <td><input class="form-check" type="checkbox" id="{{order.display + 'PORcheck'}}" [(ngModel)]="order.visible" [ngModelOptions]="{standalone: true}"></td>
+          <td><ng-select
+                [items]="[1, 2, 3, 4, 5]"
+                id="{{order.display + 'PORorder'}}"
+                [(ngModel)]="order.order"
+                (change)="reOrderOrderPref(orderPrefPORref[i].order, i)"
+                [ngModelOptions]="{standalone: true}"
+                [searchable]="false"
+                [dropdownPosition]="i > 1 ? 'top' : 'auto'"
+                class="hide-x"
+              ></ng-select>
+          </td>
+        </tr>
+      </tbody>
+      <tbody *ngIf="poBRtoggle.controls.typeToggle.value == 'br'">
+        <tr *ngFor="let order of orderPrefBr; let i = index">
+          <td class="text-wrap">{{order.display}}</td>
+          <td><input class="form-check" type="checkbox" id="{{order.display + 'BRcheck'}}" [(ngModel)]="order.visible" [ngModelOptions]="{standalone: true}"></td>
+          <td><ng-select
+                [items]="[1, 2, 3, 4, 5]"
+                id="{{order.display + 'BRorder'}}"
+                [(ngModel)]="order.order"
+                (change)="reOrderBrPref(orderPrefBrRef[i].order, i)"
+                [ngModelOptions]="{standalone: true}"
+                [searchable]="false"
+                [dropdownPosition]="i > 1 ? 'top' : 'auto'"
+                class="hide-x"
+              ></ng-select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div>
+      <button class="btn btn-primary" [disabled]=!allPrefs (click)="saveOrderPrefPOR()"  i18n="@@dashNSave">Save</button>
+    </div>
+  </div>
+</div>
+
+<ng-container *ngIf="poBRtoggle.value.typeToggle == 'por'">
+  <div class="inbox container">
+    <ngx-spinner name="porInboxSpinner">
+      <p class="loading"></p>
+    </ngx-spinner>
+    <ng-container *ngFor="let section of this.orderPrefPOR">
+      <app-inbox-section *ngIf="section.visible"
+        [prefs]="porInboxPref"
+        [list]="this[section.array]"
+        [title]="section.display"
+        [adUsers]="adUsers"
+        [reqType]="'por'"
+        [numberPref]="numberPref"
+        (pageNo)="onPageNoChange(section.array, $event)"
+      >
+      </app-inbox-section>
+    </ng-container>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="poBRtoggle.value.typeToggle == 'br'">
+  <div class="inbox container">
+    <ng-container *ngFor="let section of this.orderPrefBr">
+      <app-inbox-section
+        *ngIf="section.visible"
+        [list]="this[section.array]"
+        [title]="section.display"
+        [adUsers]="adUsers"
+        [reqType]="'budget'"
+      >
+
+      </app-inbox-section>
+    </ng-container>
+  </div>
+</ng-container>

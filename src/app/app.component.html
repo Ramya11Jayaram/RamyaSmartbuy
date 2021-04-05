@@ -1,0 +1,32 @@
+
+
+<div  *ngIf="!production" style="z-index: 1500 !important;" class="fixed-top">
+  <span class="nonProdMsg">
+    This is a test system
+  </span>
+</div>
+<app-navbar class="display-above-all" *ngIf='isAuthenticated'></app-navbar>
+
+<div class="display-above-content" *ngIf='isAuthenticated'>
+  <app-sidebar></app-sidebar>
+</div>
+
+<div class="my-content" [ngClass]="{'sidebar-out': !sidebarService.hideSidebar, 'remove-padding': !isAuthenticated }" > <!-- *ngIf="isAuthenticated" -->
+  <alert class="alert-service"></alert>
+  <router-outlet (activate)="onActivate($event)"></router-outlet>
+</div>
+
+<!-- <div class="content" *ngIf="!isAuthenticated" [ngClass]="{'sidebar-out': !sidebarService.hideSidebar }">
+  <button class="btn btn-primary m-5" (click)="oktaAuth.loginRedirect()">
+    Login
+  </button>
+</div> -->
+
+<!-- <div class="watermark" *ngIf="!production">
+
+</div> -->
+
+<app-footer class="display-beneath-sidebar w-100 overflow-hidden" *ngIf='isAuthenticated'></app-footer>
+<ngx-spinner type="ball-spin-clockwise">
+  <p class="loading">Fetching data...</p>
+</ngx-spinner>

@@ -1,0 +1,29 @@
+.custom-lg-div-btn {
+  font-size: 3rem;
+}
+.custom-lg-div {
+  font-size: 3rem;
+}
+.custom-lg-div-btn:hover{
+  cursor: pointer;
+}
+
+.jumbo-info {
+  margin-left: 7em;
+}
+.button-fix {
+  float: none;
+}
+@media (max-width: 600px) {
+  .card {
+    margin: 0!important;
+    padding-bottom: 3px!important;
+  }
+  .button-fix {
+    font-size:smaller;
+  }
+  ::placeholder {
+    font-size:xx-small;
+  }
+}
+

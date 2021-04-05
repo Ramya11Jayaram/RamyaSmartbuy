@@ -1,0 +1,443 @@
+<div class="jumbofix jumbotron bg-light align-items-center">
+  <div class="jumbo-content">
+    <div class="icon float-left clearfix shadow-lg">
+      <i class="pe-7s-display2"></i>
+    </div>
+    <div class="jumbo-info">
+      <h4 class="pb-5 text-dark" i18n="@@budgetreportTitle">Budget Authority Approver Details</h4>
+    </div>
+  </div>
+</div>
+
+<form [formGroup]="searchForm">
+  <div class="card searchcard shadow-lg custom-row-align">
+    <span *ngIf="reports[0]" class="text-primary custom-hover" i18n="@@budgetreportToggleFields" (click)="toggleSearch()"><i class="pe-7s-edit"></i>
+      Toggle Fields</span>
+    <ng-container *ngIf="searchOpened">
+      <div class="form-row justify-content-between align-content-center">
+        <h4 i18n="@@budgetreportSelection">Selection</h4>
+      </div>
+      <br />
+      <div class="form-row">
+        <div class="col sm-12 col-md-6">
+          <label i18n="@@budgetreportRegion">Approval Region</label>
+          <div class="input-group">
+            <ng-select [items]="regionOptions" i18n-placeholder="@@budgetreportMakeChoice" [multiple]="true" class="company" [closeOnSelect]="false" placeholder="Make a choice ..."
+              formControlName="currentRegion" [virtualScroll]="true">
+              <ng-template ng-multi-label-tmp>
+                <span style="display:block" class="ng-placeholder" i18n="@@budgetreportOneorMore">One or more items selected</span>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"
+                  [ngModelOptions]="{ standalone : true }" /> {{item}}
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-6">
+          <label i18n="@@budgetreportCompanyCode">Company Code</label>
+          <div class="input-group">
+            <ng-select [items]="companyOptions" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
+              bindValue="companyCode" [virtualScroll]="true" class="company" i18n-placeholder="@@budgetreportMakeChoice" placeholder="Make a choice ..."
+              formControlName="currentCompany">
+              <ng-template ng-multi-label-tmp>
+                <span style="display:block" class="ng-placeholder" i18n="@@budgetreportOneorMore">One or more items selected</span>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"
+                  [ngModelOptions]="{ standalone : true }" /> {{item.name}}
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="col-md-6">
+          <label i18n="@@budgetreportEmpName">Employee Name</label>
+          <div class="input-group">
+            <ng-select [items]="adusers" [multiple]="true" [closeOnSelect]="false" bindLabel="firstname"
+              bindValue="employeeId" class="company" i18n-placeholder="@@budgetreportOptional" formControlName="employee" placeholder="Optional"
+              [searchFn]="userSearchFn" [virtualScroll]="true">
+              <ng-template ng-multi-label-tmp>
+                <span style="display:block" class="ng-placeholder" i18n="@@budgetreportOneorMore">One or more items selected</span>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"
+                  [ngModelOptions]="{ standalone : true }" />
+                {{item.employeeId}} - {{item.firstname}} {{item.lastname}}, {{item.title}}
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-6">
+          <label i18n="@@budgetreportRepManager">Reporting Manager</label>
+          <ng-select [items]="adusers" bindLabel="firstname" bindValue="employeeId" class="company" i18n-placeholder="@@budgetreportOptional"
+            formControlName="reportingManager" placeholder="Optional" [virtualScroll]="true" [searchFn]="userSearchFn">
+            <ng-template ng-option-tmp let-item="item">
+              <div>{{item.employeeId}} - {{item.firstname}} {{item.lastname}}, {{item.title}}</div>
+            </ng-template>
+            <ng-template ng-label-tmp let-item="item">
+              <span>{{item.firstname}} {{item.lastname}}</span>
+            </ng-template>
+          </ng-select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-sm-12 col-md-6">
+          <label i18n="@@budgetreportCostCenter">Cost Center</label>
+          <div class="input-group">
+            <ng-select [items]="costCenterOptions" [virtualScroll]="true" bindLabel="searchable" bindValue="code"
+              class="company" formControlName="requesterCostCenter" placeholder="Choose a Cost Center" i18n-placeholder="@@budgetreportChooseCostCenter"
+              [multiple]="true" [closeOnSelect]="false">
+              <ng-template ng-multi-label-tmp>
+                <span style="display:block" class="ng-placeholder" i18n="@@budgetreportOneorMore">One or more items selected</span>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"
+                  [ngModelOptions]="{ standalone : true }" />
+                {{item.name}} - {{item.code}}
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-sm-auto">
+          <div class="form-check">
+            <input class="form-check-input" formControlName="adminAccess" name="commsRadio1" type="checkbox"
+              id="commsRadio1" value="1" />
+            <label for="commsRadio1" i18n="@@budgetreportAdminRadio">Admin/Buyer/Requester</label>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="col-sm-auto"> -->
+        <!--<div class="col-sm-auto">
+                <div class="form-check">
+                    <input
+                        class="form-check-input"
+                        formControlName="adminAccess"
+                        name="commsRadio2"
+                        type="checkbox"
+                        id="commsRadio2"
+                        value="2"
+
+                      />
+                </div>
+            </div>-->
+      <!-- </div> -->
+      <!-- <div class="form-row">
+        <div class="col-md-6">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            formControlName="activeuser"
+            name="commsRadio3"
+            type="checkbox"
+            id="commsRadio3"
+            value="1"
+
+          />
+          <label for="commsRadio3">Is Not Active</label>
+        </div>
+        </div>
+        </div>
+        <br/> -->
+      <div class="form-row">
+        <div class="col-sm-12 col-md-6">
+          <label i18n="@@budgetreportPC">Purchase Category</label>
+          <ng-select [items]="categoryOptions" bindLabel="Category" bindValue="ID" class="company"
+            formControlName="currentCategory" i18n-placeholder="@@budgetreportOptional" placeholder="Optional" (change)="loadLevels()">
+            <ng-template ng-option-tmp let-item="item">
+              <div>
+                {{item.Category}}
+              </div>
+            </ng-template>
+          </ng-select>
+        </div>
+      <!--Budget Authority Level-->
+        <div class="col-sm-12 col-md-6">
+          <label i18n="@@budgetreportBALevel">Budget Authority Level</label>
+          <div class="input-group">
+            <ng-select [items]="levelOptions" bindValue="level" class="company"
+              placeholder="Make a choice ..." formControlName="currentLevel"
+              i18n-placeholder="@@budgetreportMakeChoice"
+              [readonly]="!searchForm.value.currentCategory">
+              <ng-template ng-option-tmp let-item="item">
+                <div i18n="@@budgetreportUpto">Upto $ {{item.endRange}} </div>
+              </ng-template>
+              <ng-template ng-label-tmp let-item="item" i18n="@@budgetreportUpto">
+                Upto $ {{item.endRange}}
+              </ng-template>
+            </ng-select>
+            <!--
+              <span class="input-group-addon custom-hover">
+
+                <i class="pe-7s-plus text-primary"></i>
+              </span> -->
+          </div>
+        </div>
+        <div class="col-md-auto">
+          <span *ngFor="let level of levels" class="custom-badge-spacing">
+            <span class="badge badge-secondary">
+              {{ level }}
+              <a (click)="removeFromArray(levels, level)" class="custom-hover"><i class="pe-7s-close"></i>
+              </a>
+            </span>
+          </span>
+        </div>
+      </div>
+      <!--Finanace/Asset /IT Review-->
+      <div class="form-row">
+        <div class="col-md-6">
+          <label i18n="@@budgetreportReview">Review</label>
+          <div class="input-group">
+            <ng-select
+                [items]="reviewers"
+                bindValue="value"
+                class="company"
+                formControlName="reviewLevel"
+                i18n-placeholder="@@budgetreportMakeChoice"
+                placeholder="Make a choice ..."
+                [multiple]="true"
+                [closeOnSelect]="false"
+              >
+              <ng-template ng-multi-label-tmp>
+                <span style="display:block" class="ng-placeholder" i18n="@@budgetreportOneorMore">One or more items selected</span>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" [ngModelOptions]="{ standalone : true }"/>
+                {{item.text}}
+            </ng-template>
+             </ng-select>
+            <!--
+                <span class="input-group-addon custom-hover">
+
+                  <i class="pe-7s-plus text-primary"></i>
+                </span> -->
+          </div>
+        </div>
+      </div>
+
+
+      <br />
+      <div class="form-row justify-content-between">
+        <button class="btn btn-primary button-fix" i18n="@@budgetreportSearch" (click)="onSearchClick()">Search</button>
+        <button class="btn btn-primary button-fix" i18n="@@budgetreportReset" (click)="onClearFilters()">Reset Filters</button>
+      </div>
+      <br />
+    </ng-container>
+  </div>
+</form>
+
+<div class="card p-0 m-4 shadow-lg custom-table-wrapper table-wrapper-scroll-y" *ngIf="initialreports[0]">
+  <span class="p-3 text-primary custom-hover" i18n="@@budgetreportExport" (click)="saveExcel()">&nbsp;<i class="pe-7s-diskette"></i>Export</span>
+  <table id="table" matSort (matSortChange)="sortData($event)" data-toggle="table" data-search="true"
+    data-filter-control="true" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar"
+    scrollY="true" maxHeight="200" scrollX="true" maxWidth="400" [ngClass]="{'allColumns':!selectedCat, 'limitedColumns': selectedCat}"
+    class="table-responsive table-bordered table-striped tableClassName">
+    <thead>
+      <tr>
+        <th i18n="@@budgetreportTEmpID" class="c50" mat-sort-header="employeeID" data-field="porNum" data-filter-control="input" data-sortable="true">Employee
+          ID</th>
+        <th i18n="@@budgetreportTName" class="c80" mat-sort-header="displayName" data-field="status" data-filter-control="select" data-sortable="true">Name
+        </th>
+        <th i18n="@@budgetreportTTitle" class="c100" mat-sort-header="title" data-field="status" data-filter-control="select" data-sortable="true">Title</th>
+        <th i18n="@@budgetreportTRMgrName" class="c80" mat-sort-header="managerName" data-field="status" data-filter-control="select" data-sortable="true">
+          Reporting Mgr Name</th>
+        <th i18n="@@budgetreportTRMgrTitle" class="c100" mat-sort-header="managerID" data-field="category" data-filter-control="select" data-sortable="true">
+          Reporting Mgr Title</th>
+        <th i18n="@@budgetreportTCompanyCode" class="c50" mat-sort-header="companyCode" data-field="date" data-filter-control="select" data-sortable="true">Company
+          Code</th>
+        <th i18n="@@budgetreportTCostCenter" class="c40" mat-sort-header="costCenterCode" data-field="requisitioner" data-filter-control="input"
+          data-sortable="true">Cost Center</th>
+        <th i18n="@@budgetreportTRegion" class="c60" mat-sort-header="region" data-field="createdBy" data-filter-control="input" data-sortable="true">Region</th>
+
+        <th class="c70" mat-sort-header="mg1" data-field="company" data-filter-control="input" data-sortable="true"
+          *ngIf="selectedCat==1 || !selectedCat">{{showMGName(selectedCat,1)}}</th>
+        <th class="c80" mat-sort-header="mg2" data-field="vendorNum" data-filter-control="input" data-sortable="true"
+          *ngIf="selectedCat==2 || !selectedCat">{{showMGName(selectedCat,2)}}</th>
+        <th class="c70" mat-sort-header="mg3" data-field="ccenter" data-filter-control="input" data-sortable="true"
+          *ngIf="selectedCat==3 || !selectedCat">{{showMGName(selectedCat,3)}}</th>
+        <th class="c70" mat-sort-header="mg4" data-field="totalUsd" data-filter-control="input" data-sortable="true"
+          *ngIf="selectedCat==4 || !selectedCat">{{showMGName(selectedCat,4)}}</th>
+        <th class="c70" mat-sort-header="mg5" data-field="pendingw" data-filter-control="input" data-sortable="true"
+          *ngIf="selectedCat==5 || !selectedCat">{{showMGName(selectedCat,5)}}</th>
+        <th class="c70" mat-sort-header="mg6" data-field="pendings" data-filter-control="select" data-sortable="true"
+          *ngIf="selectedCat==6 || !selectedCat">{{showMGName(selectedCat,6)}}</th>
+        <th class="c80" mat-sort-header="mg7" data-field="lfab" data-filter-control="select" data-sortable="true"
+          *ngIf="selectedCat==7 || !selectedCat">{{showMGName(selectedCat,7)}}</th>
+        <th class="c80" mat-sort-header="mg8" data-field="lfad" data-filter-control="select" data-sortable="true"
+          *ngIf="selectedCat==8 || !selectedCat">{{showMGName(selectedCat,8)}}</th>
+        <th class="c70" mat-sort-header="mg9" data-field="sapponum" data-filter-control="input" data-sortable="true"
+          *ngIf="selectedCat==9 || !selectedCat">{{showMGName(selectedCat,9)}}</th>
+        <th class="c70" mat-sort-header="mg10" data-field="matno" data-filter-control="input" data-sortable="true"
+          *ngIf="selectedCat==10 || !selectedCat">{{showMGName(selectedCat,10)}}</th>
+
+        <th i18n="@@budgetreportTF1" class="c60" mat-sort-header="f1" data-field="shorttext" data-filter-control="input" data-sortable="true">Finance
+          Reviewer - F1</th>
+        <th i18n="@@budgetreportTF2" class="c60" mat-sort-header="f2" data-field="currency" data-filter-control="select" data-sortable="true">Finance
+          Reviewer - F2</th>
+        <th i18n="@@budgetreportTIsR" class="c50" mat-sort-header="it" data-field="unitcost" data-filter-control="input" data-sortable="true">IS Reviewer</th>
+
+        <th i18n="@@budgetreportTAssetR" class="c50" mat-sort-header="a1" data-field="unitcost" data-filter-control="input" data-sortable="true">Asset Reviewer
+        </th>
+        <th class="c50" i18n="@@budgetreportTCFORev"  mat-sort-header="cfo" data-field="unitcost" data-filter-control="input" data-sortable="true">CFO Reviewer
+        </th>
+        <th class="c70" i18n="@@budgetreportTAdmin" mat-sort-header="adminAccess" data-field="totalusd" data-filter-control="input" data-sortable="true">
+          Admin/ Buyer/ Requester</th>
+        <th class="c60" i18n="@@budgetreportTRecCreatedOn" mat-sort-header="addDate" data-field="ddate" data-filter-control="select" data-sortable="true">Record
+          created on</th>
+        <th class="c60" i18n="@@budgetreportTRecChanged"  mat-sort-header="editDate" data-field="ddate" data-filter-control="select" data-sortable="true">Record changed on
+        </th>
+
+      </tr>
+      <!-- <tr class="filter-row">
+        <td  *ngFor="let item of tableColumns; let i = index">
+            <input *ngIf="item.type != 'date'" [(ngModel)]="item.val" (change)='applyFilter($event, item.col, i,item.type)' (keyup)='applyFilter($event, item.col, i,item.type)' type='text'/>
+            <input *ngIf="item.type === 'date'" [(ngModel)]="item.val" (change)='applyFilter($event, item.col, i,item.type)' type="date" />
+         </td>
+      </tr> -->
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let report of reports |  paginate: { itemsPerPage: (itemsPerPage || 10), currentPage: m, id: 'm' }; let i = index">
+        <td class="c50">{{report?.employeeID}}</td>
+        <td class="c80">{{report?.displayName}}</td>
+        <td class="c100">{{displayUserTitle(report?.employeeID)}}</td>
+        <td class="c80">{{report?.managerName}}</td>
+        <td class="c100">{{displayUserTitle(report?.managerID)}}</td>
+        <td class="c50">{{report?.companyCode}}</td>
+        <td class="c40">{{report?.costCenterCode}}</td>
+        <td class="c60">{{report?.region}}</td>
+        <td class="c70" *ngIf="selectedCat==1 || !selectedCat">{{displayRange(1,report?.mg1)}}</td>
+        <td class="c80" *ngIf="selectedCat==2 || !selectedCat">{{displayRange(2,report?.mg2)}}</td>
+        <td class="c70" *ngIf="selectedCat==3 || !selectedCat">{{displayRange(3,report?.mg3)}}</td>
+        <td class="c70" *ngIf="selectedCat==4 || !selectedCat">{{displayRange(4,report?.mg4)}}</td>
+        <td class="c70" *ngIf="selectedCat==5 || !selectedCat">{{displayRange(5,report?.mg5)}}</td>
+        <td class="c70" *ngIf="selectedCat==6 || !selectedCat">{{displayRange(6,report?.mg6)}}</td>
+        <td class="c80" *ngIf="selectedCat==7 || !selectedCat">{{displayRange(7,report?.mg7)}}</td>
+        <td class="c80" *ngIf="selectedCat==8 || !selectedCat">{{displayRange(8,report?.mg8)}}</td>
+        <td class="c70" *ngIf="selectedCat==9 || !selectedCat">{{displayRange(9,report?.mg9)}}</td>
+        <td class="c70" *ngIf="selectedCat==10 || !selectedCat">{{displayRange(10,report?.mg10)}}</td>
+        <!--<td>{{report.mg11}}</td>
+              <td>{{report.mg12}}</td>
+              <td>{{report.mg13}}</td>
+              <td>{{report.mg14}}</td>
+              <td>{{report.mg15}}</td> -->
+        <td class="c60">{{report?.f1}}</td>
+        <td class="c60">{{report?.f2}}</td>
+        <td class="c50">{{report?.it}}</td>
+        <td class="c50">{{report?.a1}}</td>
+        <td class="c50">{{report?.cfo}}</td>
+        <!--<td>{{report.fg}}</td>
+              <td>{{report.cfo}}</td>
+              <td>{{report.it}}</td>-->
+        <td class="c70">{{report?.adminAccess}}</td>
+        <td class="c60">{{report?.adddate | date : dateFormat}}</td>
+        <td class="c60">{{report?.editdate | date : dateFormat}}</td>
+      </tr>
+    </tbody>
+    <!-- <tfoot>
+            <tr>
+              <td colspan='42'>
+
+              </td>
+            </tr>
+          </tfoot> -->
+  </table>
+  <div class="row">
+    <div class="col-sm-12 col-md-4">
+      <pagination-controls [previousLabel]="errTransService.returnMsg('previous')" [nextLabel]="errTransService.returnMsg('next')" (pageChange)="m = $event" id="m"></pagination-controls>
+    </div>
+    <div class="col-xs-12 col-md-4">
+      <span i18n="@@budgetreportItemsPerPage">Items Per Page:<input type="number" style="width:50px" [(ngModel)]="itemsPerPage" /></span>
+    </div>
+  </div>
+  <table [hidden]="true" id="excel-budget-table" data-toggle="table" data-search="true" data-filter-control="true"
+    data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar" scrollY="true" maxHeight="200"
+    scrollX="true" maxWidth="400" class="table-responsive table-bordered table-striped tableClassName">
+    <thead>
+      <tr>
+        <th i18n="@@budgetreportTEmpID" data-field="porNum" data-filter-control="input" data-sortable="true">Employee ID</th>
+        <th i18n="@@budgetreportTName" data-field="status" data-filter-control="select" data-sortable="true">Name</th>
+        <th data-field="status" i18n="@@budgetreportTTitle" data-filter-control="select" data-sortable="true">Title</th>
+        <th data-field="status" i18n="@@budgetreportTRMgrName" data-filter-control="select" data-sortable="true">Reporting Mgr Name</th>
+        <th data-field="category" i18n="@@budgetreportTRMgrTitle" data-filter-control="select" data-sortable="true">Reporting Mgr Title</th>
+        <th data-field="date" i18n="@@budgetreportTCompanyCode" data-filter-control="select" data-sortable="true">Company Code</th>
+        <th data-field="requisitioner" i18n="@@budgetreportTCostCenter" data-filter-control="input" data-sortable="true">Cost Center</th>
+        <th data-field="createdBy" i18n="@@budgetreportTRegion" data-filter-control="input" data-sortable="true">Region</th>
+
+        <th data-field="company" data-filter-control="input" data-sortable="true"
+          *ngIf="selectedCat==1 || !selectedCat">{{showMGName(selectedCat,1)}}</th>
+        <th data-field="vendorNum" data-filter-control="input" data-sortable="true"
+          *ngIf="selectedCat==2 || !selectedCat">{{showMGName(selectedCat,2)}}</th>
+        <th data-field="ccenter" data-filter-control="input" data-sortable="true"
+          *ngIf="selectedCat==3 || !selectedCat">{{showMGName(selectedCat,3)}}</th>
+        <th data-field="totalUsd" data-filter-control="input" data-sortable="true"
+          *ngIf="selectedCat==4 || !selectedCat">{{showMGName(selectedCat,4)}}</th>
+        <th data-field="pendingw" data-filter-control="input" data-sortable="true"
+          *ngIf="selectedCat==5 || !selectedCat">{{showMGName(selectedCat,5)}}</th>
+        <th data-field="pendings" data-filter-control="select" data-sortable="true"
+          *ngIf="selectedCat==6 || !selectedCat">{{showMGName(selectedCat,6)}}</th>
+        <th data-field="lfab" data-filter-control="select" data-sortable="true" *ngIf="selectedCat==7 || !selectedCat">
+          {{showMGName(selectedCat,7)}}</th>
+        <th data-field="lfad" data-filter-control="select" data-sortable="true" *ngIf="selectedCat==8 || !selectedCat">
+          {{showMGName(selectedCat,8)}}</th>
+        <th data-field="sapponum" data-filter-control="input" data-sortable="true"
+          *ngIf="selectedCat==9 || !selectedCat">{{showMGName(selectedCat,9)}}</th>
+        <th data-field="matno" data-filter-control="input" data-sortable="true" *ngIf="selectedCat==10 || !selectedCat">
+          {{showMGName(selectedCat,10)}}</th>
+        <th i18n="@@budgetreportTF1" data-field="shorttext" data-filter-control="input" data-sortable="true">Finance Reviewer - F1</th>
+        <th i18n="@@budgetreportTF2" data-field="currency" data-filter-control="select" data-sortable="true">Finance Reviewer - F2</th>
+        <th i18n="@@budgetreportTIsR" data-field="unitcost" data-filter-control="input" data-sortable="true">IS Reviewer</th>
+
+        <th i18n="@@budgetreportTAssetR" data-field="unitcost" data-filter-control="input" data-sortable="true">Asset Reviewer</th>
+        <th i18n="@@budgetreportTCFORev" data-field="unitcost" data-filter-control="input" data-sortable="true">CFO Reviewer</th>
+        <th i18n="@@budgetreportTAdmin" data-field="totalusd" data-filter-control="input" data-sortable="true">Admin/Buyer/Requester</th>
+        <th i18n="@@budgetreportTRecCreatedOn" data-field="ddate" data-filter-control="select" data-sortable="true">Record created on</th>
+        <th i18n="@@budgetreportTRecChanged" data-field="ddate" data-filter-control="select" data-sortable="true">Record changed on</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let report of reports |  paginate: { itemsPerPage: (reports.length), currentPage: m1, id: 'm1' }; let i = index">
+        <td>{{report?.employeeID}}</td>
+        <td>{{report?.displayName}}</td>
+        <td>{{displayUserTitle(report?.employeeID)}}</td>
+        <td>{{report?.managerName}}</td>
+        <td>{{displayUserTitle(report?.managerID)}}</td>
+        <td>{{report?.companyCode}}</td>
+        <td>{{report?.costCenterCode}}</td>
+        <td>{{report?.region}}</td>
+        <td *ngIf="selectedCat==1 || !selectedCat">{{displayRange(1,report?.mg1)}}</td>
+        <td *ngIf="selectedCat==2 || !selectedCat">{{displayRange(2,report?.mg2)}}</td>
+        <td *ngIf="selectedCat==3 || !selectedCat">{{displayRange(3,report?.mg3)}}</td>
+        <td *ngIf="selectedCat==4 || !selectedCat">{{displayRange(4,report?.mg4)}}</td>
+        <td *ngIf="selectedCat==5 || !selectedCat">{{displayRange(5,report?.mg5)}}</td>
+        <td *ngIf="selectedCat==6 || !selectedCat">{{displayRange(6,report?.mg6)}}</td>
+        <td *ngIf="selectedCat==7 || !selectedCat">{{displayRange(7,report?.mg7)}}</td>
+        <td *ngIf="selectedCat==8 || !selectedCat">{{displayRange(8,report?.mg8)}}</td>
+        <td *ngIf="selectedCat==9 || !selectedCat">{{displayRange(9,report?.mg9)}}</td>
+        <td *ngIf="selectedCat==10 || !selectedCat">{{displayRange(10,report?.mg10)}}</td>
+        <!--<td>{{report.mg11}}</td>
+            <td>{{report.mg12}}</td>
+            <td>{{report.mg13}}</td>
+            <td>{{report.mg14}}</td>
+            <td>{{report.mg15}}</td> -->
+        <td>{{report?.f1}}</td>
+        <td>{{report?.f2}}</td>
+        <td>{{report?.it}}</td>
+        <td>{{report?.a1}}</td>
+        <td>{{report?.cfo}}</td>
+        <!--<td>{{report.fg}}</td>
+            <td>{{report.cfo}}</td>
+            <td>{{report.it}}</td>-->
+        <td>{{report?.adminAccess}}</td>
+        <td>{{report?.adddate | date : dateFormat}}</td>
+        <td>{{report?.editdate | date : dateFormat}}</td>
+      </tr>
+    </tbody>
+    <pagination-controls (pageChange)="m1 = $event" id="m1"></pagination-controls>
+  </table>
+
+</div>

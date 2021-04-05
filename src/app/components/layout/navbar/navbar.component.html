@@ -1,0 +1,22 @@
+
+<nav [ngClass]="{'nonprod':!isProd}" class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <app-sidebar-toggler></app-sidebar-toggler>
+  <div class="custom-nav-spacing align-content-center align-items-center">
+    <div>
+      <img
+        class="p-3 navbar-brand custom-brand"
+        src="../../../../assets/images/logo.png"
+        alt="Epsmartbuy-app Logo"
+      />
+    </div>
+
+    <div>
+      <span *ngIf="getProxy()" i18n="@@navbarProxy" class="txt-usr txt-usr-no-underline">{{'{'}}Logged in as: {{ getProxy() }}{{'}'}} | </span>
+      <span
+        ><a class="txt-usr" (click)="onUserClick()">{{ this.userName }}</a>
+        <span class="text-light"> | </span>
+        <a (click)="onLogoutClick()" class="txt-logout" i18n="@@navbarLogOut">Log out</a></span
+      >
+    </div>
+  </div>
+</nav>

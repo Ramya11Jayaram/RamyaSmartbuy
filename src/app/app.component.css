@@ -1,0 +1,69 @@
+.my-content {
+  padding-top:4.5em;
+  min-height: 100vh;
+  transition: all 0.3s;
+  overflow: hidden;
+}
+
+.display-above-content {
+  position: absolute;
+  z-index: 901 !important;
+  transition: all 0.3s;
+}
+
+.display-above-all {
+  position: absolute;
+  z-index: 902 !important;
+}
+
+.display-beneath-sidebar {
+  position:absolute;
+  z-index: 900 !important;
+}
+
+.nonProdMsg {
+  display:block;
+  width:100vw;
+  background:red;
+  text-align: center;
+  font-weight: bold;
+  color:white
+}
+
+.watermark {
+  position: fixed;
+  z-index: 899 !important;
+  pointer-events: none;
+  background-image: url('src/assets/images/testsys.png');
+  background-repeat: repeat;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  bottom: 0;
+  opacity: 0.1;
+}
+
+/* We will need to activate this when the sidebar opens somehow */
+.sidebar-out {
+  margin-left: 250px;
+  overflow: hidden;
+}
+
+@media(max-width: 575px) {
+  .sidebar-out {
+    margin-left: 0px;
+  }
+}
+
+.remove-padding {
+  padding-top:0;
+}
+
+.alert-service {
+  width: 100%;
+  position: fixed;
+  z-index: 903 !important;
+  transition: all 0.3s;
+  top: 5em;
+}
+

@@ -1,0 +1,59 @@
+.jumbo-info {
+  margin-left: 7em;
+}
+/* div > span > img {
+  height: 100%;
+  width: 100%;
+}
+ */
+/* i {
+  font-size: 75px;
+} */
+table.setting {
+  max-width : 600px;
+}
+
+@media (min-width: 1200px) {
+  .btn-btm {
+    margin-top: 290px;
+  }
+}
+.button-fix {
+  float: none;
+}
+.w70 {
+  width: 70px;
+}
+.inbox {
+  width: 98%;
+  margin: 10px;
+  max-width:100%
+}
+.wid-70 {
+  width: 70px;
+}
+
+.icon {
+  width: 5rem;
+  height: 5rem;
+  background-image: radial-gradient(
+    circle farthest-corner at 0.7% 2.3%,
+    white 0%,
+    white 100.2%
+  );
+  border-radius: 5px;
+  border-radius: 5px;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  justify-items: center;
+  text-align: center;
+  font-size: 4rem;
+}
+table {
+  table-layout: fixed ;
+  width: 100% ;
+}
+td {
+  width: 20% ;
+}

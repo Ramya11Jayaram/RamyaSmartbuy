@@ -1,0 +1,32 @@
+.custom-overflow {
+  overflow-x: auto;
+}
+
+.icon {
+  width: 5rem;
+  height: 5rem;
+  background-image: radial-gradient(
+    circle farthest-corner at 0.7% 2.3%,
+    white 0%,
+    white 100.2%
+  );
+  border-radius: 5px;
+  border-radius: 5px;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  justify-items: center;
+  text-align: center;
+  font-size: 4rem;
+}
+
+.jumbo-info {
+  margin-left: 7em;
+}
+
+@media (max-width: 600px) {
+ table {
+   width: 2000px!important;
+   max-width: 2000px!important;
+ }
+}

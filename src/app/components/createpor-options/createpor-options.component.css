@@ -1,0 +1,17 @@
+.custom-lg-div-btn {
+  font-size: 3rem;
+}
+.custom-lg-div {
+  font-size: 3rem;
+}
+.custom-lg-div-btn:hover{
+  cursor: pointer;
+}
+
+.jumbo-info {
+  margin-left: 7em;
+}
+.button-fix {
+  float: none;
+}
+

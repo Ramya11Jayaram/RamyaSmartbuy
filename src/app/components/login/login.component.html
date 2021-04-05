@@ -1,0 +1,90 @@
+<div class="page-content" *ngIf='false'>
+  <div class="cardcontainer rounded">
+    <div class="card">
+      <div class="card-header">
+        <img class="rounded" src="../../../assets/images/logo_ameri.png" alt="placeholder" />
+      </div>
+      <div class="card-body">
+        <span class="text-secondary h6">Sign into your ESAP account</span>
+        <form [formGroup]="loginForm">
+          <div class="form-group">
+            <label for="email">
+              Username
+            </label>
+            <input
+              id="email"
+              type="text"
+              formControlName="email"
+              class="form-control"
+              placeholder="User Name"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              formControlName="password"
+              class="form-control"
+              placeholder="Credentials"
+              required
+            />
+          </div>
+          <div class="w-100 row d-flex align-items-baseline justify-content-between">
+            <div class="form-check d-inline-block m-1">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value=""
+                id="check1"
+                formControlName="stayIn"
+              />
+              <label class="form-check-label text-small" for="check1">
+                Keep Me Signed In
+              </label>
+            </div>
+            <div class="d-inline-block m-1">
+              <a class="text-secondary text-muted text-small"
+                >Help - Contact Support</a
+              >
+            </div>
+          </div>
+          <div class="align-items-center">
+            <button
+              type="submit"
+              class="btn btn-primary btn-block w-100 mb-3 button-fix"
+              (click)="onLoginClick()"
+              disabled
+            >
+              Login
+            </button>
+            <button class="btn btn-primary btn-block w-100 button-fix" (click)="oktaAuth.loginRedirect('home')">
+              Sign in with OKTA
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="card-footer">
+        <span class="text-secondary text-small"
+          >Create a ESAP account. If you have a Okta account, log into it for
+          accessing your apps. Sign in with Okta or ESAP.</span
+        >
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isAuthenticated">
+  <h1 i18n="@@loginError">An error has occurred.</h1>
+  <button (click)="onRedirectClick()" class="btn btn-lg btn-primary" i18n="@@loginHome">
+    Return to Home
+  </button>
+</div>
+
+<div *ngIf='!isAuthenticated' class="page-content">
+  <div id="okta-signin-container"></div>
+</div>

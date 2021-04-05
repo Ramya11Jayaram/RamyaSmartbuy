@@ -1,0 +1,5 @@
+
+<div *ngFor="let alert of alerts" class="{{cssClass(alert)}} rounded text-light close-visibility shadow-lg">
+  <a class="close" (click)="removeAlert(alert)"><i class="pe-7s-close"></i></a>
+  <span [innerHTML]="alert.message"></span>
+</div>

@@ -1,0 +1,28 @@
+.icon {
+  width: 5rem;
+  height: 5rem;
+  background-image: radial-gradient(
+    circle farthest-corner at 0.7% 2.3%,
+    white 0%,
+    white 100.2%
+  );
+  border-radius: 5px;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  justify-items: center;
+  text-align: center;
+  font-size: 4rem;
+}
+
+.jumbo-info {
+  margin-left: 7em;
+}
+
+.custom-lg-div-btn {
+  font-size: 3rem;
+}
+
+.custom-lg-div-btn:hover{
+  cursor: pointer;
+}

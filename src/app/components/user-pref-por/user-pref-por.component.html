@@ -1,0 +1,271 @@
+<form [formGroup]="porForm">
+  <ngx-spinner name="prefSpinner" type="ball-spin-clockwise">
+    <p class="loading" i18n="@@ncrequestnewFetchingData">Fetching data...</p>
+  </ngx-spinner>
+  <div class="card p-4 m-1">
+    <h5 class="mt-0" i18n="@@userprefporHeader">Header-default values</h5>
+
+    <div class="form-row">
+      <div class="col-lg-6">
+        <label i18n="@@ncrequestnewPurchaseCategory">Purchase Category</label>
+        <div class="input-group company">
+          <ng-select [items]="categoryOptions" [multiple]="true" [closeOnSelect]="false" bindValue="ID"
+            bindLabel="Category" placeholder="Make a choice ..." formControlName="currentCategory"
+            (change)="updateCategoryChangeFlag()" (close)="onCategoryChange()"
+            [virtualScroll]="true" class="vendor">
+            <ng-template ng-multi-label-tmp *ngIf="porForm?.controls?.currentCategory?.value?.length > 1">
+              <span style="display:block" class="ng-placeholder" i18n="@@substituteReportMulti">Multiple selected values</span>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"
+                [ngModelOptions]="{ standalone : true }" /> {{item.Category}}
+            </ng-template>
+          </ng-select>
+        </div>
+      </div>
+      <div class="col-lg-auto">
+
+        <label i18n="@@userprefCompany">Company</label>
+        <div class="input-group company">
+          <ng-select [items]="companyOptions" [multiple]="true" [closeOnSelect]="false" bindLabel="name" bindValue="companyCode"
+            (change)="updateCompanyChangeFlag()" (close)="onCompanyChange()" i18n-placeholder="@@statusreportOptional"  class="vendor" placeholder="Optional" formControlName="currentCompany" [virtualScroll]="true">
+            <ng-template ng-multi-label-tmp *ngIf="porForm?.controls?.currentCompany?.value?.length > 1">
+              <span style="display:block" i18n="@@substituteReportMulti" class="ng-placeholder">Multiple selected values</span>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"
+                [ngModelOptions]="{ standalone : true }" /> {{item.name}}
+            </ng-template>
+          </ng-select>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-lg-6">
+        <label i18n="@@budgetreportTCostCenter">Cost Center</label>
+        <div class="input-group company">
+          <ng-select [items]="costCenterOptions" [multiple]="true" [closeOnSelect]="false" bindLabel="searchable"
+            bindValue="id" class="vendor" placeholder="Optional" formControlName="currentCostCenter"
+            [readonly]="!porForm?.value?.currentCompany?.length" #cc i18n-placeholder="@@statusreportOptional"
+            [virtualScroll]="true">
+            <ng-template ng-multi-label-tmp *ngIf="porForm?.controls?.currentCostCenter?.value?.length > 1">
+              <span style="display:block" class="ng-placeholder" i18n="@@substituteReportMulti">Multiple selected values</span>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"
+                [ngModelOptions]="{ standalone : true }" /> {{item.name}} - {{item.code}}
+            </ng-template>
+          </ng-select>
+        </div>
+      </div>
+
+      <div class="col-lg-auto">
+        <label i18n="@@ncrequestviewReq">Requester</label>
+        <div class="input-group company">
+        <ng-select [items]="adusers" [multiple]="true" bindLabel="firstname" bindValue="ID" class="ad-user"
+          formControlName="currentRequester" i18n-placeholder="@@statusreportOptional" placeholder="Optional" [virtualScroll]="true">
+          <ng-template ng-multi-label-tmp *ngIf="porForm?.controls?.currentRequester?.value?.length > 1">
+            <span style="display:block" i18n="@@substituteReportMulti" class="ng-placeholder">Multiple selected values</span>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+            <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"
+              [ngModelOptions]="{ standalone : true }" />
+            {{item.employeeId}} - {{item.firstname}} {{item.lastname}}, {{item.title}}
+          </ng-template>
+        </ng-select>
+      </div>
+      </div>
+
+    </div>
+    <div class="form-row">
+      <div class="col-lg-6">
+        <label i18n="@@ncrequestnewVendor">Vendor</label>
+        <div class="input-group company">
+          <ng-select [items]="vendorOptions" [multiple]="true" [closeOnSelect]="false" bindValue="id"
+            bindLabel="searchable" i18n-placeholder="@@statusreportOptional" placeholder="Optional" formControlName="currentVendor"
+            [readonly]="!porForm?.controls?.currentCompany?.value?.length" [virtualScroll]="true" class="vendor input-width">
+            <ng-template ng-multi-label-tmp *ngIf="porForm?.controls?.currentVendor?.value?.length > 1">
+              <span style="display:block" i18n="@@substituteReportMulti" class="ng-placeholder">Multiple selected values</span>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"
+                [ngModelOptions]="{ standalone : true }" /> {{item.searchable}}
+            </ng-template>
+          </ng-select>
+        </div>
+      </div>
+      <div class="col-lg-auto">
+        <label i18n="@@ncrequestnewSpecialInstructionToVendor">Special Instructions to Vendor</label>
+        <div class="vendor input-group">
+          <textarea name="specialInstructions" id="specialInstructions" formControlName="specialInstructions"
+            class="form-control"></textarea>
+
+
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+
+  <div class="card p-4 m-1">
+    <h5 class="mt-0" i18n="@@userprefporLine">Line-default values</h5>
+    <div class="form-row">
+      <div class="col-lg-6">
+        <label i18n="@@ncrequestviewGLAcc">G/L Account</label>
+        <div class="input-group company">
+          <ng-select [items]="glAccountOptions" [multiple]="true" [closeOnSelect]="false" bindValue="id"
+            bindLabel="searchable" i18n-placeholder="@@statusreportOptional" placeholder="Optional" formControlName="currentGLAccount" [virtualScroll]="true"
+            [readonly]="!porForm?.value?.currentCompany?.length || !porForm?.value?.currentCategory?.length"
+            class="vendor">
+            <ng-template ng-multi-label-tmp *ngIf="porForm?.controls?.currentGLAccount?.value?.length > 1">
+              <span style="display:block" i18n="@@substituteReportMulti" class="ng-placeholder">Multiple selected values</span>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"
+                [ngModelOptions]="{ standalone : true }" /> {{item.accDesc}} - {{item.accountNumber | glAccount}}
+            </ng-template>
+          </ng-select>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <label i18n="@@userprefporUOM">Unit of Measure </label>
+        <div class="input-group company">
+          <ng-select [items]="uomFav" [multiple]="true" [closeOnSelect]="false" placeholder="Optional"
+          i18n-placeholder="@@statusreportOptional"
+            formControlName="currentUOM" bindValue="id" bindLabel="searchable" class="vendor">
+            <ng-template ng-multi-label-tmp *ngIf="porForm?.controls?.currentUOM?.value?.length > 1">
+              <span style="display:block" i18n="@@substituteReportMulti" class="ng-placeholder">Multiple selected values</span>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <input class="mt-1" id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"
+                [ngModelOptions]="{ standalone : true }" />{{item.unit}} - {{item.description}}
+            </ng-template>
+            <ng-template ng-footer-tmp>
+              <div (click)="uomExpand()" class="cursor-pointer" *ngIf="uomFav.length == 5" i18n="@@ncrequestviewShowMore">Show more...</div>
+              <div (click)="uomUnexpand()" class="cursor-pointer" *ngIf="uomFav.length != 5" i18n="@@ncrequestviewShowLess">Show less...</div>
+            </ng-template>
+          </ng-select>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  <div class="card p-4 m-1">
+    <h5 class="mt-0" i18n="@@userprefporShip">Ship To Address-default values</h5>
+    <div class="form-row">
+      <div class="col-lg-6">
+        <label i18n="@@ncrequestnewName">Name</label>
+        <input id="name" name="npor_shiptoname" type="text" formControlName="shipToName" class="form-control vendor" />
+      </div>
+      <div class="col-lg-auto">
+        <label i18n="@@ncrequestnewStreet">Street</label>
+        <input id="street" type="text" name="npor_street" formControlName="shipToStreet" class="form-control vendor" />
+      </div>
+
+    </div>
+    <div class="form-row">
+      <div class="col-lg-6">
+        <label i18n="@@ncrequestnewCity">City</label>
+        <input id="city" type="text" name="npor_city" formControlName="shipToCity" class="form-control vendor" />
+      </div>
+      <div class="col-lg-auto">
+        <label i18n="@@ncrequestnewState">State</label>
+        <ng-select [items]="stateByCountryOptions" bindLabel="stateName" bindValue="stateCode"
+          i18n-placeholder="@@ncrequestnewChooseACountry"
+          formControlName="shipToState" class="vendor" [readonly]="!porForm?.value?.shipToCountry"
+          placeholder="Choose a Country first...">
+        </ng-select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-lg-6">
+        <label i18n="@@ncrequestnewZip">Zip</label>
+        <input id="zip" name="npor_zip" type="text" formControlName="shipToZip" class="form-control vendor" />
+      </div>
+      <div class="col-lg-auto">
+        <label i18n="@@ncrequestnewCountry">Country</label>
+        <ng-select [items]="countryOptions" bindLabel="name" bindValue="code" formControlName="shipToCountry"
+          (change)="onCountryChange()" class="vendor" i18n-placeholder="@@ncrequestnewChoose" placeholder="Choose..." appendTo="body"></ng-select>
+      </div>
+    </div>
+  </div>
+  <div class="card p-4 m-1">
+    <h5 class="mt-0" i18n="@@userprefporSystem">System settings</h5>
+    <div class="form-row">
+      <div class="col-lg-6">
+        <label i18n="@@userprefporLang">Language *</label>
+        <ng-select [items]="languageOptions" bindLabel="lang" bindValue="lang" formControlName="language"
+       class="lang" appendTo="body"></ng-select>
+      </div>
+      <div class="col-lg-auto">
+        <label i18n="@@userprefporNum">Numbering Format *</label>
+        <ng-select [items]="numberFormats" bindLabel="format" bindValue="format" formControlName="numberFormat"
+       class="lang" appendTo="body"></ng-select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-lg-6">
+        <label i18n="@@userprefporDate">Date Format *</label>
+        <ng-select [items]="dateFormats" bindLabel="format" bindValue="format" formControlName="dateFormat"
+       class="lang" appendTo="body"></ng-select>
+      </div>
+      <div class="col-lg-auto">
+        <label i18n="@@userprefporTime">Time Format *</label>
+        <ng-select [items]="timeFormats" bindLabel="format" bindValue="format" formControlName="timeFormat"
+       class="lang" appendTo="body"></ng-select>
+      </div>
+    </div>
+  </div>
+  <div class="card p-4 m-1">
+    <h5 class="mt-0" i18n="@@userprefporInbox">Inbox column settings for POR</h5>
+    <div class="form-row overflow-auto">
+      <table class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th class="min-width-7" i18n="@@userprefporCol">Column</th>
+            <th class="min-width-7" i18n="@@userprefporVisible">Visible</th>
+            <th class="min-width-8" i18n="@@userprefporPosition">Position</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td i18n="@@userprefporPOR">POR #</td>
+            <td><input class="form-check-input" type="checkbox" checked disabled></td>
+            <td>
+              <select class="form-control" disabled>
+                <option value="">1</option>
+              </select>
+            </td>
+          </tr>
+          <tr *ngFor="let item of inboxColumns; let i = index">
+            <td class="text-wrap">{{errTransService.returnMsg(item.column)}}</td>
+            <td>
+              <input class="form-check-input" type="checkbox" id="porColumnCheck{{i}}" [(ngModel)]="item.visible"
+                [ngModelOptions]="{standalone: true}" (change)="onCheckboxChange()"
+              >
+            </td>
+            <td>
+              <select id="porColumnOrder{{i}}" name="porColumnOrder{{i}}" [(ngModel)]="item.position" class="form-control"
+                [ngModelOptions]="{standalone: true}" (change)="onInboxColumnChange(item.column, inboxColReference[i].position, item.position, i)"
+              >
+                <option *ngFor="let num of inboxOrderNums" [value]="num">{{num}}</option>
+              </select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div>
+    <!-- Wrap button so it doesn't get huge -->
+    <button class="btn btn-primary float-none" i18n="@@userprefSave" (click)="onPrefSave()">
+      Save
+    </button>
+  </div>
+
+</form>

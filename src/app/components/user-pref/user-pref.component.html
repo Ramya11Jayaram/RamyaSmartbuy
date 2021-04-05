@@ -1,0 +1,305 @@
+<div class="jumbofix jumbotron bg-light align-items-center">
+  <div class="jumbo-content">
+    <!-- <span class="float-left clearfix" ><i class="pe-7s-box2"></i></span> -->
+    <div class="icon float-left clearfix shadow-lg">
+      <i class="pe-7s-user"></i>
+    </div>
+    <div class="jumbo-info">
+      <h4 class="text-dark" i18n="@@userprefTitle">User Preference</h4>
+      <p class="text-secondary" i18n="@@userprefSubTitle">
+        Application specific and global preferences
+      </p>
+    </div>
+  </div>
+</div>
+<div class="card p-4 m-1 shadow-lg no-border">
+  <div class="card p-4 m-1 shadow no-border">
+    <h1 class="display-6 text-secondary" i18n="@@userprefHello">Hello, {{ username }}</h1>
+    <p class="lead" i18n="@@userprefHeaderText">
+      Configure your application specific and global preferences
+    </p>
+  </div>
+  <br />
+  <form [formGroup]="globalPrefs" class="card p-4 m-1 shadow no-border">
+    <div class="alert alert-secondary">
+      <b i18n="@@userprefGlobalPref">Global Preferences</b>
+    </div>
+    <h5 class="text-secondary card-title">
+      <strong i18n="@@userprefShared">SETTINGS SHARED ACROSS ALL APPLICATIONS</strong>
+    </h5>
+    <h5 class="text-primary" i18n="@@userprefGeneral">General</h5>
+    <div class="form-row">
+      <div class="col-sm-6">
+        <!-- <div class="form-group general">
+          <label for="dateFormat">Date Format</label>
+          <select
+            disabled
+            class="form-control"
+            formControlName="dateFormat"
+            id="dateFormat"
+          >
+            <option value="" disabled hidden selected>-</option>
+            <option value="1">System Default</option>
+            <option value="2">MM/DD/YYYY</option>
+            <option value="3">DD/MM/YYYY</option>
+          </select>
+        </div> -->
+        <!-- <div class="form-group general">
+          <label for="timeZone">Time Zone</label>
+          <select formControlName="timeZone" id="timeZone" class="form-control">
+            <option value="" disabled hidden selected>-</option>
+            <option value="1">System Default</option>
+            <option value="2">Pacific (UTC-8)</option>
+            <option value="3">India (UTC+5:30)</option>
+          </select>
+        </div>
+        <div class="form-group general">
+          <label for="output">Output</label>
+          <select formControlName="output" id="output" class="form-control">
+            <option value="" selected disabled hidden>-</option>
+            <option value="1">No preference</option>
+            <option value="2">Sample Option</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group general">
+          <label for="timeFormat">Time Format</label>
+          <select
+            formControlName="timeFormat"
+            id="timeFormat"
+            class="form-control"
+          >
+            <option value="" disabled hidden selected>-</option>
+            <option value="1">System Default</option>
+            <option value="2">12h</option>
+            <option value="3">24h</option>
+          </select>
+        </div>
+        <div class="form-group number-format">
+          <label for="numberFormat">Number Format</label>
+          <select
+            formControlName="numberFormat"
+            id="numberFormat"
+            class="form-control"
+          >
+            <option value="" disabled hidden selected>-</option>
+            <option value="1">No preference</option>
+            <option value="2">Comma, Dot (1,111.1)</option>
+            <option value="3">Dot, Comma (1.111,1)</option>
+          </select>
+        </div> -->
+        <div class="form-group proxy-user" *ngIf="!isProd">
+          <label for="proxyUser" i18n="@@userprefProxyUser">Proxy User</label>
+          <ng-select
+            [items]="adUsers"
+            [virtualScroll]="true"
+            bindLabel="firstname"
+            bindValue="ID"
+            id="proxyUser"
+            formControlName="proxyUser"
+            [searchFn]="proxyUserSearchFn"
+            i18n-placeholder="@@userprefSelectProxy"
+            placeholder="Select a Proxy User, or leave this blank to reset."
+          >
+            <ng-template ng-option-tmp let-item="item">
+              <div>{{item.firstname}} {{item.lastname}} - {{item.employeeId}}</div>
+            </ng-template>
+            <ng-template ng-label-tmp let-item="item">
+              <div>{{item.firstname}} {{item.lastname}} - {{item.employeeId}}</div>
+            </ng-template>
+          </ng-select>
+        </div>
+      </div>
+    </div>
+    <div>
+      <!-- wrap button so it does not get huge -->
+      <button i18n="@@userprefSave" class="btn btn-primary float-none" (click)="onGeneralSave()">
+        Save
+      </button>
+    </div>
+    <br />
+
+    <h5 class="text-primary" i18n="@@userprefSub">User Substitution</h5>
+    <div class="form-row">
+      <div class="col-lg-2 form-group">
+        <label i18n="@@userprefRegion">Region</label>
+        <input class="region form-control" disabled value="{{ this.substituteUserInfo.region }}">
+      </div>
+      <div [ngClass]="{'col-lg-5' : substituteUserInfo.isAdmin, 'col-lg-3': !substituteUserInfo.isAdmin}" >
+        <div class="form-row">
+          <div class="col-lg-6 form-group" *ngIf="this.substituteUserInfo.isAdmin">
+            <label i18n="@@userprefRFor">Request For</label>
+            <ng-select
+              [items]="hrUsers"
+              bindLabel="displayValue"
+              name="up_reqfor"
+              class="user"
+              [virtualScroll]="true"
+              formControlName="adminSubFor"
+              i18n-placeholder="@@userprefSelectSub"
+              placeholder="Select to substitute for someone else"
+              (change)="onSubFor($event)"
+              [searchFn]="hrUserSearchFn"
+            >
+              <ng-template ng-option-tmp let-item="item">
+                <div>{{ item.firstName }} {{ item.lastName}} - {{ item.employeeID }}</div>
+                <small>{{ item.title }}</small>
+              </ng-template>
+            </ng-select>
+          </div>
+          <div [ngClass]="{'col-lg-6' : substituteUserInfo.isAdmin, 'col-lg-12': !substituteUserInfo.isAdmin}" class="form-group">
+            <label i18n="@@userprefSubAuth">Substitute Authority</label>
+            <ng-select
+              [items]="this.substituteUserInfo.substitutors"
+              [virtualScroll]="true"
+              name="up_sub"
+              class="user"
+              bindLabel="fullName"
+              formControlName="substituteAuth"
+              i18n-placeholder="@@userprefSelectUserSub"
+              placeholder="Select a user for substitution"
+            >
+              <ng-template ng-option-tmp let-item="item" *ngIf="!showAll">
+                <div>{{ item.fullName }} - {{ item.employeeID }}</div>
+                <small>{{ item.region }}: {{ item.title }}</small>
+                <div>
+                  <small>{{ item.availability }}</small>
+                </div>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" *ngIf="showAll">
+                <div>{{ item.firstName }} {{ item.lastName}} - {{ item.employeeID }}</div>
+                <small>{{ item.title }}</small>
+              </ng-template>
+              <ng-template ng-footer-tmp *ngIf="substituteUserInfo.isAdmin">
+                <div (click)="showAllHRUser()" i18n="@@userPrefShowAllUsers" class="cursor-pointer">Show All Users</div>
+
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3">
+        <div class="form-row">
+          <div class="col-lg-6 form-group">
+            <label i18n="@@userprefFromDate">From Date</label>
+            <input type="date" class="date form-control" formControlName="subFromDate" id="subFromDate" />
+          </div>
+          <div class="col-lg-6 form-group">
+            <label i18n="@@userprefToDate">To Date</label>
+            <input type="date" class="date form-control" formControlName="subToDate" id="subToDate" />
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-1 form-group">
+        <label>&nbsp;</label>
+        <button
+          name="up_activate"
+          class="button-fix btn btn-primary"
+          i18n="@@userprefActivate"
+          (click)="onSubActivate()"
+        >
+          Activate
+        </button>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-lg-auto">
+        <div class="form-row" *ngIf="!substituteUserInfo.isAdmin">
+          <button i18n="@@userprefShowActiveBtn" class="history-btn" name="up_showactive" (click)="onShowHistory(true)">Show Active Substitution </button>
+          <!-- <button i18n="@@userprefShowInactiveBtn" class="history-btn" name="up_showinactive" (click)="onShowHistory('InActive')">Show Inactive Substitutions</button> -->
+          <button i18n="@@userprefShowSubBtn" class="history-btn" name="up_showhistory" (click)="onShowHistory()">Show Substitution History</button>
+        </div>
+        <div class="form-row" *ngIf="substituteUserInfo.isAdmin">
+          <button i18n="@@userprefShowActiveBtn" name="up_showactive1" (click)="onShowAdminHistory(true)">Show Active Substitution</button>
+          <!-- <button i18n="@@userprefAdminInactiveBtn" name="up_showinactive1" (click)="onShowAdminHistory('InActive')">(Admin): Inctive Substitutions You Created</button> -->
+          <button i18n="@@userprefShowSubBtn"  name="up_showadmin"  (click)="onShowAdminHistory()">Show Substitution History</button>
+        </div>
+        <br *ngIf="substituteUserInfo.activeSubs">
+        <label *ngIf="substituteUserInfo.activeSubs" i18n="@@userprefCreatedS"
+          >Created Substitutions</label
+        >
+        <div class="" *ngIf="substituteUserInfo.activeSubs">
+          <table id="table" matSort (matSortChange)="sortData($event)"
+          class="table-responsive table-bordered table-striped">
+          <thead>
+            <tr>
+              <th class="min2" i18n="@@dashT1Action">Action</th>
+              <th class="min2" mat-sort-header="statusSubstitutoer" i18n="@@userprefStatus">Status</th>
+              <th class="min1" *ngIf="substituteUserInfo.isAdmin" mat-sort-header="req_firstname" i18n="@@userprefNreqFor">Requested For</th>
+              <th class="min2" *ngIf="substituteUserInfo.isAdmin"  mat-sort-header="regionRequester" i18n="@@userprefNReqRegion">Requested For Region</th>
+              <th class="min1" mat-sort-header="sub_firstname" i18n="@@userprefNSubBy">Substitute Name</th>
+              <th class="min2" mat-sort-header="regionSubstituter" i18n="@@userprefNSubRegion">Substitute Region</th>
+              <th class="min2" mat-sort-header="validFrom" i18n="@@userprefFromDate">Date From</th>
+              <th class="min2" mat-sort-header="validTo" i18n="@@userprefToDate">Date To</th>
+              <th class="min1" mat-sort-header="createdBy" i18n="@@userprefCBy">Created By</th>
+              <th class="min2" mat-sort-header="creationDate" i18n="@@userprefNCreatedDate">Created On</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let report of substituteUserInfo.activeSubs |  paginate: { itemsPerPage: (itemsPerPage || 10), currentPage: m,id: 'm' }; let i = index">
+              <td>
+                <p><span *ngIf="report?.statusSubstitutoer == 'Active'">&nbsp;&nbsp;&nbsp;<span class="badge badge-pill bg-danger cursor-pointer custom-red-hover" i18n="@@userprefDeActivate" (click)="onSubDeactivate(report)">
+                  Deactivate Now
+                </span></span></p>
+              </td>
+              <td>{{report?.statusSubstitutoer}}</td>
+              <td *ngIf="substituteUserInfo.isAdmin">{{report?.adInfo_requester?.firstname + ' ' + report?.adInfo_requester?.lastname + '-' + report?.requesterEid + ', ' + report?.adInfo_requester?.title}}</td>
+
+
+              <td *ngIf="substituteUserInfo.isAdmin">{{report?.regionRequester}}</td>
+              <td>{{report?.adInfo_substituter?.firstname + ' ' + report?.adInfo_substituter?.lastname + '-' + report?.substituteEid + ', ' + report?.adInfo_substituter?.title}}</td>
+
+
+              <td>{{report?.regionSubstituter}}</td>
+              <td>{{report?.validFrom | date : dateFormat}}</td>
+              <td>{{report?.validTo | date : dateFormat}}</td>
+              <td><span *ngIf="report.createdBy">
+                {{report?.adInfo_created?.firstname + ' ' + report?.adInfo_created?.lastname + '-' + report?.createdBy + ', ' + report?.adInfo_created?.title}}
+              </span></td>
+              <td>{{report?.creationDate | date : dateFormat}}</td>
+            </tr>
+          </tbody>
+
+        </table>
+        <div class="row" *ngIf="showLegend || substituteUserInfo.isAdmin">
+          <div class="col-sm-12 col-md-4">
+            <pagination-controls [previousLabel]="errTransService.returnMsg('previous')" [nextLabel]="errTransService.returnMsg('next')" (pageChange)="m = $event" id="m"></pagination-controls>
+          </div>
+          <div class="col-xs-12 col-md-4">
+            <span i18n="@@statusreportItemsPerPage">Items Per Page:<input type="number" style="width:60px" [(ngModel)]="itemsPerPage" [ngModelOptions]="{standalone: true}"></span>
+          </div>
+        </div>
+
+        </div>
+        <p *ngIf="substituteUserInfo.activeSubs && substituteUserInfo.activeSubs.length == 0" i18n="@@userprefNothing">There is nothing to display.</p>
+      </div>
+      <div>
+        <p *ngIf="showLegend" i18n="@@userprefNLegend">
+          This report shows latest 30 days only, if you need to see previous data please use the Substitute report.
+        </p>
+      </div>
+    </div>
+    <ngx-spinner name="globalPrefSpinner" type="ball-beat">
+      <p class="loading" i18n="@@userprefFetchingData">Fetching data...</p>
+    </ngx-spinner>
+  </form>
+  <br />
+
+  <form [formGroup]="eprocurePrefs" class="card p-4 m-1 shadow no-border">
+    <div class="alert alert-secondary">
+      <b i18n="@@userprefAppSPref">App specific preferences</b>
+    </div>
+    <h5 class="text-secondary card-title">
+      <strong i18n="@@userprefEProc">EPROCUREMENT APP</strong>
+    </h5>
+    <h5 class="text-primary" i18n="@@userprefPRD">PR Details</h5>
+    <app-user-pref-por (refresh)="ngOnInit()"></app-user-pref-por>
+
+
+  </form>
+</div>

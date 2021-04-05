@@ -1,0 +1,208 @@
+<h3 class="text-dark">{{errTransService.returnMsg(title, true) }}</h3>
+<ng-container *ngIf="reqType === 'por'">
+  <div class="overflow-auto">
+    <table
+    matSort
+
+    class="table table-striped table-bordered"
+  ><!-- (matSortChange)="sortData($event)" -->
+  <!-- TODO: add the above comment into the missing line in table to re-enable the currently broken sorting -->
+    <thead>
+      <tr *ngIf="prefs">
+        <!-- mat-sort-header="#" -->
+        <!-- TODO: place the above commented line into the below empty space in the th to re-enable the currently broken sorting -->
+        <th
+
+        class="min-width-3"><div>#</div></th>
+        <ng-container *ngFor="let p of prefs">
+          <!-- [mat-sort-header]="p.column" -->
+          <!-- TODO: place the above commented line into the below empty space in the th to re-enable the currently broken sorting -->
+          <th *ngIf="p.visible"
+
+          [ngClass]="getClass(p.column)"
+          class="">{{ errTransService.returnMsg(p.column, true) }}</th>
+        </ng-container>
+        <!-- <th class="min-width-7">Action</th> -->
+      </tr>
+    </thead>
+    <tbody *ngIf="list">
+      <ng-container *ngIf="list[0]">
+        <tr #e
+          *ngFor="
+            let item of list
+              | paginate
+                : {
+                    itemsPerPage: itemsPerPage[0] || 10,
+                    currentPage: pagination[title],
+                    id: 'pagination' + title
+                  }
+          "
+        >
+        <td>
+          <div class="form-row">
+            <a
+            style="text-decoration: underline;"
+              *ngIf="item?.id"
+              [routerLink]=" [ item.approvelStatus == '1' ? '/draft' : '/ncrequestview', item.id]"
+            >
+            {{item?.id}}
+            </a>
+          </div>
+
+        </td>
+          <span hidden="true"
+            *ngIf="prefs && item"
+            [attr.class]="prefs | inboxPorEntry: e : item : dateFormat : numberPref"
+          ></span>
+          <!-- <td>
+            <div class="form-row justify-content-end justify-items-end">
+              <a
+                *ngIf="item?.compositeId?.id"
+                [routerLink]="['/ncrequestview', item.compositeId.id]"
+              >
+                <button class="btn btn-warning text-right" type="button">
+                  View
+                </button>
+              </a>
+            </div>
+          </td> -->
+        </tr>
+      </ng-container>
+
+      <tr *ngIf="list">
+        <td colspan="14">
+          <div class="row">
+            <div class="col-sm-12 col-md-4">
+              <pagination-controls
+              [previousLabel]="errTransService.returnMsg('previous')"
+              [nextLabel]="errTransService.returnMsg('next')"
+                (pageChange)="onPageChange($event, title)"
+                id="pagination{{ title }}"
+              ></pagination-controls>
+            </div>
+            <div class="col-xs-12 col-md-4">
+              <span i18n="@@dashItemsPerPage"
+                >Items Per Page:<input
+                  type="number"
+                  style="width: 50px;"
+                  [(ngModel)]="itemsPerPage[0]"
+                  (change)="onPageSizeChange()"
+                  (keyup)="onPageSizeChange()"
+              /></span>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+</ng-container>
+<ng-container *ngIf="reqType === 'budget'">
+  <div class="overflow-auto">
+    <table
+    class="table table-striped table-bordered"
+    matSort
+    (matSortChange)="sortBudget($event)"
+  >
+    <thead>
+      <tr>
+        <th mat-sort-header="#" class="min-width-3">
+          #
+        </th>
+        <th i18n="@@dashT1CBy" mat-sort-header="Creator" class="min-width-15">
+          Created By
+        </th>
+        <th i18n="@@dashT1RBy" mat-sort-header="Requester" class="min-width-15">
+          Requested By
+        </th>
+        <th i18n="@@dashT1CDate" mat-sort-header="Created On" class="min-width-15">
+          Created Date
+        </th>
+        <th i18n="@@dashT1Status" mat-sort-header="Status" class="min-width-15">
+          Status
+        </th>
+        <!-- <th class="min-width-7">
+          Action
+        </th> -->
+      </tr>
+    </thead>
+    <tbody *ngIf="list">
+      <tr
+        *ngFor="
+          let item of list
+            | paginate
+              : {
+                  itemsPerPage: itemsPerPage[5] || 10,
+                  currentPage: pagination[title],
+                  id: 'pagination' + title
+                }
+        "
+      >
+        <ng-container *ngIf="list[0]">
+          <td>
+            <div class="d-inline">
+              <a
+              style="text-decoration: underline;"
+              [routerLink]="['/barequestview', item?.budgetRequestId]">
+
+                {{ item.budgetRequestId }}
+
+              </a>
+
+              </div>
+          </td>
+          <td>
+            <div class="form-row">{{ returnUsername(item.createdby) }}</div>
+          </td>
+          <td>
+            <div class="form-row">
+              {{ returnUsernameByEAID(item.requester) }}
+            </div>
+          </td>
+          <td>
+            <span class="form-row" *ngIf="item.creationdate">{{
+              item.creationdate | date : dateFormat
+            }}</span>
+          </td>
+          <td>
+            <div class="form-row">{{errTransService.returnMsg(returnBrStatus(item.docStatus), true) }}</div>
+          </td>
+        </ng-container>
+        <!-- <td>
+          <div class="form-row justify-content-end justify-items-end">
+            <a [routerLink]="['/barequestview', item?.budgetRequestId]">
+              <button class="btn btn-warning text-right" type="button">
+                View
+              </button>
+            </a>
+          </div>
+        </td> -->
+      </tr>
+      <tr *ngIf="list">
+        <td colspan="5">
+          <div class="row">
+            <div class="col-sm-12 col-md-4">
+              <pagination-controls
+              [previousLabel]="errTransService.returnMsg('previous')"
+              [nextLabel]="errTransService.returnMsg('next')"
+                (pageChange)="pagination[title] = $event"
+                id="pagination{{ title }}"
+              ></pagination-controls>
+            </div>
+            <div class="col-xs-12 col-md-4">
+              <span i18n="@@dashItemsPerPage"
+                >Items Per Page:<input
+                  type="number"
+                  style="width: 50px;"
+                  [(ngModel)]="itemsPerPage[5]"
+              /></span>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+</ng-container>

@@ -1,0 +1,95 @@
+.jumbo-info {
+  margin-left: 7em;
+}
+/* div > span > img {
+  height: 100%;
+  width: 100%;
+}
+ */
+/* i {
+  font-size: 75px;
+} */
+.user /* input */ {
+  max-width: 44rem;
+  min-width: 160px;
+}
+.date {
+  max-width: 170px;
+}
+.button-fix {
+  float: none;
+}
+.region {
+  max-width: 44rem;
+}
+.icon {
+  width: 5rem;
+  height: 5rem;
+  background-image: radial-gradient(
+    circle farthest-corner at 0.7% 2.3%,
+    white 0%,
+    white 100.2%
+  );
+  border-radius: 5px;
+  border-radius: 5px;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  justify-items: center;
+  text-align: center;
+  font-size: 4rem;
+}
+
+/* Form field-specific css */
+
+@media (max-width: 600px) {
+
+  .history-btn {
+    width: 210px;
+    margin-bottom: 5px;
+  }
+  .min1 {
+    min-width: 130px;
+  }
+  .min2 {
+    min-width: 75px;
+  }
+}
+.min2 {
+  min-width: 80px;
+}
+
+@media (min-width: 576px) {
+
+  .general {
+    min-width: 16.5rem;
+    max-width: 16.5rem;
+  }
+
+  .number-format {
+    min-width: 19rem;
+    max-width: 19rem;
+  }
+
+  .company {
+    min-width: 33rem;
+    max-width: 33rem;
+  }
+
+  .por-type, .cost-center {
+    min-width: 38rem;
+    max-width: 38rem;
+  }
+
+  .purchase-category, .proxy-user {
+    min-width: 36rem;
+    max-width: 36rem;
+  }
+
+  .custom-red-hover:hover {
+    background-color: #c9302c !important;
+  }
+
+}
+
+

@@ -1,0 +1,20 @@
+.icon {
+  width: 5rem;
+  height: 5rem;
+  background-image: radial-gradient( circle farthest-corner at 0.7% 2.3%,  rgba(41,166,255,1) 0%, rgba(153,240,255,1) 100.2% );
+  border-radius: 5px;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  justify-items: center;
+  text-align: center;
+  font-size: 4rem;
+}
+
+.jumbo-info {
+  margin-left:7em;
+}
+
+a:hover {
+  cursor: pointer;
+}

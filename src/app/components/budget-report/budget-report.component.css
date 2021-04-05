@@ -1,0 +1,165 @@
+.jumbo-info {
+    margin-left: 7em;
+  }
+  /* div > span > img {
+    height: 100%;
+    width: 100%;
+  }
+   */
+  /* i {
+    font-size: 75px;
+  } */
+
+  .icon {
+    width: 5rem;
+    height: 5rem;
+    background-image: radial-gradient(
+      circle farthest-corner at 0.7% 2.3%,
+      white 0%,
+      white 100.2%
+    );
+    border-radius: 5px;
+    border-radius: 5px;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    justify-items: center;
+    text-align: center;
+    font-size: 4rem;
+  }
+  /* td {
+    white-space:nowrap;
+  } */
+
+  .custom-hover:hover {
+    cursor: pointer;
+  }
+
+  .custom-row-align .form-row {
+    align-items: center;
+  }
+
+  .custom-row-align .form-row.custom-radio-align {
+    align-items: baseline;
+  }
+
+  .custom-badge-spacing {
+    margin-right: 1em;
+  }
+
+  .button-fix {
+    float: none;
+  }
+
+  .responsive-table-fix {
+    display: inline-table;
+  }
+
+  th {
+    min-width:13rem;
+    /* white-space:nowrap; */
+  }
+
+  .filter-row {
+    background: whitesmoke;
+  }
+
+
+  /* Specific field width CSS */
+  @media(min-width: 576px) {
+    .region {
+        max-width: 37rem;
+        min-width: 37rem;
+      }
+      .company{
+        max-width: 40rem;
+        padding-bottom: 1rem;
+      }
+      .purchase-category{
+        max-width: 40rem;
+      }
+    .budget-authority {
+      max-width: 40rem;
+      min-width: 37rem;
+    }
+    .ad-user /* input */ {
+      max-width: 40rem;
+    }
+
+    .status {
+      max-width: 17rem;
+    }
+  }
+
+  @media (max-width:600px) {
+    .input-width {
+      max-width: 270px;
+    }
+    .vendorinfo {
+      display: flex;
+      white-space: nowrap;
+    }
+    .vendor-badge {
+      max-width: 280px;
+      overflow: hidden;
+    }
+  }
+
+  th {
+    color: white;
+  }
+
+ 
+  .table-wrapper-scroll-y {
+  display: block;
+  }
+
+  /* Please verify below */  
+
+ 
+ .tableClassName tbody {
+  display: block;
+  max-height: 56vh;
+  /* overflow-x: visible !important; */
+}
+
+.tableClassName thead, .tableClassName tfoot, .tableClassName tbody tr {
+  display: table;
+  width: 250%;
+  table-layout: fixed;
+}
+.tableClassName thead {
+  width: calc( 250% );
+  position: sticky;
+  top: 0;
+}
+
+.tableClassName tfoot {
+  width: calc( 300% );
+  position: sticky;
+  bottom: 0;
+}
+table .c40 {
+  width: 40px;
+}
+table .c50 {
+  width: 50px;
+}
+table .c60 {
+  width: 60px;
+}
+table .c70 {
+  width: 70px;
+}
+table .c80 {
+  width: 80px;
+}
+table .c100 {
+  width: 100px;
+}
+.allColumns thead, .allColumns tfoot, .allColumns tbody tr {  
+  width: 3500px; 
+}
+.limitedColumns thead, .limitedColumns tfoot, .limitedColumns tbody tr {  
+  width: 2200px; 
+}

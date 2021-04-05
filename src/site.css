@@ -1,0 +1,840 @@
+﻿@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('fonts/glyphicons-halflings-regular.woff');
+  src: url('fonts/glyphicons-halflings-regular.woff2');
+}
+
+.SrvOrderFilterRow {
+    padding-bottom: 3px !important;
+}
+
+.SrvOrderFilterRow input[type=submit] {
+  height: auto;
+}
+
+.SrvOrderFilterRow input {
+    height: 24px;
+}
+
+.service-order div.row span,
+.service-order div.row label {
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+.service-order div.row .select2-container span {
+    font-size: inherit;
+}
+
+.service-order div.row input[type=text] {
+    /*inline-block;*/
+    height: 24px;
+}
+
+.fillInput {
+    width:99.99%;
+}
+
+.service-order-filter select{
+    width:auto;
+    max-width: 99.99%;
+}
+
+.service-order-input {
+    max-width: 150px;
+    width: 100%;
+}
+
+.service-order-header {
+    background: #f5f8fa;
+    display: block;
+    font-size: 1.2em;
+    font-weight: 600;
+    margin: 2px 2px 3px 2px;
+    padding: 3px 5px;
+}
+
+.service-order_heading {
+    background: #f5f8fa;
+    display: block;
+    font-size: 1.3em;
+    font-weight: 600;
+    margin: 0px;
+    padding: 5px 0px;
+}
+
+.contract-equipment-input {
+    max-width: 250px;
+}
+
+.contract-equipment-table tr {
+    height: 25px;
+}
+
+
+.buttonSearch {
+    padding: 3px;
+    background: #eeeeee;
+    vertical-align: middle;
+}
+
+.ims-buttonSearch {
+    padding: 3px;
+    background: #eeeeee;
+    vertical-align: middle;
+    font-size: 1.6em;
+}
+
+.buttonSearch span:hover {
+    color: #9ddfff;
+}
+
+.compactTable tr td .glyphicon-ok-circle {
+    font-size: 1em;
+    color: #0068b3;
+}
+
+.buttonSelectDialog {
+    border-radius: 5px;
+    padding: 2px;
+    background: #e7e7e7;
+    color: #ffffff;
+    float: right;
+    cursor: pointer;
+    border-color: #989494;
+    border-width: 0.05em;
+    border-style: inherit;
+}
+
+.nopadding {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.compactTable tr td[class$="tdcontent"] label {
+font-size: 11px;
+font-weight: 500;
+}
+
+.SrvOrderFilterRow span,
+.SrvOrderFilterRow label,
+.compactTable tr td ul li label {
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+.compactTable tr td span,
+.service-order-label {
+    font-size: 0.9em;
+    font-weight: 600;
+    width: auto;
+}
+
+.responsive-report-label {
+    width: auto;
+    float: left;
+    min-width: 130px;
+}
+
+.responsive-report-short-label {
+    width: auto;
+    float: left;
+    min-width: 70px;
+}
+
+.compactTable tr td select {
+    font-size: 0.9em;
+    font-weight: 600;
+    width: auto;
+    height: 24px;
+    max-width: 100%;
+}
+
+.compactTable .aspNetDisabled {
+    padding: 0 0 0 6px;
+}
+
+.compactTable select.aspNetDisabled {
+    background-color: #ebebe4;
+}
+
+.compactTable .aspNetDisabled.alignToRight {
+    padding: 0 6px 0 0;
+}
+
+.compactTable tr td label {
+    font-size: 1.3em;
+}
+
+.compactTable .centerButtons input[type="submit"] {
+    float: inherit;
+}
+
+.search-result {
+    font-weight: 500;
+    color: #003399;
+}
+
+.SrvOrderFilterRow select {
+    font-size: 1em;
+    font-weight: 500;
+    height: 24px;
+    max-width:100%;
+}
+
+.SrvOrderFilterRow.header {
+    background-color: #f5f8fa;
+    font-weight: 800;
+}
+
+.selectParameterRow {
+    font-weight: 600;
+    background: #EEEEEE;
+}
+
+.pageTitle {
+    font-size: 24px !important;
+    font-weight: 200 !important;
+    line-height: normal;
+}
+
+.compactTable td .nopadding {
+    padding: 5px 0px !important;
+}
+
+.compactTable td {
+    padding: 5px 5px !important;
+}
+
+.compactTable tr td input[type=text] {
+    display: inline-block;
+    height: 24px;
+}
+
+form input[type="radio"] + label {
+    padding-top: 8px;
+}
+
+.loginForm {
+    float: right;
+    max-width: 440px;
+}
+
+.personalInfoForm {
+    float: right;
+    width: 50%;
+}
+
+.aspNetDisabled {
+    padding: 4px;
+}
+
+a.aspNetDisabled.btn.btn-primary,
+a.aspNetDisabled:hover {
+    background-color: #90aeeb;
+}
+
+/*.table-striped > tbody > tr:nth-child(odd) > td,*/
+.table-striped > tbody > tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+.table-striped > tbody > tr:nth-child(even) {
+    background-color: #f5f8fa;
+}
+
+.jtable-main-container {
+    overflow-x: auto;
+    min-height: 0.01%;
+    overflow-y: hidden;
+}
+
+.jtable-edit-form .tab-content {
+    border-top: 1px solid #ccc;
+}
+
+#LoadRecordsButton, #loadFailuresBtn, #loadTasksBtn, .LoadRecordsButton {
+    float: left;
+    content: none;
+    padding: 2px 10px 2px 10px;
+    font-size: inherit;
+    margin-right: 4px;
+}
+
+    #LoadRecordsButton:before, #loadFailuresBtn:after, #loadFailuresBtn:before,
+    #loadTasksBtn:before, #loadTasksBtn:after,
+    #LoadRecordsButton:after {
+        content: none;
+    }
+
+.loadrecordRow {
+    padding-top: 15px;
+    padding-bottom: 0px;
+}
+
+.ims-navigation-link {
+    font-size: 11px;
+    font-weight: 600;
+    color: #000000;
+}
+
+.ims-navigation-bar {
+    border-right-style: solid;
+    border-right-width: 1px;
+    width: 135px;
+    border-color: #cccccc;
+}
+
+.ims-navigation table:not(.searchArea) tr:not(.searchArea):hover {
+    background-color: #474d56;
+}
+
+.ims-navigation table:not(.searchArea) tr:not(.searchArea):hover a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.ims-navigation table:not(.searchArea) tr:not(.searchArea) {
+    border-bottom: 1px #e2e2e2;
+    border-bottom-style: inset;
+}
+
+.ims-arrow-icon:after {
+    border: 0;
+    color: #999999;
+    content: '\e072';
+    font-family: 'Glyphicons Halflings';
+    font-size: 80%;
+    height: auto;
+    left: auto;
+    margin-right: 2px;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: auto;
+}
+
+.ims-navigation {
+    font-size: 11px;
+}
+
+    .ims-navigation {
+        width: 122px;
+        height: 100%;
+    }
+
+    .ims-navigation table td {
+    padding: 2px 1px;
+    }
+
+.text-danger {
+color:#ff0000;
+}
+
+.text-gray {
+    color: #ababab;
+}
+
+.ims-content-header {
+    background: #f5f8fa;
+    display: block;
+    font-size: 1.2em;
+    font-weight: 600;
+    margin: 0px;
+    padding: 5px 5px 5px 5px;
+    margin-bottom: 3px;
+}
+
+.ims-grid-edit-btn {
+    background: #142939;
+    padding: 5px;
+    border-radius: 5px;
+    color: #f5f8fa;
+}
+.ims-grid-edit-btn:hover {
+    color: #fff;
+}
+
+table th a {
+    color: #7f919e;
+    text-decoration: underline;
+    font-weight:500;
+}
+
+table th a:hover {
+    color: #fff;
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.borderless td, .borderless th {
+    border: none;
+}
+
+.no-float {
+    float:none;
+}
+
+.pagingtable td table {
+    width: auto;
+    display: inline-block;
+}
+
+.pagingtable td table td {
+    padding:2px;
+    width:1px;
+}
+
+.pagingtable td table td a {
+    padding: 5px;
+    background: #1394f0;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.pagingtable tr.pager-row td table td a {
+    background-color: inherit;
+}
+
+.pagingtable tr.pager-row td table td span {
+    color: black;
+    font-weight: bold;
+}
+
+.pagingtable tr th, .pagingtable tr td[colspan] {
+    text-align: center;
+}
+
+.pagingtable tr td {
+    text-align: left;
+}
+
+.compactTable .pagingtable.paymentlot td {
+    text-align: center;
+}
+
+.ui-datepicker-trigger {
+    margin-left:3px;
+}
+
+.ims-edit-field {
+    width:200px;
+}
+
+input:read-only, textarea:read-only,
+textarea:disabled, input:disabled {
+    background-color: rgb(235, 235, 228);
+}
+
+.nav-tabs > li > a {
+    background: #8c8f94;
+    border: none;
+    color: #fff;
+    padding: 7px 20px;
+    position: relative;
+    float: left;
+    margin-right: 4px;
+    min-width: 100px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.2em;
+}
+
+.nav-tabs > li.active > a > span:before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -15px;
+    width: 0;
+    height: 0;
+    border-top: solid 10px #000000;
+    border-left: solid 15px transparent;
+    border-right: solid 15px transparent;
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li > a:hover {
+    background: #000;
+}
+
+.nav-tabs {
+    padding-bottom: 10px;
+}
+
+.jtable-main-container {
+    width: 100%;
+}
+
+.ims-empty-row {
+    min-height: 13px;
+}
+
+.fill-input {
+    width: 99.99%;
+}
+
+.control-search {
+    width: 80%;
+    max-width: 150px;
+}
+
+.label.long {
+    display: block;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.usaDatePicker,
+.usaDatePicker1,
+.usaDatePicker2 {
+    display: inline-block;
+    max-width: 95px;
+}
+
+.usaDatePicker3
+ {
+    display: inline-block;
+    max-width: 195px;
+}
+
+.recordsCount {
+    min-width: 50px;
+    max-width: 90px;
+}
+
+.navigation--main {
+    padding-right: 17%;
+}
+
+.navigation--top .nav__heading {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 10px 0;
+    text-transform: uppercase;
+}
+
+.navigation--top .nav__right .nav__links--account > li a {
+    color: #003399;
+    font-weight: 600;
+    padding: 0;
+}
+
+.filtering input[type="text"] {
+    width:100%;
+}
+
+form input[type="text"].service-config-filter-input {
+    line-height: inherit;
+}
+
+.service-config-filter-input {
+    max-width: 150px;
+    width: 100%;
+    height: 24px;
+}
+
+.translate-values-filter-input {
+    max-width: 280px;
+    width: 100%;
+    height: 24px;
+}
+
+.filtering-label {
+    float: left;
+    margin-right: 3px;
+    font-size: inherit;
+}
+
+.filtering-button {
+    float: left;
+}
+
+.ServiceOrderReport > .row > div > span {
+    white-space: -moz-nowrap;
+    white-space: -o-nowrap;
+    white-space: nowrap;
+    word-wrap: unset;
+}
+
+.dotted-line {
+    border-top: dotted 1px;
+}
+
+.filtering select {
+    height: 24px;
+}
+
+.admin-maintenance-column {
+    width: 20%;
+    min-width: 230px;
+}
+
+#main-footer.fixed {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+.gvSinPager {
+    border: none;
+}
+
+.gvSinPager tr {
+    height: 21px;
+    border: none;
+}
+
+.gvSinPager tr:hover > tr {
+    background-color: rgb(235, 235, 228);
+}
+
+.lbDefault {
+    font-size: 11px;
+    color: #003399;
+    font-family: Tahoma;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.filter-control {
+    float: left;
+    margin-left: 3px;
+}
+
+form input[type=number] .invalidFieldValue {
+    border: 1px solid #ff0000;
+}
+
+.linkButton {
+    color: #003399;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+form textarea.autoHeightTextArea {
+    min-height: inherit;
+}
+
+.log-container {
+    margin-left: 3%;
+    margin-right: 3%;
+    padding-top: 60px;
+}
+
+.float-rigth {
+    float: right;
+}
+
+.float-left {
+    float: left;
+}
+.ibExcel {
+    height: 16px;
+}
+
+.paymentLot-option input {
+    min-width: 22%;
+    padding: 2px 4px;
+}
+
+.paymentlot-option-header {
+    min-width: 140px;
+}
+
+.paymentLot-footer {
+    padding: 0px;
+    text-align: center;
+    min-width: 30px;
+}
+
+.aspNetDisabled.paymentLot-option {
+    padding: 0px;
+}
+
+.text-align-center {
+    text-align: center;
+}
+
+.text-align-right {
+    text-align: right;
+}
+
+.text-align-left {
+    text-align: left;
+}
+
+.example-label{
+    font-size: 10px;
+    color: red;
+}
+
+.formErrorContent {
+    padding: 6px;
+}
+
+.formError .formErrorContent {
+    line-height: 0px;
+}
+
+.top_banner {
+    width: 100%;
+    height: 100%;
+    max-height: 40px;
+}
+
+.right-alighed-table tr th,
+.table-responsive .right-alighed-table th:last-child,
+.right-alighed-table tr td
+{
+    text-align: right;
+}
+
+.header-attrs {
+    padding: 20px 25px 10px;
+    background-color: #f2f6f6;
+    margin-bottom: 15px;
+}
+
+.header-attrs p {
+    font-size: 16px;
+}
+
+.header-attrs .title {
+    font-weight: 600;
+}
+
+.service-order__header {
+    border-bottom: 1px solid #dddee0;
+    margin: 0 0 20px !important;
+    padding: 0 0 20px;
+    position: relative;
+    background-color: transparent;
+}
+
+div.jtable-main-container > table.jtable > tbody > tr > td.totalcell {
+    border-top-width: 2px;
+    border-top-color: #000000;
+    background-color: #ffffff;
+    font-weight: 600;
+}
+
+.SrvOrderFilterRow .select2-container .select2-selection--single {
+    height: 25px;
+}
+
+.SrvOrderFilterRow .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 25px;
+}
+
+.SrvOrderFilterRow .select2-container--default .select2-selection--single {
+    border-radius: 0px;
+}
+
+.SrvOrderFilterRow .select2-container--default .select2-selection--multiple,
+.SrvOrderFilterRow .select2-container--default.select2-container--focus .select2-selection--multiple {
+    border: 1px solid #dddee0;
+    border-radius: 0;
+}
+
+.SrvOrderFilterRow select2-selection select2-selection--multiple,
+.SrvOrderFilterRow .select2-container .select2-selection--multiple {
+    min-height: 25px;
+    height: 25px;
+}
+
+.SrvOrderFilterRow .select2-container--default .select2-search--inline .select2-search__field {
+    margin-top: 0px;
+    font-size: 1.3em;
+}
+
+.SrvOrderFilterRow .select2-container--default .select2-selection--multiple .select2-selection__clear {
+    margin-top: 2px;
+    margin-right: 2px;
+    font-size: medium;
+}
+
+.SrvOrderFilterRow .select2-selection--multiple ul > li.select2-selection__choice > span {
+    font-size: 1.2em
+}
+
+.SrvOrderFilterRow .select2-container--default .select2-selection--multiple .select2-selection__choice {
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+form input.display-none,
+.compactTable tr td input[type=text].display-none,
+.compactTable .display-none,
+.SrvOrderFilterRow .display-none {
+    display: none;
+}
+
+.modal-background {
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.select2-container .select2-dropdown {
+    z-index: 9999;
+}
+
+.jtable-search-command-button.buttonSearch.dropDownSearchButton {
+    position: absolute;
+    margin-top: 3px;
+}
+
+.select2 {
+    width: 100% !important;
+}
+
+.filtering-label.row-padding {
+    padding-left: 10px;
+}
+
+.bootstrap-tagsinput {
+    min-width: 310px;
+}
+
+form .bootstrap-tagsinput input {
+    border: none;
+    width: 100%;
+}
+
+.allow-wraps,
+.label.label-danger.allowWrap {
+    white-space: pre-line;
+}
+
+.ims-header {
+    border-bottom: 1px solid #dddee0;
+    margin: 0 0 5px !important;
+    padding: 0 0 5px;
+    position: relative;
+    background-color: transparent;
+}
+
+.ims-checkbox input[type=checkbox]{
+    transform: scale(1.5);
+    margin-right: 5px;
+}
+
+.card.WtyCard {
+    margin-bottom: 0px;
+}
+
+.card.card--light .card__content input {
+    width: -webkit-fill-available;
+}
+
+.card .card__content select,
+.card__content.compact-card,
+.card__header.compact-card-header {
+    padding: 5px;
+}
+
+span.required {
+   color: #fd7b7b;
+}

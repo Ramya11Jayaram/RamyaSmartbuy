@@ -1,0 +1,251 @@
+<div class="jumbofix jumbotron bg-light align-items-center">
+  <div class="jumbo-content">
+    <div class="icon float-left clearfix shadow-lg">
+      <i class="pe-7s-display2"></i>
+    </div>
+    <div class="jumbo-info">
+      <h4 class="pb-5 text-dark" i18n="@@substituteReportTitle">Substitute Authority Report</h4>
+    </div>
+  </div>
+</div>
+<form [formGroup]="searchForm">
+  <div class="card searchcard shadow-lg custom-row-align">
+    <span *ngIf="reports[0]" class="text-primary custom-hover" (click)="toggleSearch()" i18n="@@substituteReportToggle"><i class="pe-7s-edit"></i>
+      Toggle Fields</span>
+    <div [hidden]="!searchOpened">
+      <div class="form-row justify-content-between align-content-center">
+        <h4 i18n="@@substituteReportSelection">Selection</h4>
+      </div>
+      <div class="form-row">
+        <div class="col-md-6">
+          <label i18n="@@substituteReportSubFor">Substituted For</label>
+          <ng-select [items]="hrUsersObservable | async" [multiple]="true" bindLabel="displayValue" bindValue="employeeID"
+            class="ad-user" [loading]="loading" loadingText='Loading users...' formControlName="subFor" i18n-placeholder="@@substituteReportOptional"
+            placeholder="Optional" [closeOnSelect]="false" [virtualScroll]="true">
+            <ng-template ng-multi-label-tmp *ngIf="searchForm?.controls?.subFor?.value?.length > 1">
+              <span style="display:block" class="ng-placeholder" i18n="@@substituteReportMulti">Multiple selected values</span>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"
+                [ngModelOptions]="{ standalone : true }" />
+              {{ item.firstName }} {{ item.lastName}} - {{ item.employeeID }}
+            </ng-template>
+          </ng-select>
+
+        </div>
+        <div class="col-md-6">
+          <label i18n="@@substituteReportSubBy">Substituted By</label>
+          <ng-select [items]="hrUsersObservable | async" [multiple]="true" bindLabel="displayValue" bindValue="employeeID"
+            class="ad-user" [loading]="loading" loadingText='Loading users...' formControlName="subBy" i18n-placeholder="@@substituteReportOptional"
+            placeholder="Optional" [closeOnSelect]="false" [virtualScroll]="true">
+            <ng-template ng-multi-label-tmp *ngIf="searchForm?.controls?.subBy?.value?.length > 1">
+              <span style="display:block" class="ng-placeholder" i18n="@@substituteReportMulti">Multiple selected values</span>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"
+                [ngModelOptions]="{ standalone : true }" />
+              {{ item.firstName }} {{ item.lastName}} - {{ item.employeeID }}
+            </ng-template>
+          </ng-select>
+
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-md-6">
+          <label i18n="@@substituteReportRegion">Region</label>
+          <ng-select [items]="regionOptions" [multiple]="true" class="ad-user" [closeOnSelect]="false"
+            placeholder="Optional" formControlName="region" [virtualScroll]="true" i18n-placeholder="@@substituteReportOptional">
+            <ng-template ng-multi-label-tmp *ngIf="searchForm?.controls?.region?.value?.length > 1">
+              <span style="display:block" class="ng-placeholder" i18n="@@substituteReportMulti">Multiple selected values</span>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"
+                [ngModelOptions]="{ standalone : true }" /> {{item}}
+            </ng-template>
+          </ng-select>
+
+        </div>
+        <div class="col-md-6">
+          <label i18n="@@substituteReportCreatedBy">Created By</label>
+          <ng-select [items]="hrUsersObservable | async" [multiple]="true" bindLabel="displayValue" bindValue="employeeID"
+            class="ad-user" [loading]="loading" loadingText='Loading users...' formControlName="createdBy" i18n-placeholder="@@substituteReportOptional"
+            placeholder="Optional" [closeOnSelect]="false" [virtualScroll]="true">
+            <ng-template ng-multi-label-tmp *ngIf="searchForm?.controls?.createdBy?.value?.length > 1">
+              <span style="display:block" class="ng-placeholder" i18n="@@substituteReportMulti">Multiple selected values</span>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"
+                [ngModelOptions]="{ standalone : true }" />
+              {{ item.firstName }} {{ item.lastName}} - {{ item.employeeID }}
+            </ng-template>
+          </ng-select>
+
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-sm-12 col-md-6">
+          <div class="row">
+            <label i18n="@@substituteReportCreatedOn">Created On</label>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-4 custom-date form-group">
+              <label class="pr-3" i18n="@@substituteReportFrom">From</label>
+              <input type="date" class="form-control created-date" formControlName="createdFrom" id="createdFromDate" />
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-6 pl40 custom-date form-group">
+              <label class="pr-3" i18n="@@substituteReportTo">To</label>
+              <input type="date" class="form-control created-date" formControlName="createdTo" id="createdToDate" />
+            </div>
+          </div>
+
+        </div>
+        <div class="col-sm-12 col-md-6">
+          <div class="row">
+            <label i18n="@@substituteReportValid">Validity of substution</label>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-4 custom-date form-group">
+              <label class="pr-3" i18n="@@substituteReportFrom">From</label>
+              <input type="date" min="1997-01-01" max="2030-12-31" class="form-control created-date" formControlName="validFrom" id="validFromDate" />
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-6 pl40 custom-date form-group">
+              <label class="pr-3" i18n="@@substituteReportTo">To</label>
+              <input type="date" class="form-control created-date" formControlName="validTo" id="validToDate" />
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="form-row">
+        <div class="col-sm-12 col-md-6">
+          <div class="ad-user">
+            <input class="form-check-input" formControlName="showActive" name="showActive" type="checkbox"
+              id="showActive" />
+            <label for="showActive" i18n="@@substituteReportActiveOnly">Active Substitution Only</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-row justify-content-between">
+        <button class="btn btn-primary button-fix" (click)="onSearchClick()" i18n="@@substituteReportSearch">Search</button>
+        <button class="btn btn-primary button-fix" (click)="reset()" i18n="@@substituteReportReset">Reset Filters</button>
+      </div>
+      <br />
+    </div>
+  </div>
+</form>
+
+<div class="card p-0 m-4 shadow-lg custom-table-wrapper" *ngIf="reports[0]">
+  <span class="p-3 text-primary custom-hover" (click)="saveExcel()" i18n="@@substituteReportExport">&nbsp;<i class="pe-7s-diskette"></i>Export</span>
+  <table id="table" matSort (matSortChange)="sortData($event)" [ngClass]="{'tableClassName' : !searchForm.value.showActive, 'tableClassNameMin': searchForm.value.showActive}"
+    class="table-responsive table-bordered table-striped">
+    <thead>
+      <tr>
+        <th class="w90" mat-sort-header="requesterEid" i18n="@@substituteReportTSubFor">Substituted For</th>
+        <th class="w105" mat-sort-header="req_firstname" i18n="@@substituteReportTFName">First Name</th>
+        <th class="w105" mat-sort-header="req_lastname" i18n="@@substituteReportTLName">Last Name</th>
+        <th class="w210" mat-sort-header="req_title" i18n="@@substituteReportTTitle">Title</th>
+        <th class="w125" mat-sort-header="regionRequester" i18n="@@substituteReportTRegion">Region</th>
+        <th class="w105" mat-sort-header="levelRequester" i18n="@@substituteReportTAuthLevel">Authority Level</th>
+        <th class="w90" mat-sort-header="substituteEid" i18n="@@substituteReportTSubBy">Substituted By</th>
+        <th class="w105" mat-sort-header="sub_firstname" i18n="@@substituteReportTFNmae">First Name</th>
+        <th class="w105" mat-sort-header="sub_lastname" i18n="@@substituteReportTLName">Last Name</th>
+        <th class="w210" mat-sort-header="sub_title" i18n="@@substituteReportTTitle">Title</th>
+        <th class="w125" mat-sort-header="regionSubstituter" i18n="@@substituteReportTRegion">Region</th>
+        <th class="w105" mat-sort-header="levelSubstituter" i18n="@@substituteReportTAuthLevel">Authority Level</th>
+        <th class="w105" mat-sort-header="validFrom" i18n="@@substituteReportTActStDate">Activation Start Date</th>
+        <th class="w105" mat-sort-header="validTo" i18n="@@substituteReportTActEndDate">Activation End Date</th>
+        <th class="w105" mat-sort-header="createdBy" i18n="@@substituteReportTCreatedBy">Created By</th>
+        <th class="w210" mat-sort-header="creationDate" i18n="@@substituteReportTCreatedDate">Created Date And Time</th>
+        <th class="w105" mat-sort-header="statusSubstitutoer" i18n="@@substituteReportTStatus">Substitution Status</th>
+        <th class="w105" *ngIf="!searchForm.value.showActive" mat-sort-header="updatedBy" i18n="@@substituteReportTDeactivatedBy">Deactivated By</th>
+        <th class="w210" *ngIf="!searchForm.value.showActive" mat-sort-header="deactivateTo" i18n="@@substituteReportTDeactivationTime">Deactivation Date And Time</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let report of reports |  paginate: { itemsPerPage: (itemsPerPage || 10), currentPage: m,id: 'm' }; let i = index">
+        <td class="w90">{{report?.requesterEid}}</td>
+        <td  class="w105">{{report?.adInfo_requester?.firstname}}</td>
+        <td class="w105">{{report?.adInfo_requester?.lastname}}</td>
+        <td class="w210">{{report?.adInfo_requester?.title}}</td>
+        <td class="w125">{{report?.regionRequester}}</td>
+        <td class="w105">{{displayRange(report?.levelRequester,1)}}</td>
+        <td class="w90">{{report?.substituteEid}}</td>
+        <td class="w105">{{report?.adInfo_substituter?.firstname}}</td>
+        <td class="w105">{{report?.adInfo_substituter?.lastname}}</td>
+        <td class="w210">{{report?.adInfo_substituter?.title}}</td>
+        <td class="w125">{{report?.regionSubstituter}}</td>
+        <td class="w105">{{displayRange(report?.levelSubstituter,1)}}</td>
+        <td class="w105">{{report?.validFrom | date : dateFormat}}</td>
+        <td class="w105">{{report?.validTo | date : dateFormat}}</td>
+        <td class="w105">{{report?.createdBy}}</td>
+        <td class="w210">{{report?.creationDate | date : dateTime}}</td>
+        <td class="w105">{{report?.statusSubstitutoer}}</td>
+        <td class="w105" *ngIf="!searchForm.value.showActive">{{report?.updatedBy}}</td>
+        <td class="w210" *ngIf="!searchForm.value.showActive">{{report?.deactivateTo | date : dateTime}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="col-sm-12 col-md-4">
+      <pagination-controls [previousLabel]="errTransService.returnMsg('previous')" [nextLabel]="errTransService.returnMsg('next')" (pageChange)="m = $event" id="m"></pagination-controls>
+    </div>
+    <div class="col-xs-12 col-md-4">
+      <span i18n="@@statusreportItemsPerPage">Items Per Page:<input type="number" style="width:50px" [(ngModel)]="itemsPerPage" /></span>
+    </div>
+  </div>
+  <table [hidden]="true" id="excel-table" matSort (matSortChange)="sortData($event)"
+  class="table-responsive table-bordered table-striped tableClassName">
+  <thead>
+    <tr>
+      <th class="w90" mat-sort-header="requesterEid">Substituted For</th>
+      <th class="w105" mat-sort-header="req_firstname">First Name</th>
+      <th class="w105" mat-sort-header="req_lastname">Last Name</th>
+      <th class="w210" mat-sort-header="req_title">Title</th>
+      <th class="w125" mat-sort-header="regionRequester">Region</th>
+      <th class="w105" mat-sort-header="levelRequester">Authority Level</th>
+      <th class="w90" mat-sort-header="substituteEid">Substituted By</th>
+      <th class="w105" mat-sort-header="sub_firstname">First Name</th>
+      <th class="w105" mat-sort-header="sub_lastname">Last Name</th>
+      <th class="w210" mat-sort-header="sub_title">Title</th>
+      <th class="w125" mat-sort-header="regionSubstituter">Region</th>
+      <th class="w105" mat-sort-header="levelSubstituter">Authority Level</th>
+      <th class="w105" mat-sort-header="validFrom">Activation Start Date</th>
+      <th class="w105" mat-sort-header="validTo">Activation End Date</th>
+      <th class="w105" mat-sort-header="createdBy">Created By</th>
+      <th class="w210" mat-sort-header="creationDate">Created Date And Time</th>
+      <th class="w105" mat-sort-header="statusSubstitutoer">Substitution Status</th>
+      <th class="w105" *ngIf="!searchForm.value.showActive" mat-sort-header="updatedBy">Deactivated By</th>
+      <th class="w210" *ngIf="!searchForm.value.showActive" mat-sort-header="deactivateTo">Deactivation date and time</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    <tr
+      *ngFor="let report of reports |  paginate: { itemsPerPage: reports.length, currentPage: m1,id: 'm1' }; let i = index">
+      <td class="w90">{{report?.requesterEid}}</td>
+      <td  class="w105">{{report?.adInfo_requester?.firstname}}</td>
+      <td class="w105">{{report?.adInfo_requester?.lastname}}</td>
+      <td class="w210">{{report?.adInfo_requester?.title}}</td>
+      <td class="w125">{{report?.regionRequester}}</td>
+      <td class="w105">{{report?.levelRequester}}</td>
+      <td class="w90">{{report?.substituteEid}}</td>
+      <td class="w105">{{report?.adInfo_substituter?.firstname}}</td>
+      <td class="w105">{{report?.adInfo_substituter?.lastname}}</td>
+      <td class="w210">{{report?.adInfo_substituter?.title}}</td>
+      <td class="w125">{{report?.regionSubstituter}}</td>
+      <td class="w105">{{report?.levelSubstituter}}</td>
+      <td class="w105">{{report?.validFrom | date : dateFormat}}</td>
+      <td class="w105">{{report?.validTo | date : dateFormat}}</td>
+      <td class="w105">{{report?.createdBy}}</td>
+      <td class="w210">{{report?.creationDate | date : dateTime}}</td>
+      <td class="w105">{{report?.statusSubstitutoer}}</td>
+      <td class="w105" *ngIf="!searchForm.value.showActive">{{report?.updatedBy}}</td>
+      <td class="w210" *ngIf="!searchForm.value.showActive">{{report?.deactivateTo | date : dateTime}}</td>
+    </tr>
+  </tbody>
+  <pagination-controls (pageChange)="m1 = $event" id="m1"></pagination-controls>
+</table>
+</div>

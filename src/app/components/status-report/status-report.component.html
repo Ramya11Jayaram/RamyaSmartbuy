@@ -1,0 +1,524 @@
+<div class="jumbofix jumbotron bg-light align-items-center">
+  <div class="jumbo-content">
+    <div class="icon float-left clearfix shadow-lg">
+      <i class="pe-7s-display2"></i>
+    </div>
+    <div class="jumbo-info">
+      <h4 class="pb-5 text-dark" i18n="@@statusreportTitle">Purchase Order Request Details Report</h4>
+    </div>
+  </div>
+</div>
+
+<form [formGroup]="searchForm">
+  <div class="card searchcard shadow-lg custom-row-align">
+    <span *ngIf="reports[0]" class="text-primary custom-hover" (click)="toggleSearch()" i18n="@@statusreportToggle"><i class="pe-7s-edit"></i> Toggle Fields</span>
+    <div [hidden]="!searchOpened">
+      <div class="form-row justify-content-between align-content-center">
+        <h4 i18n="@@statusreportSelection">Selection</h4>
+      </div>
+      <div class="form-row">
+        <div class="col-md-6">
+          <label i18n="@@statusreportPORNo">Purchase Order Req Number</label>
+          <div class="input-group req-number">
+            <input
+              type="number"
+              class="form-control"
+              formControlName="currentReqNo"
+            />
+            <span
+              class="input-group-addon custom-hover"
+              (click)="addToArray(reqNumbers, 'currentReqNo')"
+              ><a><i class="pe-7s-plus text-primary"></i></a
+            ></span>
+          </div>
+        </div>
+        <div class="col-md-auto">
+          <span *ngFor="let number of reqNumbers" class="custom-badge-spacing">
+            <span class="badge badge-secondary">
+              {{ number }}
+              <a
+                (click)="removeFromArray(reqNumbers, number)"
+                class="custom-hover"
+                ><i class="pe-7s-close"></i
+              ></a>
+            </span>
+          </span>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-sm-12 col-md-6" >
+         <div class="row">
+          <label i18n="@@statusreportPORCDate">POR Creation Date</label>
+         </div>
+          <div class="row">
+            <div class="col-sm-12 col-md-6 custom-date form-group">
+              <label class="pr-3" i18n="@@statusreportFrom">From</label>
+              <input
+              type="date"
+              class="form-control created-date"
+              formControlName="createdDate"
+              id="orderDate"
+            />
+            </div>
+            <div class="col-sm-12 col-md-6 custom-date form-group">
+              <label class="pr-3" i18n="@@statusreportTo">To</label>
+              <input
+                type="date"
+                class="form-control created-date"
+                formControlName="toDate"
+                id="toDate"
+              />
+              </div>
+          </div>
+
+          </div>
+          <div class="col-sm-12 col-md-6">
+            <label i18n="@@statusreportPORStatus">POR Status</label>
+          <div class="input-group">
+            <ng-select
+                [items]="statusList"
+                bindValue="id"
+                class="vendor"
+                formControlName="currentStatus"
+                placeholder="Make a choice ..."
+                i18n-placeholder="@@statusreportMakeChoice"
+                [multiple]="true"
+                [closeOnSelect]="false"
+              >
+              <ng-template ng-multi-label-tmp>
+                <span style="display:block" class="ng-placeholder" i18n="@@statusreportOneOrMore">One or more items selected</span>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" [ngModelOptions]="{ standalone : true }"/>
+                {{errTransService.returnMsg(item.value, true)}}
+            </ng-template>
+             </ng-select>
+          </div>
+
+          </div>
+
+          </div>
+
+      <div class="form-row">
+        <div class="col-sm-12 col-md-6">
+
+          <label i18n="@@statusreportCompany">Company</label>
+          <div class="input-group company">
+            <ng-select
+             [items]="companyOptions"
+             [multiple]="true"
+             [closeOnSelect]="false"
+             bindLabel="name"
+             bindValue="id"
+             class="vendor"
+             placeholder="Make a choice..."
+             i18n-placeholder="@@statusreportMakeChoice"
+             formControlName="currentCompany"
+             [virtualScroll]="true"
+            >
+            <ng-template ng-multi-label-tmp>
+              <span style="display:block" class="ng-placeholder" i18n="@@statusreportOneOrMore">One or more items selected</span>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" [ngModelOptions]="{ standalone : true }"/> {{item.name}}
+          </ng-template>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-6">
+          <label i18n="@@statusreportVendor">Vendor</label>
+          <div class="input-group vendor">
+            <ng-select
+            [items]="vendorOptionsObservable | async"
+            [multiple]="true"
+            [closeOnSelect]="false"
+            bindValue="id"
+            bindLabel="searchable"
+            placeholder="Make a choice..."
+            i18n-placeholder="@@statusreportMakeChoice"
+            formControlName="currentVendor"
+            [searchFn]="vendorSearchFn"
+            [loading]= "loadingVendor"
+            loadingText='Loading vendor...'
+            [virtualScroll]="true"
+            class="vendor input-width"
+          >
+          <ng-template ng-multi-label-tmp>
+            <span style="display:block" class="ng-placeholder" i18n="@@statusreportOneOrMore">One or more items selected</span>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+            <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" [ngModelOptions]="{ standalone : true }"/> <span title="{{item.searchable}}">{{item.searchable}}</span>
+        </ng-template>
+          </ng-select>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-sm-12 col-md-6">
+          <label i18n="@@statusreportPC">Purchase Category</label>
+          <div class="input-group purchase-category">
+            <ng-select
+            [items]="categoryOptions"
+            [multiple]="true"
+            [closeOnSelect]="false"
+            bindValue="ID"
+            bindLabel="Category"
+            placeholder="Make a choice ..."
+            i18n-placeholder="@@statusreportMakeChoice"
+            formControlName="currentCategory"
+            [virtualScroll]="true"
+            class="vendor"
+            >
+            <ng-template ng-multi-label-tmp>
+              <span style="display:block" class="ng-placeholder" i18n="@@statusreportOneOrMore">One or more items selected</span>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" [ngModelOptions]="{ standalone : true }"/> {{item.Category}}
+          </ng-template>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-6">
+          <label i18n="@@statusreportCBy">Created By</label>
+          <ng-select
+            [items]="adusers"
+            bindLabel="firstname"
+            bindValue="ID"
+            class="ad-user"
+            formControlName="createdBy"
+            placeholder="Optional"
+            i18n-placeholder="@@statusreportOptional"
+            [virtualScroll]="true"
+            [searchFn]="userSearchFn"
+          >
+            <ng-template ng-option-tmp let-item="item">
+              <div>{{item.employeeId}} - {{item.firstname}} {{item.lastname}}, {{item.title}}</div>
+            </ng-template>
+            <ng-template ng-label-tmp let-item="item">
+              <span>{{item.firstname}} {{item.lastname}}</span>
+            </ng-template>
+          </ng-select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-sm-12 col-md-6">
+          <label i18n="@@statusreportReq">Requester</label>
+          <ng-select
+            [items]="adusers"
+            bindLabel="firstname"
+            bindValue="ID"
+            class="ad-user"
+            formControlName="requisitioner"
+            i18n-placeholder="@@statusreportOptional"
+            placeholder="Optional"
+            [virtualScroll]="true"
+            [searchFn]="userSearchFn"
+          >
+            <ng-template ng-option-tmp let-item="item">
+              <div>{{item.employeeId}} - {{item.firstname}} {{item.lastname}}, {{item.title}}</div>
+            </ng-template>
+            <ng-template ng-label-tmp let-item="item">
+              <span>{{item.firstname}} {{item.lastname}}</span>
+            </ng-template>
+          </ng-select>
+        </div>
+        <div class="col-sm-12 col-md-6">
+          <label i18n="@@statusreportApprover">Approver/Reviewer</label>
+          <ng-select
+            [items]="adusers"
+            i18n-placeholder="@@statusreportOptional"
+            placeholder="Optional"
+            formControlName="approver"
+            class="ad-user"
+            bindLabel="firstname"
+            bindValue="ID"
+            [virtualScroll]="true"
+            [searchFn]="userSearchFn"
+          >
+            <ng-template ng-option-tmp let-item="item">
+              <div>{{item.employeeId}} - {{item.firstname}} {{item.lastname}}, {{item.title}}</div>
+            </ng-template>
+            <ng-template ng-label-tmp let-item="item">
+              <span>{{item.firstname}} {{item.lastname}}</span>
+            </ng-template>
+          </ng-select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-sm-12 col-md-6">
+          <div class="row">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="trueRadio" value="true" formControlName="pending">
+              <label class="form-check-label" for="trueRadio" i18n="@@statusreportPending">
+                Pending
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="falseRadio" value="false" formControlName="pending">
+              <label class="form-check-label" for="falseRadio" i18n="@@statusreportAll">
+                All
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-6">
+
+        </div>
+        <div class="col-md-auto">
+          <span *ngFor="let status of statusPor" class="custom-badge-spacing">
+            <span class="badge badge-secondary">
+              {{ displayStatus(status) }}
+              <a (click)="removeFromArray(statusPor, status)" class="custom-hover"
+                ><i class="pe-7s-close"></i>
+              </a>
+            </span>
+          </span>
+        </div>
+      </div>
+      <br />
+      <div class="form-row justify-content-between">
+        <button class="btn btn-primary button-fix" (click)="onSearchClick()" i18n="@@statusreportSearch">Search</button>
+        <button class="btn btn-primary button-fix" (click)="resetSearchFilters()" i18n="@@statusreportReset">Reset Filters</button>
+      </div>
+      <br />
+    </div>
+  </div>
+</form>
+
+<div class="card p-0 m-4 shadow-lg custom-table-wrapper" *ngIf="initialreports[0]">
+  <span class="p-3 text-primary custom-hover" (click)="saveExcel()" i18n="@@statusreportExport">&nbsp;<i class="pe-7s-diskette"></i>Export</span>
+    <table id="table"
+    matSort (matSortChange)="sortData($event)"
+           data-toggle="table"
+           data-search="true"
+           data-filter-control="true"
+           data-show-export="true"
+           data-click-to-select="true"
+           data-toolbar="#toolbar"
+           class="table-responsive table-bordered table-striped tableClassName">
+      <thead>
+        <tr>
+          <th i18n="@@statusreportTPORNo" class="cell2" mat-sort-header="id" data-field="porNum" data-filter-control="input" data-sortable="true">POR Number</th>
+          <th i18n="@@statusreportTPORStatus" class="cell4" mat-sort-header="status" data-field="status" data-filter-control="select" data-sortable="true">POR Status</th><!--
+          <th data-field="status" data-filter-control="select" data-sortable="true">Financial Approver</th>
+          <th data-field="status" data-filter-control="select" data-sortable="true">Asset Approver</th> -->
+          <th i18n="@@statusreportTPC" mat-sort-header="purchaseCategory" data-field="category" data-filter-control="select" data-sortable="true">Purchase Category</th>
+          <th i18n="@@statusreportTDateOFC" class="cell4" mat-sort-header="orderDate" data-field="date" data-filter-control="select" data-sortable="true">Date of Creation</th>
+          <th i18n="@@statusreportTReq" mat-sort-header="requester" data-field="requisitioner" data-filter-control="input" data-sortable="true">Requester</th>
+          <th i18n="@@statusreportTCBy" mat-sort-header="createdBy" data-field="createdBy" data-filter-control="input" data-sortable="true">Created By</th>
+          <th i18n="@@statusreportTComp" mat-sort-header="company" data-field="company" data-filter-control="input" data-sortable="true">Company</th>
+          <th  i18n="@@statusreportTVendorNo" mat-sort-header="vendor" data-field="vendorNum" data-filter-control="input" data-sortable="true">Vendor Number</th>
+          <th i18n="@@statusreportTCC" mat-sort-header="costCenter" data-field="ccenter" data-filter-control="input" data-sortable="true">Cost Center</th>
+          <th i18n="@@statusreportTTotalValue" class="cell4" mat-sort-header="cost" data-field="totalUsd" data-filter-control="input" data-sortable="true">Total Value of POR in USD</th>
+          <th i18n="@@statusreportTPendingWith" mat-sort-header="hCurrentApproverId" data-field="pendingw" data-filter-control="input" data-sortable="true">Pending With</th>
+          <th class="cell4" i18n="@@statusreportTPendingSince" mat-sort-header="hdisplayDate" data-field="pendings" data-filter-control="select" data-sortable="true">Pending Since</th>
+          <th mat-sort-header="hLastFunctionalApproverId" [hidden]="true" data-field="lfab" data-filter-control="select" data-sortable="true">Last Approved By</th>
+          <th mat-sort-header="hfApprovalDate" [hidden]="true" data-field="lfad" data-filter-control="select" data-sortable="true">Last Approval Date</th>
+          <th class="cell4" i18n="@@statusreportTSapPONo" mat-sort-header="sapOrder" data-field="sapponum" data-filter-control="input" data-sortable="true">SAP PO Number</th>
+          <th class="cell4" i18n="@@statusreportTMatNo" data-field="matno" data-filter-control="input" data-sortable="true">Material Number</th>
+          <th data-field="shorttext" i18n="@@statusreportTShortText"  data-filter-control="input" data-sortable="true">Short Text</th>
+          <th class="cell3" i18n="@@statusreportTOrderCur"  mat-sort-header="orderCurrency" data-field="currency" data-filter-control="select" data-sortable="true">Order Currency</th>
+          <th class="cell4" i18n="@@statusreportTUC" data-field="unitcost" data-filter-control="input" data-sortable="true">Unit Cost</th>
+          <th class="cell4" i18n="@@statusreportTTotalCost" data-field="totalcost" data-filter-control="input" data-sortable="true">Total Item Cost in Order Currency</th>
+          <th class="cell4" i18n="@@statusreportTTotalUSD" data-field="totalusd" data-filter-control="input" data-sortable="true">Total Item Cost in USD</th>
+          <th class="cell3" i18n="@@statusreportTDD" data-field="ddate" data-filter-control="select" data-sortable="true">Delivery Date</th>
+        </tr>
+        <!-- <tr class="filter-row">
+          <td  *ngFor="let item of tableColumns; let i = index">
+              <input *ngIf="item.type != 'date'" [(ngModel)]="item.val" (change)='applyFilter($event, item.col, i,item.type)' (keyup)='applyFilter($event, item.col, i,item.type)' type='text'/>
+              <input *ngIf="item.type === 'date'" [(ngModel)]="item.val" (change)='applyFilter($event, item.col, i,item.type)' type="date" />
+           </td>
+        </tr> -->
+      </thead>
+      <tbody>
+        <tr *ngFor="let report of reports.filter(reportFilter) |  paginate: { itemsPerPage: (itemsPerPage || 10), currentPage: m,id: 'm' }; let i = index">
+          <td class="cell2"><a style="text-decoration: underline;" [routerLink]="['/ncrequestview', report.header.id]">{{report.header.id}}</a></td>
+          <td class="cell4">{{displayStatus(report.header.status)}}</td><!--
+          <td><span *ngIf="report.financialApproverId!=null">{{displayAduser(report.financialApproverId)||''}}</span></td>
+          <td><span *ngIf="report.assetApproverId!=null">{{displayAduser(report.assetApproverId)||''}}</span></td> -->
+          <td>{{displayCategory(report.header.purchaseCategory)}}</td>
+          <td class="cell4">{{report.header.orderDate | date : dateFormat}}</td>
+          <td>{{displayAduser(report.header.requester)}}</td>
+          <td>{{displayAduser(report.header.createdBy)}}</td>
+          <td>{{displayCompany(report.header.company)}}</td>
+           <td>{{displayVendor(report.header.vendor)}}</td>
+         <!-- <td>
+            <ul>
+              <li *ngFor="let item of report.header.itemDetails">
+                <div>{{item.vendorMaterialNo || 'None found'}}</div>
+              </li>
+            </ul>
+          </td>-->
+          <td>{{displayCostCenter(report.header.costCenter)}}</td>
+          <td class="cell4">{{report.header.cost |customCurrency : 'USD' : numberFormat}}</td>
+          <td>
+            <span *ngIf="report.hcurrentApprovalstatus === 2 && report.header.status < 5">
+              {{report.substituterId ? (displayAduser(report.substituterId || '')) : (displayAduser(report.hCurrentApproverId || ''))}}</span>
+
+          </td>
+          <td class="cell4"><span *ngIf="report.header.status < 5"><ng-container *ngIf="report.hdisplayDate && report.hdisplayDate !== 'null'">{{report.hdisplayDate|date : dateFormat}}</ng-container></span></td>
+          <td [hidden]="true">{{displayAduser(report.hLastFunctionalApproverId)||''}}</td>
+          <td [hidden]="true"><ng-container *ngIf="report.hfApprovalDate && report.hfApprovalDate !== 'null'">{{report.hfApprovalDate|date : dateFormat}}</ng-container></td>
+          <td class="cell4">{{report.header.sapOrder || ''}}</td>
+          <td class="cell4">
+            <ul>
+              <ng-container  *ngFor="let item of report.header.itemDetails">
+                <ng-container *ngIf="item.material">
+                  <li><div>{{item.material || ''}}</div></li>
+                </ng-container>
+              </ng-container>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li *ngFor="let item of report.header.itemDetails">{{item.description}}</li>
+            </ul>
+          </td>
+          <td class="cell3">{{displayCurrency(report.header.orderCurrency)}}</td>
+          <td class="cell4">
+            <ul>
+              <!-- TODO: replace currency filter specific to currency code -->
+              <li *ngFor="let item of report.header.itemDetails">{{item.unitCost | customCurrency : displayCurrency(report.header.orderCurrency) : numberFormat }}</li>
+            </ul>
+          </td>
+          <td class="cell4">
+            <ul>
+              <li *ngFor="let item of report.header.itemDetails">{{item.totalCost | customCurrency : displayCurrency(report.header.orderCurrency) : numberFormat }}</li>
+            </ul>
+          </td>
+          <td class="cell4">
+
+              <li *ngFor="let item of report.header.itemDetails">{{item.totalCostUsd | customCurrency : 'USD': numberFormat}}</li>
+
+          </td>
+          <td class="cell3">
+            <ul>
+              <ng-container *ngFor="let item of report.header.itemDetails">
+                <ng-container *ngIf="item.deliveryDate">
+                  <li>{{(item.deliveryDate | date : dateFormat) || ''}}</li>
+                </ng-container>
+              </ng-container>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="row">
+      <div class="col-sm-12 col-md-4">
+        <pagination-controls [previousLabel]="errTransService.returnMsg('previous')" [nextLabel]="errTransService.returnMsg('next')" (pageChange)="m = $event" id="m"></pagination-controls>
+      </div>
+      <div class="col-xs-12 col-md-4">
+        <span i18n="@@statusreportItemsPerPage">Items Per Page:<input type="number" style = "width:50px" [(ngModel)]="itemsPerPage"/></span>
+      </div>
+    </div>
+    <!-- The below hidden table is for exporting the entire list to excel -->
+    <table  [hidden]="true" id="excel-table"
+    matSort (matSortChange)="sortData($event)"
+           data-toggle="table"
+           data-search="true"
+           data-filter-control="true"
+           data-show-export="true"
+           data-click-to-select="true"
+           data-toolbar="#toolbar"
+           class="table-responsive table-bordered table-striped tableClassName">
+      <thead>
+        <tr>
+          <th i18n="@@statusreportTPORNo" mat-sort-header="id" data-field="porNum" data-filter-control="input" data-sortable="true">POR Number</th>
+          <th i18n="@@statusreportTPORStatus" mat-sort-header="status" data-field="status" data-filter-control="select" data-sortable="true">POR Status</th><!--
+          <th data-field="status" data-filter-control="select" data-sortable="true">Financial Approver</th>
+          <th data-field="status" data-filter-control="select" data-sortable="true">Asset Approver</th> -->
+          <th i18n="@@statusreportTPC" mat-sort-header="category" data-field="category" data-filter-control="select" data-sortable="true">Purchase Category</th>
+          <th i18n="@@statusreportTDateOFC" mat-sort-header="orderDate" data-field="date" data-filter-control="select" data-sortable="true">Date of Creation</th>
+          <th i18n="@@statusreportTReq" mat-sort-header="requester" data-field="requisitioner" data-filter-control="input" data-sortable="true">Requester</th>
+          <th i18n="@@statusreportTCBy" mat-sort-header="createdBy" data-field="createdBy" data-filter-control="input" data-sortable="true">Created By</th>
+          <th i18n="@@statusreportTComp" mat-sort-header="company" data-field="company" data-filter-control="input" data-sortable="true">Company</th>
+          <th mat-sort-header="vendor" i18n="@@statusreportTVendorNo" data-field="vendorNum" data-filter-control="input" data-sortable="true">Vendor Number</th>
+          <th mat-sort-header="costCenter" i18n="@@statusreportTCC" data-field="ccenter" data-filter-control="input" data-sortable="true">Cost Center</th>
+          <th mat-sort-header="cost" i18n="@@statusreportTTotalValue" data-field="totalUsd" data-filter-control="input" data-sortable="true">Total Value of POR in USD</th>
+          <th mat-sort-header="hCurrentApproverId" i18n="@@statusreportTPendingWith"  data-field="pendingw" data-filter-control="input" data-sortable="true">Pending With</th>
+          <th mat-sort-header="hdisplayDate" i18n="@@statusreportTPendingSince" data-field="pendings" data-filter-control="select" data-sortable="true">Pending Since</th>
+          <th mat-sort-header="sapOrder" data-field="sapponum" i18n="@@statusreportTSapPONo" data-filter-control="input" data-sortable="true">SAP PO Number</th>
+          <th data-field="matno" data-filter-control="input" i18n="@@statusreportTMatNo" data-sortable="true">Material Number</th>
+          <th data-field="shorttext" data-filter-control="input" i18n="@@statusreportTShortText" data-sortable="true">Short Text</th>
+          <th mat-sort-header="orderCurrency" data-field="currency" i18n="@@statusreportTOrderCur" data-filter-control="select" data-sortable="true">Order Currency</th>
+          <th data-field="unitcost" data-filter-control="input" i18n="@@statusreportTUC" data-sortable="true">Unit Cost</th>
+          <th data-field="totalcost" data-filter-control="input" i18n="@@statusreportTTotalCost" data-sortable="true">Total Item Cost in Order Currency</th>
+          <th data-field="totalusd" data-filter-control="input" i18n="@@statusreportTTotalUSD" data-sortable="true">Total Item Cost in USD</th>
+          <th data-field="ddate" data-filter-control="select" i18n="@@statusreportTDD" data-sortable="true">Delivery Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let report of reports.filter(reportFilter) |  paginate: { itemsPerPage: (reports.filter(reportFilter).length), currentPage: m1,id: 'm1' }; let i = index">
+          <td><a [routerLink]="['/ncrequestview', report.header.id]">{{report.header.id}}</a></td>
+          <td>{{displayStatus(report.header.status)}}</td><!--
+          <td><span *ngIf="report.financialApproverId!=null">{{displayAduser(report.financialApproverId)||''}}</span></td>
+          <td><span *ngIf="report.assetApproverId!=null">{{displayAduser(report.assetApproverId)||''}}</span></td> -->
+          <td>{{displayCategory(report.header.purchaseCategory)}}</td>
+          <td>{{report.header.orderDate | date : dateFormat}}</td>
+          <td>{{displayAduser(report.header.requester)}}</td>
+          <td>{{displayAduser(report.header.createdBy)}}</td>
+          <td>{{displayCompany(report.header.company)}}</td>
+           <td>{{displayVendor(report.header.vendor)}}</td>
+         <!-- <td>
+            <ul>
+              <li *ngFor="let item of report.header.itemDetails">
+                <div>{{item.vendorMaterialNo || 'None found'}}</div>
+              </li>
+            </ul>
+          </td>-->
+          <td>{{displayCostCenter(report.header.costCenter)}}</td>
+          <td>{{report.header.cost | currency}}</td>
+          <td>
+            <span *ngIf="report.hcurrentApprovalstatus === 2 && report.header.status < 5">
+              {{report.substituterId ? (displayAduser(report.substituterId || '')) : (displayAduser(report.hCurrentApproverId || ''))}}</span>
+
+          </td>
+          <td><span *ngIf="report.header.status < 5">{{(report.hdisplayDate != null && report.hdisplayDate != 'null') ? (report.hdisplayDate | date : dateFormat) : ' '}}</span></td>
+          <td>{{report.header.sapOrder || ''}}</td>
+          <td>
+            <ul>
+              <ng-container  *ngFor="let item of report.header.itemDetails">
+                <ng-container *ngIf="item.material">
+                  <li><div>{{item.line + ') ' + (item.material || '') + '  '}}</div>&nbsp;&nbsp;</li>
+                </ng-container>
+              </ng-container>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li *ngFor="let item of report.header.itemDetails">{{item.line + ') ' + item.description}}&nbsp;&nbsp;
+                <br/>
+              </li>
+            </ul>
+          </td>
+          <td>{{displayCurrency(report.header.orderCurrency)}}</td>
+          <td>
+            <ul>
+              <li *ngFor="let item of report.header.itemDetails">{{item.line + ') ' +item.unitCost}}&nbsp;&nbsp;</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li *ngFor="let item of report.header.itemDetails">{{item.line + ') ' +item.totalCost}}&nbsp;&nbsp;</li>
+            </ul>
+          </td>
+          <td>
+
+              <li *ngFor="let item of report.header.itemDetails">{{item.line + ') ' + (item.totalCostUsd | currency)}}&nbsp;&nbsp;</li>
+
+          </td>
+          <td>
+            <ul>
+              <ng-container *ngFor="let item of report.header.itemDetails">
+                <ng-container *ngIf="item.deliveryDate">
+                  <li>{{item.line + ') ' +(item.deliveryDate | date : dateFormat) || ''}}&nbsp;&nbsp;</li>
+                </ng-container>
+              </ng-container>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+      <pagination-controls (pageChange)="m1 = $event" id="m1"></pagination-controls>
+    </table>
+
+</div>

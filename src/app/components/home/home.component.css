@@ -1,0 +1,72 @@
+.apps-card:hover {
+  cursor: pointer;
+}
+
+.page-content {
+  position: absolute;
+  height: 90%;
+}
+
+/* .card-group {
+  display: inline;
+} */
+
+.apps-card {
+  display: inline-block;
+  height: 12em;
+  width: 13em;
+  padding: 1em;
+  margin: 1em;  
+}
+
+.tile-badge {
+  background-color: white;
+  color: black;
+}
+.card-title {
+  font-size: medium;
+  margin-top: 2px;
+}
+.card-text {
+  font-size: small;
+}
+
+
+@media (max-width: 600px) {
+  .card-group {
+    display: inline-table;
+    margin-top: 50px;
+  }
+  .apps-card {
+    display: inline-flex;
+    height: 12em;
+    width: 13em;
+    padding: 1em;
+    margin: 1em;
+  }
+  h4 {
+    font-size: 12px;
+    margin-top: -10px;
+  }
+  p {
+    font-size: 9px;
+  }
+}
+
+/* DELETE THE BELOW CSS WHEN WE GET smartbuy-app STYLES */
+.bg-turq {
+  background-color: turquoise;
+}
+
+.bg-ind {
+  background-color: indigo;
+}
+
+.text-sm {
+  font-size: 0.6em;
+}
+
+.bg-cool {
+  background-color: blue;
+  background: linear-gradient(turquoise, blue);
+}

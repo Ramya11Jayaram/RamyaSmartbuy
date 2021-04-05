@@ -1,0 +1,158 @@
+.jumbo-info {
+  margin-left: 7em;
+}
+/* div > span > img {
+  height: 100%;
+  width: 100%;
+}
+ */
+/* i {
+  font-size: 75px;
+} */
+/* td {
+  white-space:nowrap;
+} */
+th {
+  /* white-space:nowrap; */
+  text-transform:none;
+}
+.filter-row {
+  background: whitesmoke;
+}
+.icon {
+  width: 5rem;
+  height: 5rem;
+  background-image: radial-gradient(
+    circle farthest-corner at 0.7% 2.3%,
+    white 0%,
+    white 100.2%
+  );
+  border-radius: 5px;
+  border-radius: 5px;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  justify-items: center;
+  text-align: center;
+  font-size: 4rem;
+}
+
+.custom-hover:hover {
+  cursor: pointer;
+}
+
+.custom-row-align .form-row {
+  align-items: center;
+}
+
+.custom-row-align .form-row.custom-radio-align {
+  align-items: baseline;
+}
+
+.custom-badge-spacing {
+  margin-right: 1em;
+}
+
+.button-fix {
+  float: none;
+}
+
+.responsive-table-fix {
+  display: inline-table;
+}
+
+th {
+  min-width:13rem;
+  color: white;
+}
+
+.custom-date {
+  /* padding-bottom: 1rem; */
+  display: flex;
+  align-items: center;
+}
+
+/* Specific field width CSS */
+@media(min-width: 576px) {
+  .req-number {
+   max-width: 16rem;
+   padding-bottom: 1rem;
+  }
+  .created-date /* input */ {
+    max-width: 16rem;
+  }
+  .purchase-category {
+    max-width: 40rem;
+    padding-bottom: 1rem;
+  }
+  .vendor {
+    max-width: 44rem;
+    min-width: 44rem;
+    padding-bottom: 1rem;
+  }
+  .ad-user /* input */ {
+    max-width: 44rem;
+    padding-bottom: 1rem;
+  }
+  .company {
+    max-width: 37rem;
+    min-width: 37rem;
+    padding-bottom: 1rem;
+  }
+  .status {
+    max-width: 17rem;
+    padding-bottom: 1rem;
+  }
+}
+
+@media (max-width:600px) {
+  .input-width {
+    max-width: 270px;
+  }
+  .vendorinfo {
+    display: flex;
+    white-space: nowrap;
+  }
+  .vendor-badge {
+    max-width: 280px;
+    overflow: hidden;
+  }
+  .tableClassName thead, .tableClassName tfoot, .tableClassName tbody tr {   
+    width: 3200px !important;
+    }
+}
+
+/* Please verify below */
+
+.tableClassName tbody {
+display: block;
+max-height: 56vh;
+/* overflow-x: visible !important; */
+}
+
+.tableClassName thead, .tableClassName tfoot, .tableClassName tbody tr {
+display: table;
+width: 250%;
+table-layout: fixed;
+}
+.tableClassName thead {
+width: calc( 250% );
+position: sticky;
+top: 0;
+}
+
+.tableClassName tfoot {
+width: calc( 250% );
+position: sticky;
+bottom: 0;
+}
+table .cell2{
+  width: 2%;
+}
+table .cell3{
+  width: 3%;
+}
+
+table .cell4{
+  width: 4%;
+}

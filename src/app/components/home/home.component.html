@@ -1,0 +1,48 @@
+<!-- <div class="card-group text-light">
+      <a (click)="onInboxClick()">
+        <div class="card apps-card shadow-sm bg-turq">
+          <div class="card-block">
+            <div class="text-right"><span>°</span></div>
+            <h4 class="card-title">Inbox<br /><br /></h4>
+            <p class="card-text">
+              Access your requisitions
+            </p>
+          </div>
+        </div>
+      </a>
+      <a (click)="onShopClick()">
+        <div class="card apps-card shadow-sm bg-ind">
+          <div class="card-block">
+            <div class="text-right"><span>°</span></div>
+            <h4 class="card-title">Purchase Requisitions</h4>
+            <p class="card-text">
+              Create a new purchase request
+            </p>
+          </div>
+        </div>
+      </a>
+</div> -->
+<h1 *ngIf="!userTiles" i18n="@@homeTitleLoading">Loading...</h1>
+<div class="card-group text-light">
+    <a (click)="onAppClick(tile.url)" *ngFor="let tile of userTiles">
+      <div class="card apps-card shadow-sm" [ngStyle]="{background: styleApp(tile)}">
+        <div class="card-block">
+          <div class="text-right">
+            <span *ngIf="badges[tile.id] || badges[tile.id] == ''" class="badge tile-badge">{{badges[tile.id]}}</span>
+            <!-- <span *ngIf="!badges[tile.id] && badges[tile.id] !=''">°</span> -->
+          </div>
+          <!-- not i18n because it is dynamic -->
+          <h4 class="card-title">{{tile.header}}<br /></h4>
+          <p class="card-text">
+            {{tile.subtitle}}
+          </p>
+        </div>
+      </div>
+    </a>
+</div>
+
+<div *ngIf="debug">
+  <button (click)="onTestClick()" class="btn btn-primary" >TILE TEST</button>
+  <br>
+</div>
+

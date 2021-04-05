@@ -1,0 +1,144 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~ngx-smart-modal/ngx-smart-modal';
+* {
+    font-family: Helvetica;
+  }
+
+.no-border {
+  border: 0px;
+}
+
+.text-smartbuy {
+  color: #003399;
+}
+
+.hide-x div.x {
+  display:none!important;
+}
+
+.hide-x.ng-select .ng-clear-wrapper {
+  display:none!important;
+}
+
+.ng-star-inserted {
+  visibility: visible!important;
+}
+
+.dropdown-width-fix.ng-dropdown-panel {
+  width: auto !important;
+}
+
+.dropdown-width-15.ng-dropdown-panel {
+  width: 15em !important;
+}
+
+.dropdown-width-25.ng-dropdown-panel {
+  width: 25em !important;
+}
+
+.width-25 {
+  width: 25em !important;
+}
+
+.width-10 {
+  width: 10em !important;
+}
+
+.min-width-7 {
+  min-width: 7em !important;
+}
+
+.min-width-8 {
+  min-width: 8em !important;
+}
+
+.text-wrap {
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  word-break: break-word !important;
+}
+
+.fit-content {
+  width: fit-content;
+}
+
+.ng-invalid.ng-touched {
+  border-color: #dc3545;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px #fde6e8;
+}
+
+form.ng-invalid.ng-touched {
+  border-color: initial;
+  box-shadow: initial;
+}
+
+ng-select.ng-invalid.ng-touched .ng-select-container {
+  border-color: #dc3545;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px #fde6e8;
+}
+.ng-select .ng-select-container .ng-value-container .ng-input {
+  padding-left: 0px!important;
+}
+
+.cursor-pointer:hover {
+  cursor: pointer;
+}
+
+.loading{
+  color: white;
+  padding-top: 50px;
+}
+
+.badge-primary-fix{
+  color: #fff !important;
+  background-color: #007bff !important;
+}
+
+.badge-danger-fix {
+  color: #fff !important;
+  background-color: #dc3545 !important;
+}
+
+.bg-gold {
+  background-color: rgb(212, 175, 55) !important;
+  color: white !important;
+}
+
+.text-gold {
+  color: rgb(212, 175, 55);
+}
+
+.btn.btn-warning.btn-gold {
+  background-color: rgb(212, 175, 55) !important;
+  border-color: rgb(212, 175, 55) !important;
+}
+
+.btn.btn-warning.btn-gold:hover {
+  background-color: #b08f26 !important;
+}
+
+.alert-service .alert {
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.close-visibility > .close {
+  opacity: 1;
+}
+
+#okta-signin-container {
+  width: initial;
+  margin: 0 auto;
+}
+
+.force-no-border {
+  border: none !important;
+}
+form input[type="radio"] + label {
+  padding-top: 3px !important;
+}
+@media(max-width: 575px) {
+  .css3-tabstrip input[type="radio"] + label {
+    font-size: smaller;
+  }
+}

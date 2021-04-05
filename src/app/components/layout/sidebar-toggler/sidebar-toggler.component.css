@@ -1,0 +1,21 @@
+.custom-toggler{
+  font-size: x-large;
+}
+
+.custom-toggler:active, .btn:active > .custom-toggler {
+  animation-name: skrrt;
+  animation-duration: 0.1s;
+  -webkit-animation-name: skrrt;
+  -webkit-animation-duration: 0.1s;
+}
+
+@keyframes skrrt {
+  from {transform:rotate(0deg)}
+  to {transform:rotate(180deg);}
+}
+
+@-webkit-keyframes skrrt {
+  from {-webkit-transform: rotate(0deg);}
+  to {-webkit-transform: rotate(180deg);}
+}
+

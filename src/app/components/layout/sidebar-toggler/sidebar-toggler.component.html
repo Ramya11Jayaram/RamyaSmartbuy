@@ -1,0 +1,4 @@
+<button type="button" class="btn" (click)="sidebarService.toggleSidebar()">
+  <span class="text-light custom-toggler" [ngClass]="{'pe-7s-menu': sidebarService.hideSidebar, 'pe-7s-close': !sidebarService.hideSidebar}"></span>
+  <!-- <span class="text-light custom-toggler pe-7s-close"></span> -->
+</button>

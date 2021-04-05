@@ -1,0 +1,6 @@
+<div *ngIf="errCode ==='403'" class="alert alert-danger" role="alert" style="font-weight: bold">
+  <span>403</span> - <span i18n="@@unaouthorized403">You don't have permission to perform this activity. Please contact EAI service desk for assistance !</span>
+</div>
+<div *ngIf="errCode ==='401'" class="alert alert-danger" role="alert" style="font-weight: bold">
+  <span i18n="@@unaouthorizedSessionExpired">Session Expired !</span>
+</div>

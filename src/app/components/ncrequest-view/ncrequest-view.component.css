@@ -1,0 +1,731 @@
+.small-input {
+  height: 20px!important;
+  min-height: 20px!important;
+}
+
+.jumbotron {
+  padding-top: 1em !important;
+}
+
+.file-table th:last-child {
+  text-align: left;
+}
+
+/* Bootsnipp CSS below */
+
+.css3-tabstrip
+{
+    width: 100%;
+    height: 220px;
+}
+
+.css3-tabstrip ul,
+.css3-tabstrip li
+{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.css3-tabstrip,
+.css3-tabstrip input[type="radio"]:checked + label
+{
+    position: relative;
+}
+
+.css3-tabstrip li,
+.css3-tabstrip input[type="radio"] + label
+{
+    display: inline-block;
+}
+
+.css3-tabstrip li > div,
+.css3-tabstrip input[type="radio"]
+{
+    position: absolute;
+}
+
+.css3-tabstrip li > div,
+.css3-tabstrip input[type="radio"] + label
+{
+    border: solid 1px #ccc;
+}
+
+.css3-tabstrip
+{
+    font: normal 11px Arial, Sans-serif;
+    color: #404040;
+}
+
+.css3-tabstrip li
+{
+    vertical-align: top;
+}
+
+.css3-tabstrip li:first-child
+{
+    margin-left: 8px;
+}
+
+.css3-tabstrip li > div
+{
+    top: 33px;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 8px;
+    overflow: auto;
+    background: #fff;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.css3-tabstrip input[type="radio"] + label
+{
+    margin: 0 2px 0 0;
+    padding: 0 18px;
+    line-height: 32px;
+    background: #f1f1f1;
+    text-align: center;
+    border-radius: 5px 5px 0 0;
+    cursor: pointer;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.css3-tabstrip input[type="radio"]:checked + label
+{
+    z-index: 1;
+    background: #fff;
+    border-bottom-color: #fff;
+    cursor: default;
+}
+
+.css3-tabstrip input[type="radio"]
+{
+    opacity: 0;
+}
+
+.css3-tabstrip input[type="radio"] ~ div
+{
+    display: none;
+}
+
+.css3-tabstrip input[type="radio"]:checked:not(:disabled) ~ div
+{
+    display: block;
+}
+
+.css3-tabstrip input[type="radio"]:disabled + label
+{
+    opacity: .5;
+    cursor: no-drop;
+}
+
+/* End Bootsnipp CSS */
+
+/* CSS copied from ncrequest-new.component.css */
+
+input, textarea, select, ng-autoselect {
+  margin-bottom: 1em;
+}
+
+.custom-hide {
+  visibility: hidden;
+}
+
+/* .custom-table > * > tr > th, .custom-table > * > tr > td {
+  min-width: 110px;
+} */
+.custom-select-size-3 {
+  width: 3em;
+}
+
+.custom-select-size-10 {
+  width: 10em;
+}
+
+.custom-table > * > tr > th {
+  color: white;
+}
+
+.custom-table > tbody:nth-child(even) > tr {
+  background-color: #ffffff !important
+}
+
+.custom-table > tbody:nth-child(odd) > tr {
+  background-color: #f5f8fa !important;
+}
+
+#addrow {
+  float: none;
+}
+
+.shape-square-sm {
+  width: 2em;
+  height: 2em;
+}
+
+.custom-button-fix {
+  float: none;
+  margin-left: 5em;
+}
+
+.button-fix {
+  float: none;
+}
+
+.bg-smartbuy {
+  background-color: #003399;
+}
+
+
+.custom-circle {
+  border-radius: 25px !important;
+}
+
+.custom-mobile-button-group button {
+  width: 180px;
+  font-size: small;
+}
+/* button.btn[disabled].btn-success {
+  opacity: 1;
+  background-color: #69b873!important;
+}
+button.btn[disabled].btn-warning {
+  opacity: 1;
+  background-color: #d9b667!important;
+}
+button.btn[disabled].btn-danger {
+  opacity: 1;
+  background-color: #d0717b!important;
+} */
+@media(max-width: 575px) {
+  .custom-mobile-button-group {
+    width: 100%
+  }
+
+  .custom-mobile-button-group button {
+    margin-top: 0.5em;
+  }
+
+  .custom-mobile-button-group > div {
+    width: initial;
+    margin:0 auto;
+  }
+
+  .custom-mobile-button-group button:last-child {
+    margin-bottom: 0.5em;
+    width: 180px;
+  }
+
+  .jumbo-info {
+    margin-left: 1em !important;
+  }
+
+  .custom-hide {
+    display: none;
+  }
+
+  .card {
+    margin: 0px !important;
+  }
+  .custom-file.w-25 {
+    width: 100% !important;
+  }
+}
+
+.costObjectForm .form-group {
+  padding:.5rem!important;
+}
+
+.approvers select {
+  max-width: 50rem;
+}
+
+/* Styles that pertain to specific form fields
+    TODO: make mobile view look nice with mobile version of these styles */
+@media(min-width: 576px) {
+  .purchase-category {
+    min-width: 36rem !important;
+    max-width: 36rem !important;
+  }
+
+  .company, .company .autocomplete-container {
+    min-width: 33rem !important;
+    max-width: 33rem !important;
+  }
+
+  .por-type {
+    min-width: 38rem !important;
+    max-width: 38rem !important;
+  }
+
+  .requester, .requester .autocomplete-container, .approver {
+    min-width: 33rem !important;
+    max-width: 33rem !important;
+  }
+
+  .cost-center, .gl-account, .internal-order, .profit-center, .asset-number {
+    min-width: 38rem !important;
+    max-width: 38rem !important;
+  }
+
+  .asset-type {
+    min-width: 26rem !important;
+    max-width: 26rem !important;
+  }
+
+  .order-currency ng-select {
+    min-width: 9rem !important;
+    max-width: 9rem !important;
+  }
+  .vendor, .vendor .autocomplete-container {
+    min-width: 40rem !important;
+    max-width: 40rem !important;
+  }
+
+  .reference-number {
+    min-width: 18rem !important;
+    max-width: 18rem !important;
+  }
+
+  .order-request-details .form-group {
+    margin-right: 1em; margin-left: 1em;
+  }
+}
+
+  /* Overwrite tooltippy to make more sense for how it's actually used in our application */
+  .tooltippy--top:before, .tooltippy--bottom:before, .tooltippy--top:after, .tooltippy--bottom:after {
+    transform: translate(-50%, -1em) !important;
+  }
+
+  .tooltippy--right:before, .tooltippy--right:after {
+    transform: translate(10px, -50%) !important;
+  }
+
+/* CSS Copied from other pages */
+.icon {
+  width: 5rem;
+  height: 5rem;
+  background-image: radial-gradient(
+    circle farthest-corner at 0.7% 2.3%,
+    white 0%,
+    white 100.2%
+  );
+  border-radius: 5px;
+  border-radius: 5px;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  justify-items: center;
+  text-align: center;
+  font-size: 4rem;
+}
+
+.custom-lg-div-btn {
+  font-size: 3rem;
+}
+
+.custom-lg-div-btn:hover{
+  cursor: pointer;
+}
+
+.jumbo-info {
+  margin-left: 6em;
+}
+
+@media(min-width: 576px) {
+  input.form-control, select.form-control {
+    min-height: 40px !important;
+  }
+  input.small-input {
+    min-height: 20px!important;
+  }
+}
+
+/* Experimental CSS */
+
+img {
+  vertical-align: middle;
+}
+
+.img-responsive {
+  display: block;
+  height: auto;
+  max-width: 100%;
+}
+
+.img-rounded {
+  border-radius: 3px;
+}
+
+.img-thumbnail {
+  background-color: #fff;
+  border: 1px solid #ededf0;
+  border-radius: 3px;
+  display: inline-block;
+  height: auto;
+  line-height: 1.428571429;
+  max-width: 100%;
+  -moz-transition: all .2s ease-in-out;
+  -o-transition: all .2s ease-in-out;
+  padding: 2px;
+  transition: all .2s ease-in-out;
+  -webkit-transition: all .2s ease-in-out;
+}
+
+.img-circle {
+  border-radius: 50%;
+}
+
+.timeline-centered {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+  .timeline-centered:before, .timeline-centered:after {
+      content: " ";
+      display: table;
+  }
+
+  .timeline-centered:after {
+      clear: both;
+  }
+
+  .timeline-centered:before, .timeline-centered:after {
+      content: " ";
+      display: table;
+  }
+
+  .timeline-centered:after {
+      clear: both;
+  }
+
+  .timeline-centered:before {
+      content: '';
+      position: absolute;
+      display: block;
+      width: 4px;
+      background: #f5f5f6;
+      /*left: 50%;*/
+      top: 20px;
+      bottom: 20px;
+      margin-left: 30px;
+  }
+
+  .timeline-centered .timeline-entry {
+      position: relative;
+      /*width: 50%;
+      float: right;*/
+      margin-top: 5px;
+      margin-left: 30px;
+      margin-bottom: 10px;
+      clear: both;
+  }
+
+      .timeline-centered .timeline-entry:before, .timeline-centered .timeline-entry:after {
+          content: " ";
+          display: table;
+      }
+
+      .timeline-centered .timeline-entry:after {
+          clear: both;
+      }
+
+      .timeline-centered .timeline-entry:before, .timeline-centered .timeline-entry:after {
+          content: " ";
+          display: table;
+      }
+
+      .timeline-centered .timeline-entry:after {
+          clear: both;
+      }
+
+      .timeline-centered .timeline-entry.begin {
+          margin-bottom: 0;
+      }
+
+      .timeline-centered .timeline-entry.left-aligned {
+          float: left;
+      }
+
+          .timeline-centered .timeline-entry.left-aligned .timeline-entry-inner {
+              margin-left: 0;
+              margin-right: -18px;
+          }
+
+              .timeline-centered .timeline-entry.left-aligned .timeline-entry-inner .timeline-time {
+                  left: auto;
+                  right: -100px;
+                  text-align: left;
+              }
+
+              .timeline-centered .timeline-entry.left-aligned .timeline-entry-inner .timeline-icon {
+                  float: right;
+              }
+
+              .timeline-centered .timeline-entry.left-aligned .timeline-entry-inner .timeline-label {
+                  margin-left: 0;
+                  margin-right: 70px;
+              }
+
+                  .timeline-centered .timeline-entry.left-aligned .timeline-entry-inner .timeline-label:after {
+                      left: auto;
+                      right: 0;
+                      margin-left: 0;
+                      margin-right: -9px;
+                      -moz-transform: rotate(180deg);
+                      -o-transform: rotate(180deg);
+                      -webkit-transform: rotate(180deg);
+                      -ms-transform: rotate(180deg);
+                      transform: rotate(180deg);
+                  }
+
+      .timeline-centered .timeline-entry .timeline-entry-inner {
+          position: relative;
+          margin-left: -20px;
+      }
+
+          .timeline-centered .timeline-entry .timeline-entry-inner:before, .timeline-centered .timeline-entry .timeline-entry-inner:after {
+              content: " ";
+              display: table;
+          }
+
+          .timeline-centered .timeline-entry .timeline-entry-inner:after {
+              clear: both;
+          }
+
+          .timeline-centered .timeline-entry .timeline-entry-inner:before, .timeline-centered .timeline-entry .timeline-entry-inner:after {
+              content: " ";
+              display: table;
+          }
+
+          .timeline-centered .timeline-entry .timeline-entry-inner:after {
+              clear: both;
+          }
+
+          .timeline-centered .timeline-entry .timeline-entry-inner .timeline-time {
+              position: absolute;
+              left: -100px;
+              text-align: right;
+              padding: 10px;
+              -webkit-box-sizing: border-box;
+              -moz-box-sizing: border-box;
+              box-sizing: border-box;
+          }
+
+              .timeline-centered .timeline-entry .timeline-entry-inner .timeline-time > span {
+                  display: block;
+              }
+
+                  .timeline-centered .timeline-entry .timeline-entry-inner .timeline-time > span:first-child {
+                      font-size: 15px;
+                      font-weight: bold;
+                  }
+
+                  .timeline-centered .timeline-entry .timeline-entry-inner .timeline-time > span:last-child {
+                      font-size: 12px;
+                  }
+
+          .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon {
+              background: #fff;
+              color: #737881;
+              display: block;
+              width: 40px;
+              height: 40px;
+              -webkit-background-clip: padding-box;
+              -moz-background-clip: padding;
+              background-clip: padding-box;
+              -webkit-border-radius: 20px;
+              -moz-border-radius: 20px;
+              border-radius: 20px;
+              text-align: center;
+              -moz-box-shadow: 0 0 0 5px #f5f5f6;
+              -webkit-box-shadow: 0 0 0 5px #f5f5f6;
+              box-shadow: 0 0 0 5px #f5f5f6;
+              line-height: 40px;
+              font-size: 15px;
+              float: left;
+          }
+
+              .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon.bg-primary {
+                  background-color: #303641;
+                  color: #fff;
+              }
+
+              .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon.bg-secondary {
+                  background-color: #ee4749;
+                  color: #fff;
+              }
+
+              .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon.bg-success {
+                  background-color: #00a651;
+                  color: #fff;
+              }
+
+              .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon.bg-info {
+                  background-color: #21a9e1;
+                  color: #fff;
+              }
+
+              .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon.bg-warning {
+                  background-color: #fad839;
+                  color: #fff;
+              }
+
+              .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon.bg-danger {
+                  background-color: #cc2424;
+                  color: #fff;
+              }
+
+          .timeline-centered .timeline-entry .timeline-entry-inner .timeline-label {
+              position: relative;
+              background: #f5f5f6;
+              padding: 1em;
+              margin-left: 60px;
+              -webkit-background-clip: padding-box;
+              -moz-background-clip: padding;
+              background-clip: padding-box;
+              -webkit-border-radius: 3px;
+              -moz-border-radius: 3px;
+              border-radius: 3px;
+          }
+
+              .timeline-centered .timeline-entry .timeline-entry-inner .timeline-label:after {
+                  content: '';
+                  display: block;
+                  position: absolute;
+                  width: 0;
+                  height: 0;
+                  border-style: solid;
+                  border-width: 9px 9px 9px 0;
+                  border-color: transparent #f5f5f6 transparent transparent;
+                  left: 0;
+                  top: 10px;
+                  margin-left: -9px;
+              }
+
+              .timeline-centered .timeline-entry .timeline-entry-inner .timeline-label h2, .timeline-centered .timeline-entry .timeline-entry-inner .timeline-label p {
+                  color: #737881;
+                  font-family: "Noto Sans",sans-serif;
+                  font-size: 12px;
+                  margin: 0;
+                  line-height: 1.428571429;
+              }
+
+                  .timeline-centered .timeline-entry .timeline-entry-inner .timeline-label p + p {
+                      margin-top: 15px;
+                  }
+
+              .timeline-centered .timeline-entry .timeline-entry-inner .timeline-label h2 {
+                  font-size: 16px;
+                  margin-bottom: 10px;
+              }
+
+                  .timeline-centered .timeline-entry .timeline-entry-inner .timeline-label h2 a {
+                      color: #303641;
+                  }
+
+                  .timeline-centered .timeline-entry .timeline-entry-inner .timeline-label h2 span {
+                      -webkit-opacity: .6;
+                      -moz-opacity: .6;
+                      opacity: .6;
+                      -ms-filter: alpha(opacity=60);
+                      filter: alpha(opacity=60);
+                  }
+
+
+/* End CSS copied from ncrequest-new.component.css */
+.bigger-font {
+  transform: scale(2);
+}
+
+.small-input.ng-select {
+  top: -8%;
+  right: 20%;
+  transform: scale(0.6);
+}
+
+.custom-underline:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.custom-stick-to-bottom {
+  position:fixed;
+  right:0;
+  bottom:0;
+  z-index: 999999999999;
+}
+.btn-danger-fix {
+  padding: 6px;
+}
+.fixed-btn {
+  position: fixed;
+  bottom: 65px;
+  z-index: 999999999999;
+}
+@media (max-width:600px) {
+  .fixed-btn {
+    position: fixed;
+    bottom: 0;
+    z-index: 999999999999;
+    width: 100%;
+  }
+  .half-width {
+    width:50%
+  }
+}
+
+.custom-mobile-button-group .btn-warning.disabled, .custom-mobile-button-group .btn-warning:disabled {
+  color: white;
+}
+
+.custom-pending-approval {
+  box-shadow: 0px 0px 8px 3px rgba(255,228,196,1);
+}
+
+.custom-pending-approval > h2 {
+  font-weight: bold;
+}
+
+.custom-table-wrapper {
+  position:relative;
+}
+.custom-table-scroll {
+  height:150px;
+  overflow:auto;
+  margin-top:20px;
+}
+.custom-table-wrapper table {
+  width:100%;
+
+}
+
+.custom-table-wrapper table thead th .text {
+  position:absolute;
+  top:-20px;
+  z-index:2;
+  height:20px;
+  width:35%;
+}
+
+.custom-display-over-table {
+  position: absolute;
+  bottom: 0;
+  right: 1.6em;
+}
+
+@media (max-width: 600px) {
+  ::ng-deep .ng-dropdown-panel {
+    overflow-x: auto!important;
+    min-width: 200px!important;
+  }
+
+  ::ng-deep body > .ng-dropdown-panel > .ng-dropdown-panel-items {
+    width:fit-content!important;
+  }
+}

@@ -1,0 +1,830 @@
+<div class="jumbofix jumbotron bg-light align-items-center">
+  <div class="jumbo-content">
+    <div class="jumbo-info">
+      <form>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row">
+              <h4 class="col-sm-auto text-smartbuy">
+                <strong i18n="@@viewbudgetrequestRequest"> Request # &nbsp; {{ requestId }} </strong>
+              </h4>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="row">
+              <h4 class="col-sm-auto text-smartbuy">
+                <strong i18n="@@viewbudgetrequestStatus"
+                  >Status:&nbsp;<span *ngIf="requestInfo">
+                    <span [innerHTML]="errTransService.returnMsg(requestInfo?.docStatus, true)"></span> </span
+                ></strong>
+              </h4>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row">
+              <span class="col">
+                <span class="">
+                  <div class="form-group col-sm-auto">
+                    <span
+                      ><strong i18n="@@viewbudgetrequestReqFor"
+                        >Requested For: {{ requestInfo?.requester }}</strong
+                      ></span
+                    >
+                  </div>
+                  <div class="form-group col-sm-auto">
+                    <span
+                      ><strong i18n="@@viewbudgetrequestTitle">Title: </strong>{{ requestInfo?.title }}</span
+                    >
+                  </div>
+                  <div class="form-group col-sm-auto">
+                    <span><strong i18n="@@viewbudgetrequestCompany">Company: </strong></span>
+                    <span>{{ requestInfo?.company }}</span>
+                  </div>
+                  <div class="form-group col-sm-auto">
+                    <span><strong i18n="@@viewbudgetrequestCostCenter">Cost Center: </strong></span>
+                    <span *ngIf="requestInfo?.costcenterName">{{
+                      costCenterNameToCcDisplay(requestInfo?.costcenterName)
+                    }}</span>
+                  </div>
+                  <div class="form-group col-sm-auto">
+                    <span
+                      ><strong i18n="@@viewbudgetNUserRegionLabel">Current Region Assigned: </strong
+                      >{{ createdForRegion }}</span
+                    >
+                  </div>
+                  <div class="form-group col-sm-auto">
+                    <span
+                      ><strong>{{
+                        returnRequestType(requestInfo?.requestType)
+                      }}</strong></span
+                    >
+                  </div>
+                </span>
+              </span>
+              <span class="col">
+                <span class="">
+                  <ng-container
+                    *ngIf="
+                      requestInfo?.createdById !==
+                      getAdIdFromEid(requestInfo?.employeeId)
+                    "
+                  >
+                    <div class="form-group col-sm-auto">
+                      <span
+                        ><strong i18n="@@viewbudgetrequestReqBy">Requested By: </strong
+                        >{{ requestInfo?.createdBy }}</span
+                      >
+                    </div>
+                    <div class="form-group col-sm-auto">
+                      <span
+                        ><strong i18n="@@viewbudgetrequestTitle">Title: </strong>{{ createdBy?.title }}</span
+                      >
+                    </div>
+                    <div class="form-group col-sm-auto">
+                      <span
+                        ><strong i18n="@@viewbudgetrequestCompany">Company: </strong
+                        >{{ createdBy?.company }}</span
+                      >
+                    </div>
+                    <div class="form-group col-sm-auto">
+                      <span
+                        ><strong i18n="@@viewbudgetrequestCostCenter">Cost Center: </strong
+                        >{{ createdBy?.costCenter }}</span
+                      >
+                    </div>
+                    <div class="form-group col-sm-auto">
+                      <span
+                        ><strong i18n="@@viewbudgetNUserRegionLabel">Current Region Assigned: </strong
+                        >{{ createdBy?.region }}</span
+                      >
+                    </div>
+                  </ng-container>
+                  <div class="form-group col-sm-auto">
+                    <span><strong i18n="@@viewbudgetrequestCreationDate">Creation Date: </strong></span>
+                    <span>{{ requestInfo?.creationdate | date : dateFormat }}</span>
+                    <!-- <span *ngIf="requestInfo?.creationtime">
+                        {{ requestInfo?.creationtime }}</span
+                      > -->
+                  </div>
+                  <div
+                    class="form-group col-sm-auto"
+                    *ngIf="requestInfo?.changedate"
+                  >
+                    <span><strong i18n="@@viewbudgetrequestChangedOn">Changed On: </strong></span>
+                    <span>{{ requestInfo?.changedate | date : dateFormat }}</span>
+                    <!-- <span *ngIf="requestInfo?.changetime">
+                    {{ requestInfo?.changetime }}</span
+                  > -->
+                  </div>
+                </span>
+              </span>
+            </div>
+            <div class="form-group row">
+              <div class="col-lg-8">
+                <label for="authComments"
+                  ><strong i18n="@@viewbudgetrequestInternalNotes">Internal Notes</strong></label
+                >
+                <textarea
+                  name="authComments"
+                  id="authComments"
+                  class="form-control"
+                  [(ngModel)]="internalNotes"
+                  [ngModelOptions]="{ standalone: true }"
+                ></textarea>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="form-group row custom-mobile-button-group">
+                <div class="col-sm-auto">
+                  <button
+                    class="btn btn-success"
+                    (click)="onApproveClick()"
+                    i18n="@@viewbudgetrequestApproveBtn"
+                    [disabled]="!userPermissions.canApproveReject"
+                  >
+                    <i class="pe-7s-check"></i> Approve
+                  </button>
+                </div>
+                <div class="col-sm-auto">
+                  <button
+                    class="btn btn-warning btn-gold"
+                    (click)="askQuestionModal.open()"
+                    id="pendingClarification"
+                    i18n="@@viewbudgetrequestAskBtn"
+                    [disabled]="!userPermissions.canAskQuestion"
+                  >
+                    <i class="pe-7s-help1"></i> Ask a question
+                  </button>
+                </div>
+                <div class="col-sm-auto">
+                  <button
+                    class="btn btn-danger"
+                    (click)="onRejectClick()"
+                    i18n="@@viewbudgetrequestRejectBtn"
+                    [disabled]="!userPermissions.canApproveReject"
+                  >
+                    <i class="pe-7s-close-circle"></i> Reject
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-auto">
+            <div class="row">
+              <div>
+                <div class="row">
+                  <div class="timeline-centered">
+                    <ng-container *ngFor="let name of hierarchy; let i = index">
+                      <article class="timeline-entry remove-last">
+                        <div class="timeline-entry-inner">
+                          <div
+                            class="timeline-icon"
+                            [ngClass]="{
+                              'bg-success': name.name.includes('@'),
+                              'bg-danger':
+                                name.name.includes('^') &&
+                                !name.name.includes('@'),
+                              'bg-gold':
+                                (name.name.includes('#') &&
+                                  !name.name.includes('^') &&
+                                  !name.name.includes('@')) ||
+                                (!name.name.includes('@') &&
+                                  !name.name.includes('^') &&
+                                  !name.name.includes('#'))
+                            }"
+                          >
+                            <i
+                              class="entypo-feather bigger-font"
+                              [ngClass]="{
+                                'pe-7s-angle-down': hierarchy[i + 1]
+                              }"
+                            ></i>
+                          </div>
+                          <div
+                            class="timeline-label"
+                            [ngClass]="{
+                              'custom-pending-approval':
+                                name.name.includes('#') &&
+                                !name.name.includes('^') &&
+                                !name.name.includes('@')
+                            }"
+                          >
+                            <h2
+                              [innerHTML]="
+                                name.name
+                                  | budgetHierarchy
+                                    : {
+                                        date: name.displayDt,
+                                        approval: sendHierarchyApprovalString(
+                                          name
+                                        ),
+                                        sub: name.substitutor
+                                      }
+                              "
+                            ></h2>
+                            <h6
+                              *ngIf="name.fieldName"
+                              class="text-smartbuy"
+                              [innerText]="name.fieldName"
+                            ></h6>
+                            <!-- <div
+                              *ngIf="
+                                !name.name.includes('^') &&
+                                name.name.includes('@')
+                              "
+                              i18n="@@viewbudgetrequestApproved"
+                            >
+                              Approved
+                            </div>
+                            <div
+                              *ngIf="
+                                name.name.includes('^') &&
+                                !name.name.includes('@')
+                              "
+                              i18n="@@viewbudgetrequestReject"
+                            >
+                              Reject
+                            </div>
+                            <div
+                              *ngIf="
+                                name.name.includes('#') &&
+                                !name.name.includes('^') &&
+                                !name.name.includes('@')
+                              "
+                              i18n="@@viewbudgetrequestPendingApproval"
+                            >
+                              Pending Approval
+                            </div> -->
+                            <!--<div
+                              *ngIf="
+                                !name.name.includes('#') &&
+                                !name.name.includes('^') &&
+                                !name.name.includes('@')
+                              "
+                            >
+                              Pending
+                            </div>-->
+                            <p
+                              class="text-sm"
+                              *ngIf="name.title"
+                              [innerHTML]="name.title"
+                            ></p>
+                            <!-- <span
+                              *ngIf="
+                                name.name.includes('^') ||
+                                name.name.includes('@')
+                              "
+                            >
+                              <span
+                                class="text-sm"
+                                *ngIf="name.displayDt"
+                                [innerHTML]="name.displayDt"
+                              ></span>
+                            </span> -->
+                          </div>
+                        </div>
+                      </article>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Bootsnipp from https://bootsnipp.com/snippets/mMWql -->
+    <div class="shadow-lg cmttable card m-5">
+      <div class="css3-tabstrip">
+        <ul>
+          <li>
+            <input
+              type="radio"
+              name="css3-tabstrip-0"
+              checked="checked"
+              id="css3-tabstrip-0-0"
+            /><label for="css3-tabstrip-0-0" i18n="@@viewbudgetrequestComments">Comments/History</label>
+            <div>
+              <table class="table mt-0 mb-0">
+                <thead>
+                  <tr>
+                    <th scope="col" i18n="@@viewbudgetrequestCBy">Created By</th>
+                    <!--<th scope="col">requestid</th>-->
+                    <th scope="col" i18n="@@viewbudgetrequestCAt">Created At</th>
+                    <th scope="col" i18n="@@viewbudgetrequestComment">Comment</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let tblv of loadGrid">
+                    <!--<td>{{ tblv.requestid }} tblv.addwho</td>-->
+
+                    <td>
+                      <span *ngFor="let user of adUsers">
+                        <span *ngIf="user.ID == tblv.addwho">
+                          {{ user.firstname }}&nbsp;{{ user.lastname }}
+                        </span>
+                      </span>
+                    </td>
+                    <td>
+                      {{ tblv?.displayDate | date: dateTime }}
+                    </td>
+                    <td>{{ tblv.comments }}</td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- End bootsnipp -->
+  </div>
+</div>
+
+<div
+  class="card authtable p-5 m-4 shadow-lg"
+  *ngIf="
+    requestInfo?.requestType != 1 &&
+    requestInfo?.requestType != 4 &&
+    userPermissions.canSeeTable
+  "
+>
+  <!-- <ngx-spinner id="brViewSpinner">
+    <span>Checking user HR info...</span>
+  </ngx-spinner> -->
+  <div class="row">
+    <div class="col-lg-auto">
+      <label i18n="@@viewbudgetrequestAddAppNeeded">Additional Approval Authorizations Needed</label>
+    </div>
+  </div>
+  <div class="card m-1 overflow-auto shadow-lg">
+    <table class="table table-striped table-main table-bordered m-0">
+      <thead>
+        <tr>
+          <th>
+            <i
+              class="pe-7s-note text-primary cursor-pointer"
+              *ngIf="userPermissions.canEdit"
+              (click)="toggleEdit('table')"
+            ></i>
+          </th>
+          <th i18n="@@viewbudgetrequestReqRange">Requested Range</th>
+          <th [hidden]="true" i18n="@@viewbudgetrequestReqLevel">Requested Level</th>
+          <th class="minwidth" i18n="@@viewbudgetrequestExAmount">Existing amount authorization</th>
+          <th [hidden]="true" i18n="@@viewbudgetrequestExLevel">Existing Level</th>
+        </tr>
+      </thead>
+      <tr
+        *ngFor="let entry of userLevels"
+        [ngClass]="{ 'bg-gold': entry.validated }"
+      >
+        <th>{{ returnCategoryName(entry.category) }}</th>
+        <td>
+          <ng-select
+            [items]="titleOptions"
+            bindValue="id"
+            [disabled]="!editing.table"
+            (change)="onEditTableLevel()"
+            [(ngModel)]="entry.level"
+            bindLabel="title"
+            [virtualScroll]="true"
+            appendTo="body"
+          >
+          <ng-template ng-label-tmp let-item="item">
+            {{item.level != 0 ? item.title + ': ' : item.title}} {{ item.level && item.level != 11 ? errTransService.returnMsg('upto') + " $" + ((item.endrange || 0) | customNumber : numberFormat) : item.level == 0 ? '' : "Above >$" + (item.startrange | customNumber : numberFormat) }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            {{item.level != 0 ? item.title + ': ' : item.title}} {{ item.level && item.level != 11 ? errTransService.returnMsg('upto') + " $" + ((item.endrange || 0) | customNumber : numberFormat) : item.level == 0 ? '' : "Above >$" + (item.startrange | customNumber : numberFormat) }}
+          </ng-template>
+          </ng-select>
+        </td>
+        <td [hidden]="true">
+          <ng-select
+            [items]="titleOptions"
+            bindValue="id"
+            [disabled]="!editing.table"
+            (change)="onEdit()"
+            [(ngModel)]="entry.level"
+            bindLabel="title"
+            [virtualScroll]="true"
+            appendTo="body"
+          >
+            <ng-template ng-label-tmp let-item="item">
+              <span>{{ "L" + item.level }}</span>
+            </ng-template>
+          </ng-select>
+        </td>
+        <td *ngIf="entry?.oldLevel?.startRange">
+          {{ errTransService.returnMsg('upto') + " " + (entry?.oldLevel?.endRange | customCurrency : 'USD' : numberFormat : true) }}
+        </td>
+        <td *ngIf="!entry?.oldLevel?.startRange">
+          {{ entry?.oldLevel?.message || levelNotErrorFlag ? "No Authority Level Present" : "Error" }}
+        </td>
+        <td [hidden]="true">
+          {{ entry?.oldLevel?.level || "N/A" }}
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div
+  class="card p-5 m-4 shadow-lg"
+  *ngIf="requestInfo?.requestType == 1 || requestInfo?.requestType == 4"
+>
+  <h4>
+    <i
+      class="text-primary pe-7s-note cursor-pointer"
+      *ngIf="userPermissions.canEdit"
+      (click)="toggleEdit('details')"
+    ></i>
+  </h4>
+  <div class="row">
+    <form class="col-lg-auto">
+      <div class="row mt-4">
+        <label i18n="@@budgetrequestNNeedRegionAccess">Do you need access beyond your company?&nbsp;&nbsp;&nbsp;</label>
+        <div class="form-check form-check-inline mr-5">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="needRegion"
+            id="needRegionRadio1"
+            [(ngModel)]="chooseRegion"
+            [ngModelOptions]="{ standalone: true }"
+            [disabled]="!editing.details"
+            value="1"
+          />
+          <label class="form-check-label" i18n="@@budgetrequestYes" for="needRegionRadio1">Yes</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="needRegion"
+            id="needRegionRadio2"
+            [(ngModel)]="chooseRegion"
+            [ngModelOptions]="{ standalone: true }"
+            [disabled]="!editing.details"
+            value="2"
+          />
+          <label class="form-check-label" i18n="@@budgetrequestNo" for="needRegionRadio2">No</label>
+        </div>
+      </div>
+      <div class="form-group mt-4" [hidden]="chooseRegion == '2'">
+        <label for="regionS" i18n="@@viewbudgetrequestSelectRegion">Select the region for the required access</label>
+        <ng-select
+          id="regionS"
+          [items]="regionOptions"
+          [(ngModel)]="requestInfo.region"
+          [ngModelOptions]="{ standalone: true }"
+          [disabled]="!editing.details"
+          [hidden]="chooseRegion != '1'"
+          (change)="onEdit()"
+          *ngIf="requestInfo"
+        >
+        </ng-select>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div
+  class="card p-5 m-4 shadow-lg"
+  *ngIf="requestInfo?.requestType != 1 && requestInfo?.requestType != 4"
+>
+  <h4>
+    <i
+      class="text-primary pe-7s-note cursor-pointer"
+      *ngIf="userPermissions.canEdit"
+      (click)="toggleEdit('details')"
+    ></i>
+  </h4>
+  <div class="row">
+    <form class="col-lg-auto">
+      <div class="form-group mt-4">
+        <div class="row mt-4">
+          <label i18n="@@budgetrequestNNeedRegionAccess"
+            >Do you need access beyond your company?&nbsp;&nbsp;&nbsp;</label
+          >
+          <div class="form-check form-check-inline mr-5">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="needRegion"
+              id="needRegionRadio1"
+              [(ngModel)]="chooseRegion"
+              [ngModelOptions]="{ standalone: true }"
+              [disabled]="!editing.details"
+              value="1"
+            />
+            <label class="form-check-label" i18n="@@budgetrequestYes" for="needRegionRadio1">Yes</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="needRegion"
+              id="needRegionRadio2"
+              [(ngModel)]="chooseRegion"
+              [ngModelOptions]="{ standalone: true }"
+              [disabled]="!editing.details"
+              value="2"
+            />
+            <label class="form-check-label" i18n="@@budgetrequestNo" for="needRegionRadio2">No</label>
+          </div>
+        </div>
+        <label for="regionS" i18n="@@viewbudgetrequestSelectRAccess" [hidden]="chooseRegion == '2'">Select the region for the required access</label>
+        <ng-select
+          id="regionS"
+          [items]="regionOptions"
+          [(ngModel)]="requestInfo.region"
+          [ngModelOptions]="{ standalone: true }"
+          [disabled]="!editing.details"
+          [hidden]="chooseRegion != '1'"
+          (change)="onEdit()"
+          *ngIf="requestInfo"
+        >
+        </ng-select>
+      </div>
+      <!-- <div class="form-group mt-4">
+        <label for="authNeeded">What Authorization level needed?</label>
+        <div class="d-inline-flex">
+          <ng-select
+            [items]="titleOptions"
+            bindLabel="title"
+            bindValue="id"
+            placeholder="select a title"
+            i18n-placeholder="@@viewbudgetrequesSelectTitle"
+            [(ngModel)]="headerAuthLevel"
+            [ngModelOptions]="{ standalone: true }"
+            class="auth-level"
+            [disabled]="!editing.details"
+            (change)="onEditBaseLevel()"
+            >
+          </ng-select>
+          <small class="w-100" *ngIf="requestInfo"
+            >&nbsp;{{ returnAuthRange(headerAuthLevel) }}</small
+          >
+        </div>
+        <br />
+      </div> -->
+      <ng-container *ngIf="userPermissions.canSeeTable">
+        <div class="form-group mt-4">
+          <label i18n="@@viewbudgetrequestNeedSpcl">Do you need special functional authority</label>
+          <div class="row">
+            <small *ngIf="needExceptional == 1" i18n="@@viewbudgetrequestYes">Yes</small>
+            <small *ngIf="needExceptional != 1" i18n="@@viewbudgetrequestNo">No</small>
+          </div>
+        </div>
+        <ng-container
+          *ngFor="let entry of requestInfo?.purchaseCategory; let i = index"
+        >
+          <div
+            class="form-group mt-4"
+            *ngIf="needExceptional == 1"
+            [hidden]="entry.levelId == 0"
+          >
+            <label for="specialneeded" class="mt-4 clearfix" i18n="@@viewbudgetrequestCat">Category </label>
+            <ng-select
+              id="specialneeded"
+              [items]="categoryOptions"
+              bindLabel="Category"
+              bindValue="ID"
+              placeholder="Choose a category"
+              [(ngModel)]="entry.pcId"
+              [ngModelOptions]="{ standalone: true }"
+              disabled
+            >
+            </ng-select>
+            <label for="spcAuthLv" class="mt-4" i18n="@@viewbudgetrequestAuthLevel">Authority Level</label>
+            <div class="d-inline-flex">
+              <ng-select
+                [items]="titleOptions"
+                bindLabel="title"
+                bindValue="id"
+                placeholder="select a title"
+                [(ngModel)]="entry.levelId"
+                [ngModelOptions]="{ standalone: true }"
+                class="auth-level"
+                disabled
+              >
+                <ng-template ng-label-tmp let-item="item">
+                  <span>{{ errTransService.returnMsg('upto') +" $" + (item.endrange | customNumber : numberFormat) }}</span>
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="!userPermissions.canSeeTable && requestInfo">
+        <div class="form-group mt-4">
+          <label i18n="@@viewbudgetrequestNeedSpcl">Do you need special functional authority</label>
+          <div class="row">
+            <div class="col-md-auto form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="needExceptional"
+                [(ngModel)]="requestInfo.spclFunctionalAuthorityRequested"
+                [ngModelOptions]="{ standalone: true }"
+                id="needExceptional1"
+                [value]="true"
+                (change)="onEdit()"
+                [disabled]="!editing.details"
+              />
+              <label class="form-check-label" i18n="@@budgetrequestYes" for="needExceptional1">
+                Yes
+              </label>
+            </div>
+            <div class="col-md-auto form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="needExceptional"
+                [(ngModel)]="requestInfo.spclFunctionalAuthorityRequested"
+                [ngModelOptions]="{ standalone: true }"
+                id="needExceptional2"
+                [value]="false"
+                (change)="onEdit()"
+                [disabled]="!editing.details"
+              />
+              <label class="form-check-label" i18n="@@budgetrequestNo" for="needExceptional2">
+                No
+              </label>
+            </div>
+          </div>
+        </div>
+        <ng-container *ngIf="requestInfo?.spclFunctionalAuthorityRequested">
+          <ng-container *ngFor="let entry of specialAuths; let i = index">
+            <div
+              class="form-group mt-4"
+              *ngIf="requestInfo?.spclFunctionalAuthorityRequested"
+            >
+              <label for="specialneeded{{i}}" class="mt-4 clearfix" i18n="@@viewbudgetNcatRem"
+                >Category
+                <button
+                  (click)="onRemoveSpecialRow(i)"
+                  class="float-right btn btn-sm btn-danger"
+                  [disabled]="specialAuths.length === 1 || !editing.details"
+                  [hidden]="specialAuths.length === 1"
+
+                >
+                  <i class="pe-7s-close"></i>
+                  Remove
+                </button>
+              </label>
+              <ng-select
+                id="specialneeded{{i}}"
+                [items]="categoryOptions"
+                bindLabel="Category"
+                bindValue="ID"
+                i18n-placeholder="@@budgetrequestChooseCat"
+                placeholder="Choose a category"
+                [(ngModel)]="entry.category"
+                [ngModelOptions]="{standalone: true}"
+                [disabled]="!editing.details"
+                (change)="onEdit()"
+              >
+              </ng-select>
+              <label for="spcAuthLv{{i}}" class="mt-4" i18n="@@budgetrequestAuthLevel">Authority Level</label>
+              <div class="d-inline-flex">
+                <ng-select
+                  id="spcAuthLv{{i}}"
+                  [items]="rangeOptions"
+                  bindLabel="endrange"
+                  placeholder="select a title"
+                  i18n-placeholder="@@budgetrequestSelectTitle"
+                  [(ngModel)]="entry.level"
+                  [ngModelOptions]="{standalone: true}"
+                  [disabled]="!entry.category || !editing.details"
+                  class="auth-level"
+                  (change)="onEdit()"
+                >
+                  <ng-template ng-label-tmp let-item="item">
+                    <span>{{errTransService.returnMsg('upto') + ' $' + (item.endrange | customNumber : numberFormat)}}</span>
+                  </ng-template>
+                  <ng-template ng-option-tmp let-item="item">
+                    <span>{{errTransService.returnMsg('upto') + ' $' + (item.endrange | customNumber : numberFormat)}}</span>
+                  </ng-template>
+                </ng-select>
+                <small
+                  *ngIf="entry.category && displayUserCurrentCatLevel(entry.category)" i18n="@@budgetrequestNUptoEndRangeCurrent"
+                >
+                  &nbsp;&nbsp;&nbsp;Current Level: Up to $ {{displayUserCurrentCatLevel(entry.category)| customNumber : numberFormat}}
+                </small>
+                <!-- <select id="spcAuthLv" class="form-control auth-level">
+                </select> -->
+                <!-- <div class="col">
+                  <small class="w-100 row" i18n="@@budgetrequestUpTo1" *ngIf="entry.level">&nbsp;{{'Up to $' +  entry.level?.endrange || 'Select a title'}}</small>
+                  <small class="row" i18n="@@budgetrequestCurrentLevel1" *ngIf="this.authorityRequestForm.value.authType == 3">&nbsp;Current Level: {{handleTitleDisplay(entry)}}</small>
+                </div> -->
+              </div>
+              <!-- <br>
+              <label for="whyAuth" class="mt-4" i18n="@@budgetrequestChangeReason">Reasons for the change:</label>
+              <textarea id="whyAuth" class="form-control" [(ngModel)]="entry.reasons" [ngModelOptions]="{standalone: true}" (change)="onFormChange()"></textarea> -->
+            </div>
+          </ng-container>
+          <button
+            *ngIf="requestInfo?.spclFunctionalAuthorityRequested"
+            (click)="onAddSpecialRow()"
+            class="btn btn-sm btn-primary"
+            i18n="@@budgetrequestAddAnother"
+          >
+            Add another
+          </button>
+        </ng-container>
+      </ng-container>
+    </form>
+  </div>
+</div>
+
+<div class="p-1 shadow-lg fixed-btn" *ngIf="contentEdited">
+  <button
+    i18n="@@viewbudgetrequestSubmitChanges"
+    class="btn btn-primary button-fix half-width"
+    (click)="submitUpdate()"
+  >
+    Submit Changes
+  </button>
+  <button
+    i18n="@@viewbudgetrequestReset"
+    class="btn btn-danger btn-danger-fix half-width"
+    (click)="resetEdits()"
+  >
+    Reset Changes
+  </button>
+</div>
+
+<ngx-smart-modal
+  #askQuestionModal
+  identifier="askQuestionModal"
+  target="button#pendingClarification"
+>
+  <h4 class="modal-header" i18n="@@viewbudgetrequestSendEmail">Send Email...</h4>
+  <form class="modal-body" [formGroup]="sendEmailForm">
+    <label for="toEmail">To:</label>
+    <ng-select
+      formControlName="emailTo"
+      id="toEmail"
+      [items]="adUsers"
+      [virtualScroll]="true"
+      bindLabel="emailId"
+      bindValue="emailId"
+      [multiple]="true"
+      i18n-placeholder="@@viewbudgetrequestSelectEmail"
+      placeholder="Select email address"
+    >
+    </ng-select>
+    <br />
+    <label for="ccEmail" i18n="@@viewbudgetrequestCC">Cc:</label>
+    <ng-select
+      formControlName="emailCc"
+      id="ccEmail"
+      [items]="adUsers"
+      [virtualScroll]="true"
+      bindLabel="emailId"
+      bindValue="emailId"
+      [multiple]="true"
+      i18n-placeholder="@@viewbudgetrequestSelectCCEmail"
+      placeholder="Select email address"
+    >
+    </ng-select>
+    <br />
+    <!-- <input type="email" formControlName="emailCc" id="ccEmail" class="form-control" /> -->
+    <label for="emailSubject" i18n="@@viewbudgetrequestSubject">Subject:</label>
+    <input
+      type="text"
+      formControlName="emailSubject"
+      id="emailSubject"
+      class="form-control"
+    />
+    <hr />
+    <label for="clarifyText" i18n="@@viewbudgetrequestMessage">Message:</label>
+    <textarea
+      formControlName="emailMsg"
+      id="clarifyText"
+      class="form-control"
+      maxlength="200"
+      onkeyup="document.getElementById('clarifyTextCCount').innerText = this.value.length + '/200'"
+    ></textarea>
+    <small id="clarifyTextCCount">0/200</small>
+  </form>
+  <div class="modal-footer">
+    <button
+      class="btn btn-primary button-fix"
+      (click)="onSendEmail(askQuestionModal)"
+      i18n="@@viewbudgetrequestSubmit1"
+      [disabled]="!sendEmailForm.valid"
+    >
+      Submit
+    </button>
+    <button i18n="@@viewbudgetrequestCancel1" class="btn btn-danger" (click)="askQuestionModal.close()">
+      Cancel
+    </button>
+  </div>
+</ngx-smart-modal>

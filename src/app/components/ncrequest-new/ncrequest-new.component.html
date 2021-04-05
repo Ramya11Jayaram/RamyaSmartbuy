@@ -1,0 +1,2363 @@
+
+<p *ngIf="debug">ncrequest-new works!</p>
+
+<div class="jumbofix jumbotron">
+  <div class="jumbo-content">
+    <div class="icon float-left clearfix shadow-lg">
+      <i class="pe-7s-map-marker"></i>
+    </div>
+
+    <div class="jumbo-info">
+      <h5 i18n="@@ncrequestnewTitle">Purchase Order Request Form</h5>
+      <p i18n="@@ncrequestnewSubTitle">Your purchase order request items</p>
+    </div>
+    <div class="d-flex flex-row justify-content-around">
+      <div class="text-center">
+        <div class="p-2">
+
+        </div>
+      </div>
+      <div class="text-center">
+
+          <span class="row" *ngIf="orderId">
+            <span class="column">
+            <h4 class="col-sm-auto text-smartbuy">
+                    <strong i18n="@@ncrequestnewOrder"
+                      >Purchase Order Request # &nbsp;
+                      {{ orderId
+                      }}
+                    </strong>
+              </h4>
+            </span>
+            <span class="column">
+              <h4 class="col-sm-auto text-smartbuy">
+                    <strong i18n="@@ncrequestnewStatus"
+                      >Status:&nbsp;<span *ngIf="documentStatus">
+                        <span [innerHTML]="errTransService.returnMsg(documentStatus, true)"></span></span
+                    ></strong>
+              </h4>
+              </span>
+        </span>
+
+      </div>
+
+  </div>
+</div>
+
+<form [formGroup]="typeForm" autocomplete="off">
+  <div class="card p-4 m-5 shadow-lg">
+    <a><!-- (click)="onHomeClick()" -->
+      <span class="custom-lg-div-btn text-muted" [routerLink]="['/home']"
+        ><i class="pe-7s-home"></i
+      ></span>
+    </a>
+
+    <div class="row align-content-center align-items-center">
+      <div class="col-sm-2">
+        <h3 i18n="@@ncrequestnewPOR">Purchase Order Request</h3>
+      </div>
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="reqRadios"
+            formControlName="reqRadios"
+            id="reqRadios1"
+            value="1"
+            (change)="onFormChange()"
+          />
+          <label class="form-check-label" for="reqRadios1" i18n="@@ncrequestnewGoods">
+            Goods &nbsp;
+          </label>
+          <span
+          class="align-self-center tooltip--right position-relative"
+          name="npor_tt35_1"
+          i18n-[attr.data-tooltip]="@@ncrequestnew_TT1"
+          [attr.data-tooltip]="
+            'This selection will determine the fields to be completed in the POR.'
+          "
+          ><i class="pe-7s-help1"></i
+        ></span>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="reqRadios"
+            formControlName="reqRadios"
+            id="reqRadios2"
+            value="2"
+            (change)="onFormChange()"
+          />
+          <label class="form-check-label" for="reqRadios2" i18n="@@ncrequestnewServices">
+            Services &nbsp;
+          </label>
+          <span
+          class="align-self-center tooltip--right position-relative"
+          name="npor_tt35_1"
+          i18n-[attr.data-tooltip]="@@ncrequestnew_TT2"
+          [attr.data-tooltip]="
+            'This selection will determine the fields to be completed in the POR.'
+          "
+          ><i class="pe-7s-help1"></i
+        ></span>
+        </div>
+        <div class="form-check disabled">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="reqRadios"
+            formControlName="reqRadios"
+            id="reqRadios3"
+            value="3"
+            (change)="onFormChange()"
+          />
+          <label class="form-check-label" for="reqRadios3" i18n="@@ncrequestnewGoodsAndServices">
+            Goods + Services &nbsp;
+          </label>
+          <span
+          class="align-self-center tooltip--right position-relative"
+          name="npor_tt35_1"
+          i18n-[attr.data-tooltip]="@@ncrequestnew_TT3"
+          [attr.data-tooltip]="
+            'This selection will determine the fields to be completed in the POR.'
+          "
+          ><i class="pe-7s-help1"></i
+        ></span>
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="d-flex flex-row justify-content-around">
+      <div class="text-center">
+        <div class="p-2">
+          <p i18n="@@ncrequestnewCreatedBy">
+            Created By:
+            <strong name='npor_user'>{{ userFullName[0] }} {{ userFullName[1] }}</strong>
+          </p>
+        </div>
+      </div>
+      <div class="text-center">
+        <div class="p-2">
+            <p i18n="@@ncrequestnewCreatedOn">
+            Created On: <strong name='npor_ondate'>{{ date | date : dateFormat}}</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<form [formGroup]="isApprovedForm" autocomplete="off" [hidden]="!typeForm.value.reqRadios">
+  <div class="card p-4 m-5 shadow-lg">
+    <div class="row justify-content-start justify-items-start">
+      <div class="col-md-5">
+        <h4 i18n="@@ncrequestnewIsBudgetApproved">Is budget approved for this request? &nbsp;
+            <span
+            name='npor_tt1'
+              class="tooltip--right"
+              i18n-[attr.data-tooltip]="@@ncrequestnew_TT4"
+              [attr.data-tooltip]="
+                'If purchase is not part of an approved budget, enter explanation.'
+              "
+              ><i class="pe-7s-help1"></i
+            ></span>
+        </h4>
+      </div>
+      <div class="col-md-2">
+        <div class="form-row justify-content-around">
+          <div class="col-md-auto form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="budgetApproved"
+              formControlName="budgetApproved"
+              id="budgetApproved1"
+              value="1"
+              (change)="onFormChange()"
+            />
+            <label class="form-check-label" for="budgetApproved1" i18n="@@ncrequestnewYes">
+              Yes
+            </label>
+          </div>
+          <div class="col-md-auto form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="budgetApproved"
+              formControlName="budgetApproved"
+              id="budgetApproved2"
+              value="2"
+              (change)="onFormChange()"
+            />
+            <label class="form-check-label" for="budgetApproved2" i18n="@@ncrequestnewNo">
+              No
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      *ngIf="isApprovedForm.value.budgetApproved == 2"
+      class="row justify-content-start justify-items-start"
+    >
+      <div class="col-md-8">
+        <label i18n="@@ncrequestnewExplanation" for="budgetNotApproved">Explanation:</label>
+        <textarea id="budgetNotApproved" name='npor_budgetNotApproved' class="form-control" formControlName="budgetNotApproved"></textarea>
+      </div>
+    </div>
+    <div class="row justify-content-start justify-items-start">
+      <div class="col-md-5">
+        <h4 i18n="@@ncrequestnewIsContract">Is a contract in place in CARS for this request? &nbsp;
+          <span
+            class="tooltip--right"
+            name='npor_tt2'
+            i18n-[attr.data-tooltip]="@@ncrequestnew_TT5"
+            [attr.data-tooltip]="
+              'Please review CARS guidelines to see if a contract is required.  If contract is not required, enter explanation.'
+            "
+            ><i class="pe-7s-help1"></i
+          ></span>
+      </h4>
+      </div>
+      <div class="col-md-2">
+        <div class="form-row justify-content-around">
+          <div class="col-md-auto form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="contractInPlace"
+              formControlName="contractInPlace"
+              id="contractInPlace1"
+              value="1"
+              (change)="onFormChange()"
+            />
+            <label class="form-check-label" for="contractInPlace1" i18n="@@ncrequestnewYes">
+              Yes
+            </label>
+          </div>
+          <div class="col-md-auto form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="contractInPlace"
+              formControlName="contractInPlace"
+              id="contractInPlace2"
+              value="2"
+              (change)="onFormChange()"
+            />
+            <label class="form-check-label" for="contractInPlace2" i18n="@@ncrequestnewNo">
+              No
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<form autocomplete="off"
+  [formGroup]="commentsForm"
+  *ngIf="
+  typeForm.value.reqRadios &&
+  isApprovedForm.value.budgetApproved != 0 &&
+  isApprovedForm.value.contractInPlace != 0
+"
+>
+  <div class="card p-4 m-5 shadow-lg">
+    <div class="form-group">
+      <div class="d-flex">
+        <label for="comments"><strong i18n="@@ncrequestnewInternalComments">Brief Description of Purchase/Internal Comments * &nbsp;</strong></label>
+        <span
+        class="tooltip--right"
+        name='npor_ttcomments'
+        i18n-[attr.data-tooltip]="@@ncrequestnew_TT6"
+        [attr.data-tooltip]="
+          'Comments for those who will review or approve the POR; will not be sent to vendor.'
+        "
+        ><i class="pe-7s-help1"></i
+      ></span>
+      </div>
+      <textarea
+        name="comments"
+        id="comments"
+        formControlName="comments"
+        class="form-control"
+        (change)="onFormChange()"
+      ></textarea>
+    </div>
+  </div>
+</form>
+
+<button class="btn btn-danger" (click)="checkForms()" *ngIf="debug">
+  check console.log for form values
+</button>
+
+<form autocomplete="off"
+  *ngIf="
+    typeForm.value.reqRadios &&
+    isApprovedForm.value.budgetApproved != 0 &&
+    isApprovedForm.value.contractInPlace != 0
+  "
+  [formGroup]="requestDetailsForm"
+  id="requestDetailsForm"
+>
+  <p *ngIf="debug">Successfully opened</p>
+  <div class="card p-4 m-5 shadow-lg">
+    <ngx-spinner name="detailsSpinner" type="ball-spin-clockwise">
+      <p class="loading" i18n="@@ncrequestnewFetchingData">Fetching data...</p>
+    </ngx-spinner>
+    <h4 i18n="@@ncrequestnewOrderRequestDetails">Order Request Details</h4>
+    <span *ngIf="currencyOptions[0].name === 'Loading options...'" i18n="@@ncrequestnewFetchingData"
+      >Fetching data...</span
+    >
+    <div class="order-request-details">
+      <div class="form-row">
+        <div class="col-lg-5">
+          <div class="form-group purchase-category">
+            <div class="d-flex">
+              <label for="purchaseCategory"
+                ><strong i18n="@@ncrequestnewPurchaseCategory"  name='npor_pclabel'>Purchase Category </strong>* &nbsp;</label
+              >
+              <span
+                class="align-self-center tooltip--right position-relative"
+                name='npor_tt3'
+                i18n-[attr.data-tooltip]="@@ncrequestnew_TT7"
+                [attr.data-tooltip]="
+                  'Select a category that best fits your purchase; use \'profit center\' for PORs to be coded to cost of sales.  Use \' general other expenses \' when no other category is appropriate.'
+                "
+                ><i class="pe-7s-help1"></i
+              ></span>
+            </div>
+            <ng-select
+            [items]="purchaseCategoryOptions"
+            placeholder="Please Choose..."
+            formControlName="purchaseCategory"
+            id="purchaseCategory"
+            i18n-placeholder="@@ncrequestnewPleaseChoose"
+            name='npor_pc'
+            (change)="onCategoryChange()"
+            bindLabel="Category"
+            bindValue="ID"
+            appendTo="body"
+          >
+          <ng-template ng-footer-tmp *ngIf="purchaseCategoryOptionsPref?.length">
+            <div (click)="showMore('purchaseCategory')" i18n="@@ncrequestviewShowMore" class="cursor-pointer"  *ngIf="!showFullList.purchaseCategory">Show more...</div>
+            <div (click)="showLess('purchaseCategory')" i18n="@@ncrequestviewShowLess" class="cursor-pointer"  *ngIf="showFullList.purchaseCategory">Show less...</div>
+          </ng-template>
+        </ng-select>
+
+          </div>
+        </div>
+        <div class="col-lg-auto">
+          <div class="form-group company">
+            <div class="d-flex">
+              <label i18n="@@ncrequestnewCompanyPlacingOrder" for="company">Company Placing Order * &nbsp;</label>
+              <span
+                class="align-self-center tooltip--right position-relative"
+                name='npor_tt4'
+                i18n-[attr.data-tooltip]="@@ncrequestnew_TT8"
+                [attr.data-tooltip]="
+                  'From the drop-down menu, enter the name of the company that is placing the order.'
+                "
+                ><i class="pe-7s-help1"></i
+              ></span>
+            </div>
+            <ng-select
+              [items]="companyOptions"
+              i18n-placeholder="@@ncrequestnewEnterCompany"
+              placeholder="Enter the Company name"
+              formControlName="company"
+              name='npor_company'
+              (change)="onCompanyChange()"
+              bindLabel="name"
+            >
+            <ng-template ng-footer-tmp *ngIf="companyOptionsPref?.length">
+              <div (click)="showMore('company')" i18n="@@ncrequestviewShowMore" class="cursor-pointer"  *ngIf="!showFullList.company">Show more...</div>
+              <div (click)="showLess('company')" i18n="@@ncrequestviewShowLess" class="cursor-pointer"  *ngIf="showFullList.company">Show less...</div>
+            </ng-template>
+          </ng-select>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-lg-5">
+          <div class="form-group cost-center">
+            <div class="d-flex">
+              <label for="requesterCostCenter"
+                ><strong i18n="@@ncrequestnewCostCenter"  name='npor_cclabel'>Cost Center </strong>* &nbsp;</label
+              >
+              <span
+                class="align-self-center tooltip--right position-relative"
+                name='npor_tt5'
+                i18n-[attr.data-tooltip]="@@ncrequestnew_TT9"
+                [attr.data-tooltip]="
+                  'The cost center that will be charged for the purchase.'
+                "
+                ><i class="pe-7s-help1"></i
+              ></span>
+            </div>
+            <ng-select
+              [items]="costCenterOptions"
+              id="requesterCostCenter"
+              name='npor_rcostcenter'
+              formControlName="requesterCostCenter"
+              (change)="onCostCenterChange($event)"
+              bindValue="id"
+              bindLabel="searchable"
+              i18n-placeholder="@@ncrequestnewChooseCC"
+              placeholder="Choose a Cost Center"
+            >
+              <ng-template ng-option-tmp let-item="item">
+                <div>{{item.name}} - {{item.code}}</div>
+              </ng-template>
+              <ng-template ng-footer-tmp *ngIf="costCenterOptionsPref?.length">
+                <div (click)="showMore('costCenter')" i18n="@@ncrequestviewShowMore" class="cursor-pointer"  *ngIf="!showFullList.costCenter">Show more...</div>
+                <div (click)="showLess('costCenter')" i18n="@@ncrequestviewShowLess" class="cursor-pointer"  *ngIf="showFullList.costCenter">Show less...</div>
+              </ng-template>
+            </ng-select>
+            <alert id="costCenterHeaderAlert"></alert>
+          </div>
+        </div>
+        <div class="col-lg-auto">
+          <div class="form-group requester">
+            <div class="d-flex">
+              <label i18n="@@ncrequestnewRequester" for="requester">Requester * &nbsp;</label>
+              <span
+                class="align-self-center tooltip--right position-relative"
+                name='npor_tt6'
+                i18n-[attr.data-tooltip]="@@ncrequestnew_TT10"
+                [attr.data-tooltip]="
+                  'The person on whose behalf the order is placed; may be same as the creator.'
+                "
+                ><i class="pe-7s-help1"></i
+              ></span>
+            </div>
+            <ng-select
+              bindLabel="displayname"
+              name='npor_reqester'
+              [virtualScroll]="true"
+              [items]="requesterOptions"
+              i18n-placeholder="@@ncrequestnewEnterRequester"
+              placeholder="Enter the Requester's name"
+              formControlName="requester"
+              (change)="onFormChange('requester')"
+            >
+            <ng-template ng-footer-tmp *ngIf="requesterOptionsPref?.length">
+              <div (click)="showMore('requester')" i18n="@@ncrequestviewShowMore" class="cursor-pointer"  *ngIf="!showFullList.requester">Show more...</div>
+              <div (click)="showLess('requester')" i18n="@@ncrequestviewShowLess" class="cursor-pointer"  *ngIf="showFullList.requester">Show less...</div>
+            </ng-template>
+          </ng-select>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-lg-5">
+          <div class="form-group vendor input-max-width">
+            <div class="d-flex">
+              <label for="vendor"><strong i18n="@@ncrequestnewVendor">Vendor </strong><ng-container *ngIf="hideBuyer">*</ng-container> &nbsp;</label>
+              <span
+                class="align-self-center tooltip--right position-relative"
+                name="npor_tt7"
+                i18n-[attr.data-tooltip]="@@ncrequestnew_TT11"
+                [attr.data-tooltip]="
+                  'Choose from existing vendors in the drop down menu.'
+                "
+                ><i class="pe-7s-help1"></i
+              ></span>
+            </div>
+            <ng-select
+              [items]="vendorOptions"
+              name="npor_vendor"
+              bindLabel="searchable"
+              i18n-placeholder="@@ncrequestviewEnterVendor"
+              placeholder="Enter the Vendor name"
+              (change)="onVendorChange($event)"
+              formControlName="vendor"
+              [disabled]="!requestDetailsForm.value.company"
+              [searchFn]="vendorSearchFn"
+              [virtualScroll]="true"
+            >
+            <ng-template ng-footer-tmp *ngIf="vendorOptionsPref?.length">
+              <div (click)="showMore('vendor')" i18n="@@ncrequestviewShowMore" class="cursor-pointer"  *ngIf="!showFullList.vendor">Show more...</div>
+              <div (click)="showLess('vendor')" i18n="@@ncrequestviewShowLess" class="cursor-pointer"  *ngIf="showFullList.vendor">Show less...</div>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item">
+              <div title="{{item.searchable}}">{{item.searchable}}</div>
+            </ng-template>
+
+          </ng-select>
+            <alert id="vendorLocked"></alert>
+          </div>
+        </div>
+        <div class="col-lg-auto">
+          <div class="form-row">
+            <div class="form-group order-currency col-lg-auto">
+              <div class="d-flex">
+                <label for="currency"><strong i18n="@@ncrequestnewOrderCurrencyMain">Order Currency </strong>* &nbsp;</label>
+                <span
+                  class="align-self-center tooltip--right position-relative"
+                  name="npor_tt8"
+                  i18n-[attr.data-tooltip]="@@ncrequestnew_TT12"
+                  [attr.data-tooltip]="
+                    'Usually, the same currency that will be used to remit payment to the vendor.'
+                  "
+                  ><i class="pe-7s-help1"></i
+                ></span>
+              </div>
+              <ng-select
+                [items]="currencyOptions"
+                name="npor_currency"
+                placeholder="..."
+                formControlName="currency"
+                (change)="onCurrencyChange()"
+                bindValue="ID"
+                bindLabel="currency"
+              >
+              </ng-select>
+            </div>
+            <div class="form-group requester col-lg-auto" *ngIf="!hideBuyer">
+              <div class="d-flex">
+                <label for="buyer"><strong i18n="@@ncrequestnewBuyer">Buyer *</strong></label>
+                <span
+                  class="align-self-center tooltip--right position-relative"
+                  name="npor_tt9"
+                  i18n-[attr.data-tooltip]="@@ncrequestnew_TT13"
+                  [attr.data-tooltip]="
+                    'Select Buyer'
+                  "
+                  ><i class="pe-7s-help1"></i
+                ></span>
+              </div>
+              <ng-select
+                  [items]="buyerOptions"
+                  name="npor_buyer"
+                  i18n-placeholder="@@ncrequestnewEnterBuyer"
+                  placeholder="Enter the buyer name"
+                  (change)="onBuyerChange($event)"
+                  formControlName="buyer"
+                  bindLabel="searchable"
+                >
+                <ng-template ng-option-tmp let-item="item">
+                  <div>{{displayUser(item.employeeId)}} </div>
+                </ng-template>
+                <ng-template ng-label-tmp let-item="item">
+
+                  {{displayUser(item.employeeId)}}
+             </ng-template>
+              </ng-select>
+              </div>
+
+
+          </div>
+
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-lg-5">
+          <div class="form-group vendor">
+            <div class="d-flex">
+              <label for="detailsField"><strong i18n="@@ncrequestnewVendorDetails">Vendor Details </strong>* &nbsp;</label>
+              <span
+                class="align-self-center tooltip--right position-relative"
+                name="npor_tt10"
+                ><i class="pe-7s-help1"></i
+              ></span>
+            </div>
+            <textarea
+              formControlName="detailsField"
+              id="detailsField"
+              name="npor_details"
+              class="form-control"
+              rows="5"
+              required
+              readonly
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <h4><span i18n="@@ncrequestnewShipTo">Ship To Address&nbsp;</span>
+              <span
+              class="align-self-center tooltip--right position-relative"
+              name="npor_tt11"
+              i18n-[attr.data-tooltip]="@@ncrequestnew_TT14"
+              [attr.data-tooltip]="
+                'Defaults to corporate office address based on company. Ship to address can be edited as necessary'
+              "
+              ><i class="pe-7s-help1"></i
+            ></span>
+            </h4>
+
+            <div class="form-row">
+              <div class="col">
+                <div class="d-flex">
+                  <label for="name" i18n="@@ncrequestnewName">Name &nbsp;</label>
+                </div>
+                <input
+                  id="name"
+                  autocomplete="off"
+                  name="npor_shiptoname"
+                  type="text"
+                  formControlName="shipToName"
+                  class="form-control"
+                  (change)="onFormChange()"
+                />
+              </div>
+              <div class="col">
+                <div class="d-flex">
+                  <label for="street" i18n="@@ncrequestnewStreet">Street &nbsp;</label>
+                </div>
+                <input
+                  id="street"
+                  autocomplete="off"
+                  type="text"
+                  name="npor_street"
+                  formControlName="shipToStreet"
+                  class="form-control"
+                  (change)="onFormChange()"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col">
+                <div class="d-flex">
+                  <label for="city" i18n="@@ncrequestnewCity">City &nbsp;</label>
+                </div>
+                <input
+                  id="city"
+                  autocomplete="off"
+                  type="text"
+                  name="npor_city"
+                  formControlName="shipToCity"
+                  class="form-control"
+                  (change)="onFormChange()"
+                />
+              </div>
+              <div class="col">
+                <div class="d-flex">
+                  <label for="state" i18n="@@ncrequestnewState">State &nbsp;</label>
+                </div>
+                <!-- <input
+                  id="state"
+                  type="text"
+                  formControlName="shipToState"
+                  class="form-control small-input"
+                  (change)="onFormChange()"
+                /> -->
+                <ng-select
+                 [items]="stateByCountryOptions || stateOptions"
+                 bindLabel="{{returnStateBinds('label')}}"
+                 bindValue="{{returnStateBinds('value')}}"
+                 id="state"
+                 name="npor_state"
+                 formControlName="shipToState"
+                 class=""
+                 (change)="onFormChange()"
+                 [readonly]="!requestDetailsForm.value.shipToCountry"
+                 i18n-placeholder="@@ncrequestnewChooseACountry"
+                 placeholder="Choose a Country first..."
+                 appendTo="body"
+                >
+                </ng-select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col">
+                <div class="d-flex">
+                  <label for="zip" i18n="@@ncrequestnewZip">Zip &nbsp;</label>
+                </div>
+                <input
+                  id="zip"
+                  autocomplete="off"
+                  name="npor_zip"
+                  type="text"
+                  formControlName="shipToZip"
+                  class="form-control"
+                  (change)="onFormChange()"
+                />
+              </div>
+              <div class="col">
+                <div class="d-flex">
+                  <label for="country" i18n="@@ncrequestnewCountry">Country &nbsp;</label>
+                </div>
+                <!-- <input
+                  id="country"
+                  type="text"
+                  formControlName="shipToCountry"
+                  class="form-control small-input"
+                  (change)="onFormChange()"
+                /> -->
+                <ng-select
+                  [items]="countryOptions"
+                  bindLabel="name"
+                  bindValue="code"
+                  name="npor_country"
+                  id="country"
+                  formControlName="shipToCountry"
+                  (change)="onCountryChange()"
+                  i18n-placeholder="@@ncrequestnewChoose"
+                  placeholder="Choose..."
+                  appendTo="body"
+                >
+                </ng-select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col">
+                <div class="d-flex">
+                  <label for="shipToAttentionTo"><span i18n="@@ncrequestnewAttentionTo">Attention To </span> * &nbsp;</label>
+                </div>
+                <input
+                  id="shipToAttentionTo"
+                  name="npor_shipToAttentionTo"
+                  type="text"
+                  autocomplete="off"
+                  formControlName="shipToAttentionTo"
+                  class="form-control"
+                  (change)="onFormChange()"
+                />
+              </div>
+              <div class="col"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-auto">
+          <div class="form-row order-request-details">
+            <div class="col-md-auto">
+              <div class="row d-flex">
+                <div class="reference-number form-group">
+                  <div class="d-flex">
+                    <label for="refNumber"><strong i18n="@@ncrequestnewVendorRef">Vendor Reference &nbsp;</strong></label>
+                    <span
+                      class="align-self-center tooltip--right position-relative"
+                      name="npor_tt17"
+                      i18n-[attr.data-tooltip]="@@ncrequestnew_TT15"
+                      [attr.data-tooltip]="
+                        'Enter a quote or other reference number that is useful to the vendor.'
+                      "
+                      ><i class="pe-7s-help1"></i
+                    ></span>
+                  </div>
+                  <input
+                    formControlName="referenceNumber"
+                    type="text"
+                    autocomplete="off"
+                    class="form-control"
+                    id="refNumber"
+                    name="npor_refno"
+                    (change)="onFormChange()"
+                  />
+                </div>
+                <div class="reference-number form-group">
+                  <div class="d-flex">
+                    <label for="trackingNumber"
+                      ><strong i18n="@@ncrequestnewAttentionToVendor">Vendor Contact &nbsp;</strong></label
+                    >
+                    <span
+                      class="align-self-center tooltip--right position-relative"
+                      name="npor_tt18"
+                      i18n-[attr.data-tooltip]="@@ncrequestnew_TT16"
+                      [attr.data-tooltip]="
+                        'Vendor contact name (for internal use only)'
+                      "
+                      ><i class="pe-7s-help1"></i
+                    ></span>
+                  </div>
+                  <input
+                    type="text"
+                    autocomplete="off"
+                    class="form-control"
+                    id="trackingNumber"
+                    name="npor_track"
+                    formControlName="quotationNumber"
+                    (change)="onFormChange()"
+                  />
+                </div>
+              </div>
+              <div class="row d-flex" *ngIf="requestDetailsForm?.value?.company?.companyCode?.match(brazil)">
+                <div class="reference-number form-group">
+                  <div class="d-flex">
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" id="contractPoFlag" formControlName="contractFlag" (change)="onFormChange()">
+                      <label class="form-check-label" for="contractPoFlag" i18n="@@ncrequestnewSAPContractPO">SAP Contract PO</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row d-flex">
+                <div class="reference-number form-group">
+                  <div class="d-flex">
+                    <label for="startDate" *ngIf="typeForm.value.reqRadios != 2"
+                      ><strong i18n="@@ncrequestnewContractStart">Contract Start Date &nbsp;</strong></label
+                    >
+                    <label for="startDate" *ngIf="typeForm.value.reqRadios == 2"
+                      ><strong i18n="@@ncrequestnewPurchaseStart">Purchase Start Date &nbsp;</strong></label
+                    >
+                    <span
+                      class="align-self-center tooltip--right position-relative"
+                      name="npor_tt19"
+                      i18n-[attr.data-tooltip]="@@ncrequestnew_TT17"
+                      [attr.data-tooltip]="
+                        'For services to be provided over a period of time.'
+                      "
+                      ><i class="pe-7s-help1"></i
+                    ></span>
+                  </div>
+                  <input
+                    type="date"
+                    id="startDate"
+                    name="npor_stdate"
+                    class="form-control"
+                    formControlName="startDate"
+                    (focusout)="onContractDateChange('startDate')"
+                  />
+                </div>
+                <div class="reference-number form-group">
+                  <div class="d-flex">
+                    <label for="endDate" *ngIf="typeForm.value.reqRadios != 2" i18n="@@ncrequestnewContractEnd"
+                      >Contract End Date <ng-container *ngIf="requestDetailsForm?.value?.company?.companyCode?.match(brazil) && requestDetailsForm?.value?.contractFlag"> *</ng-container>&nbsp;</label
+                    >
+                    <label for="endDate" *ngIf="typeForm.value.reqRadios == 2"
+                      ><strong i18n="@@ncrequestnewPurchaseEnd">Purchase End Date <ng-container *ngIf="requestDetailsForm?.value?.company?.companyCode?.match(brazil) && requestDetailsForm?.value?.contractFlag"> *</ng-container>&nbsp;</strong></label>
+                    <span
+                      class="align-self-center tooltip--right position-relative"
+                      name="npor_tt20"
+                      i18n-[attr.data-tooltip]="@@ncrequestnew_TT18"
+                      [attr.data-tooltip]="
+                        'For services to be provided over a period of time.'
+                      "
+                      ><i class="pe-7s-help1"></i
+                    ></span>
+                  </div>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="endDate"
+                    name="npor_enddate"
+                    formControlName="endDate"
+                    (focusout)="onContractDateChange('endDate')"
+                  />
+                </div>
+              </div>
+              <div>
+                <div class="d-flex col">
+                  <h4 class="" i18n="@@ncrequestnewSendPOBy">Send Purchase Order By &nbsp;</h4>
+                  <span
+                    class="align-self-center tooltip--right position-relative"
+                    name="npor_tt21"
+                    i18n-[attr.data-tooltip]="@@ncrequestnew_TT19"
+                    [attr.data-tooltip]="
+                      'To send a PDF copy of the PO automatically by email, enter an address.  Enter a fax number if email not available.'
+                    "
+                    ><i class="pe-7s-help1"></i
+                  ></span>
+                </div>
+                <div class="row">
+                  <div class="col-sm-auto">
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        formControlName="sendEmail"
+                        name="commsRadio1"
+                        type="checkbox"
+                        id="commsRadio1"
+                        value="1"
+                        (change)="onCommsChange()"
+                      />
+                      <label for="commsRadio1" i18n="@@ncrequestnewEmail">Email</label>
+                    </div>
+                    <input
+                      type="text"
+                      autocomplete="off"
+                      id="email"
+                      formControlName="email"
+                      class="form-control"
+                      value="bind later"
+                      (change)="onFormChange()"
+                    />
+                  </div>
+                  <div class="col-sm-auto">
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        formControlName="sendFax"
+                        name="commsRadio2"
+                        type="checkbox"
+                        id="commsRadio2"
+                        value="2"
+                        (change)="onCommsChange()"
+                      />
+                      <label for="commsRadio2" i18n="@@ncrequestnewFax">Fax</label>
+                    </div>
+                    <input
+                      type="text"
+                      autocomplete="off"
+                      id="fax"
+                      name="npor_fax"
+                      formControlName="fax"
+                      class="form-control"
+                      value="bind later"
+                      (change)="onFormChange()"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<div
+  *ngIf="
+    typeForm.value.reqRadios &&
+    isApprovedForm.value.budgetApproved != 0 &&
+    isApprovedForm.value.contractInPlace != 0
+  "
+>
+  <p *ngIf="debug">This part works! Finish later!</p>
+  <div class="card p-4 m-5 shadow-lg">
+    <ngx-spinner name="itemSpinner">
+      <p class="loading" i18n="@@ncrequestnewFetchingData">Fetching data...</p>
+    </ngx-spinner>
+    <h4 i18n="@@ncrequestnewItemDetails">Item Details *</h4>
+    <div class="card m-1 custom-overflow shadow-sm">
+      <table class="table table-striped table-bordered m-0 custom-table">
+        <thead>
+          <tr>
+            <th *ngIf="!phase1"></th>
+            <th name="npor_line" i18n="@@ncrequestnewLineNo">Line#</th>
+            <ng-container *ngIf="requestDetailsForm.value.company">
+              <ng-container
+                *ngIf="
+                  requestDetailsForm.value.company.companyCode.match(brazil)
+                "
+              >
+                <th>
+                  <div class="">
+                    <span name="npor_material" i18n="@@ncrequestnewMaterial">Material &nbsp;</span>
+                    <span
+                      class="tooltip--right position-relative"
+                      name="npor_tt22"
+                      ><i class="pe-7s-help1"></i
+                    ></span>
+                  </div>
+                </th><!-- *ngIf="typeForm.value.reqRadios != 2" -->
+              </ng-container>
+            </ng-container>
+            <th>
+              <div class="">
+                <span name="npor_pod" i18n="@@ncrequestnewPODescription">Line Item Description * &nbsp;</span>
+                <span
+                  class="tooltip--right position-relative"
+                  name="npor_tt23"
+                  i18n-[attr.data-tooltip]="@@ncrequestnew_TT20"
+                  [attr.data-tooltip]="
+                    'Description of the goods or services being purchased. Use the additional text field if you need more space to describe the line item'
+                  "
+                  ><i class="pe-7s-help1"></i
+                ></span>
+              </div>
+            </th>
+            <!-- <ng-container *ngIf="requestDetailsForm.value.company">
+              <ng-container
+                *ngIf="
+                  requestDetailsForm.value.company.companyCode.match(brazil)
+                "
+              > -->
+                <th *ngIf="typeForm.value.reqRadios != 2">
+                  <div class="">
+                    <span name="npor_vmn" i18n="@@ncrequestnewVendorMatNo">Vendor Material No. &nbsp;</span>
+                    <span
+                      class="tooltip--right position-relative"
+                      name="npor_tt24"
+                      ><i class="pe-7s-help1"></i
+                    ></span>
+                  </div>
+                </th>
+              <!-- </ng-container>
+            </ng-container> -->
+            <th>
+              <div class="">
+                <span name="npor_qty" i18n="@@ncrequestnewQty">Qty * &nbsp;</span>
+                <span
+                  class="tooltip--right position-relative"
+                  name="npor_tt25"
+                  ><i class="pe-7s-help1"></i
+                ></span>
+              </div>
+            </th>
+            <th>
+              <div class="">
+                <span name="npor_uom" i18n="@@ncrequestnewUOM">UOM * &nbsp;</span>
+                <span
+                  class="tooltip--right position-relative"
+                  name="npor_tt26"
+                  ><i class="pe-7s-help1"></i
+                ></span>
+              </div>
+            </th>
+            <th>
+              <div class="">
+                <span name="npor_dd" i18n="@@ncrequestnewDeliveryDate">Delivery Date * &nbsp;</span>
+                <span
+                  class="tooltip--right position-relative"
+                  name="npor_tt27"
+                  ><i class="pe-7s-help1"></i
+                ></span>
+              </div>
+            </th>
+            <th>
+              <div class="">
+                <span name="npor_uc" i18n="@@ncrequestnewUnitCost">Unit Cost *&nbsp;</span>
+                <span
+                  class="tooltip--right position-relative"
+                  name="npor_28"
+                  ><i class="pe-7s-help1"></i
+                ></span>
+              </div>
+            </th>
+            <th [hidden]="true">
+              <div class="">
+                <span name="npor_pu" i18n="@@ncrequestnewPriceUnit">Price Unit &nbsp;</span>
+                <span
+                  class="tooltip--right position-relative"
+                  name="npor_tt29"
+                  ><i class="pe-7s-help1"></i
+                ></span>
+              </div>
+            </th>
+            <th>
+              <div class="">
+                <span name="npor_oc" i18n="@@ncrequestnewOrderCurrency">Order Currency &nbsp;</span>
+                <span
+                  class="tooltip--right position-relative"
+                  name="npor_tt30"
+                  i18n-[attr.data-tooltip]="@@ncrequestnew_TT21"
+                  [attr.data-tooltip]="
+                    'Usually, the same currency that will be used to remit payment to the vendor.'
+                  "
+                  ><i class="pe-7s-help1"></i
+                ></span>
+              </div>
+            </th>
+            <th>
+              <div class="">
+                <span name="npor_extcost" i18n="@@ncrequestnewExtendedCost">Extended Cost in Order Currency &nbsp;</span>
+                <span
+                  class="tooltip--right position-relative"
+                  name="npor_tt31"
+                  i18n-[attr.data-tooltip]="@@ncrequestnew_TT22"
+                  [attr.data-tooltip]="
+                    'This value will be calculated by the system.'
+                  "
+                  ><i class="pe-7s-help1"></i
+                ></span>
+              </div>
+            </th>
+            <th [hidden]="hideIfUsd()">
+              <div class="">
+                <span name="npor_extcostusd" i18n="@@ncrequestnewExtendedCostUSD">Extended Cost in USD &nbsp;</span>
+                <span
+                  class="tooltip--right position-relative"
+                  name="npor_tt32"
+                  i18n-[attr.data-tooltip]="@@ncrequestnew_TT23"
+                  [attr.data-tooltip]="
+                    'This value will be calculated by the system.'
+                  "
+                  ><i class="pe-7s-help1"></i
+                ></span>
+              </div>
+            </th>
+            <th>
+              <div class="">
+                <span name="npor_fi" i18n="@@ncrequestnewFreeItem">Free Item &nbsp;</span>
+                <span
+                  class="tooltip--right position-relative"
+                  i18n-[attr.data-tooltip]="@@ncrequestnew_TT24"
+                  name="npor_tt33"
+                  [attr.data-tooltip]="
+                    'Check this box if the item is free of charge.'
+                  "
+                  ><i class="pe-7s-help1"></i
+                ></span>
+              </div>
+            </th>
+            <th class="force-no-border bg-white" name="npor_action">&nbsp;</th>
+          </tr>
+        </thead>
+        <!-- TODO: finish resizing field width -->
+        <tbody *ngFor="let row of tableForm; let i = index">
+          <tr>
+            <td *ngIf="!phase1">
+              <div class="d-inline">
+                <a
+                  class="toggler m-1"
+                  *ngIf="!requestDetailsForm.value.company"
+                >
+                  <span
+                    class="position-relative tooltip--right"
+                    i18n-[attr.data-tooltip]="@@ncrequestnew_TT25"
+                    [attr.data-tooltip]="
+                      'Select Company and Purchase Category before opening distribution.'
+                    "
+                  >
+                    <span class="pe-7s-close-circle text-info"></span>
+                  </span>
+                </a>
+                <a
+                  class="toggler m-1"
+                  (click)="toggleTableExtra(row)"
+                  *ngIf="requestDetailsForm.value.company"
+                >
+                  <span>
+                    <span
+                      class="pe-7s-angle-down-circle text-primary"
+                      *ngIf="!row.extraOpen"
+                    ></span>
+                    <span
+                      class="pe-7s-angle-up-circle text-primary"
+                      *ngIf="row.extraOpen"
+                    ></span>
+                  </span>
+                </a>
+                <a
+                  class="toggler m-1 d-none"
+                  (click)="removeTableExtra(row)"
+                  *ngIf="row.extra"
+                >
+                  <span>
+                    <span class="pe-7s-trash text-danger"></span>
+                  </span>
+                </a>
+              </div>
+            </td>
+            <td>
+              <!-- <span class="form-control">{{ i + 1 }}</span> -->
+              <input
+                type="text"
+                autocomplete="off"
+                name="{'line'+i}"
+                value="{{ i + 1 }}"
+                class="form-control"
+                style="width:3em;"
+              />
+            </td>
+            <ng-container *ngIf="requestDetailsForm.value.company">
+              <ng-container
+                *ngIf="
+                  requestDetailsForm.value.company.companyCode.match(brazil)
+                "
+              >
+                <td><!--  *ngIf="typeForm.value.reqRadios != 2" -->
+                  <ng-select
+                    [(ngModel)]="row.material"
+                    [items]="materialOptions"
+                    name="{{'npor_mat'+i}}"
+                    id="{{'npor_mat'+i}}"
+                    i18n-placeholder="@@ncrequestnewEnterMaterialNo"
+                    placeholder="Enter the material number"
+                    bindLabel="materialNum"
+                    (change)="onFormChange();onSelectedMaterialOption();"
+                    class="material-number-select dropdown-width-fix"
+                    appendTo="body"
+                    [searchFn]="materialSearchFn"
+                  >
+                  <ng-template ng-option-tmp let-item="item">
+                    <div>{{item.materialNum}} {{item.description}}</div>
+                  </ng-template>
+                </ng-select>
+                  <!-- size="10" -->
+                </td>
+              </ng-container>
+            </ng-container>
+            <td>
+              <input
+                [(ngModel)]="row.shortText"
+                class="form-control"
+                type="text"
+                autocomplete="off"
+                id="{{'npor_st'+i}}"
+                name="{{ row.shortText }}"
+                required
+                maxlength="40"
+                style="width:15em;"
+                (change)="onFormChange()"
+              />
+            </td>
+            <!-- <ng-container *ngIf="requestDetailsForm.value.company">
+              <ng-container
+                *ngIf="
+                  requestDetailsForm.value.company.companyCode.match(brazil)
+                "
+              > -->
+                <td *ngIf="typeForm.value.reqRadios != 2">
+                  <input
+                    type="text"
+                    autocomplete="off"
+                    class="form-control"
+                    id="{{'npor_vmno'+i}}"
+                    name="{{ row.vendorMaterialNo }}"
+                    [(ngModel)]="row.vendorMaterialNo"
+                    maxlength="35"
+                    style="width: 10em;"
+                    (change)="onFormChange()"
+                  /><!-- size="10" -->
+                </td>
+              <!-- </ng-container>
+            </ng-container> -->
+            <td>
+              <input
+
+                [ngModel]="row.qty | customNumber : numberFormat"
+                (ngModelChange)="row.qty=customNumberPipe.transform($event,numberFormat, '',true);"
+                class="form-control"
+                type="text"
+                autocomplete="off"
+                min="0"
+                id="{{'npor_qty'+i}}"
+                name="{{ row.qty }}"
+                required
+                onkeypress="if(this.value.length==13) return false;"
+                max="9999999999999"
+                style="width:6.8em;"
+                (change)="onRowUpdate(row)"
+              /><!-- size="10" -->
+            </td>
+            <td>
+              <!-- <select
+                [(ngModel)]="row.uom"
+                class="form-control"
+                type="select"
+                name="{{ row.uom }}"
+                required
+                style="width: 6.5em;"
+                (change)="onFormChange()"
+              >
+                <option value="undefined" selected disabled hidden>-</option>
+                <option *ngFor="let item of uomOptions" value="{{ item.id }}"
+                  >{{ item.unit }} &nbsp; - &nbsp;
+                  {{ item.description }}</option
+                >
+              </select> -->
+              <ng-select
+                [items]="uomOptions"
+                placeholder="..."
+                [(ngModel)]="row.uom"
+                id="{{'npor_uom'+i}}"
+                name="{{ row.uom }}"
+                required
+                style="width: 6.5em;"
+                (change)="onFormChange()"
+                bindValue="id"
+                bindLabel="searchable"
+                appendTo="body"
+                class="dropdown-width-fix"
+                appendTo="body"
+              >
+                <ng-template ng-option-tmp let-item="item">
+                  <div>{{item.unit}} - {{item.description}}</div>
+                </ng-template>
+                <ng-template ng-footer-tmp *ngIf="uomOptionsPref?.length">
+                  <div (click)="showMore('uom')" i18n="@@ncrequestviewShowMore" class="cursor-pointer"  *ngIf="!showFullList.uom">Show more...</div>
+                  <div (click)="showLess('uom')" i18n="@@ncrequestviewShowLess" class="cursor-pointer"  *ngIf="showFullList.uom">Show less...</div>
+                </ng-template>
+              </ng-select
+              >
+            </td>
+            <td>
+              <input
+                [(ngModel)]="row.deliveryDate"
+                type="date"
+                class="form-control"
+                id="{{'npor_dd'+i}}"
+                name="{{ row.deliveryDate }}"
+                (change)="checkDeliveryDate(row, i)"
+              />
+              <alert appSpyOnInit (loaded)="checkDeliveryDate(row, i)" id='DeliveryDate{{i}}'></alert>
+            </td>
+            <td>
+              <input
+
+                [ngModel]="row.unitCost | customNumber : numberFormat"
+                (ngModelChange)="row.unitCost=customNumberPipe.transform($event,numberFormat, '',true)"
+                class="form-control"
+                type="text"
+                autocomplete="off"
+                min="0"
+                name="{{ row.unitCost }}"
+                id="unitCostRow{{i}}"
+                required
+                (change)="onRowUpdate(row)"
+                (keypress)="onKeyPress($event)"
+                max="9999999999999"
+                style="width: 6.8em;"
+                [disabled]="row.isFree"
+              /><!-- size="10" -->
+            </td>
+            <td [hidden]="true">
+              <input
+                type="number"
+                autocomplete="off"
+                class="form-control"
+                id="{{'npor_pu'+i}}"
+                name="{{ row.priceUnit }}"
+                [(ngModel)]="row.priceUnit"
+                onkeypress="if(this.value.length==5) return false;"
+                onkeyup="if(this.value < 1) this.value = 1;"
+                min="1"
+                max="99999"
+                style="width: 4em;"
+                (change)="onRowUpdate(row)"
+              /><!-- size="1" -->
+            </td>
+            <td>
+              <select
+                [(ngModel)]="row.orderCurrency"
+                class="form-control"
+                type="select"
+                id="{{'npor_oc'+i}}"
+                name="{{ row.orderCurrency }}"
+                (change)="onRowUpdate(row)"
+                style="width: 6em;"
+                disabled
+              >
+                <option value="undefined" selected disabled hidden>-</option>
+                <option  id="{{'npor_ocoption'+i}}"
+                  value="{{ option.ID }}"
+                  *ngFor="let option of currencyOptions"
+                  >{{ option.currency }}</option
+                >
+              </select>
+            </td>
+            <td>
+              <input
+                [ngModel]="row.totalCost | customNumber : numberFormat"
+                (ngModelChange)="row.totalCost=customNumberPipe.transform($event,numberFormat, '',true);"
+                class="form-control"
+                type="text"
+                autocomplete="off"
+                id="{{'npor_tc'+i}}"
+                name="{{ row.totalCost }}"
+                readonly
+                style="width:13em;"
+                (change)="onFormChange()"
+              />
+            </td>
+            <td [hidden]="hideIfUsd()">
+              <input
+                [ngModel]="row.totalUsd | customNumber : numberFormat"
+                (ngModelChange)="row.totalUsd=customNumberPipe.transform($event,numberFormat, '',true);"
+                class="form-control"
+                type="text"
+                autocomplete="off"
+                id="{{'npor_totalusd'+i}}"
+                name="{{ row.totalUsd }}"
+                readonly
+                style="width:13em;"
+                (change)="onFormChange()"
+              />
+            </td>
+            <td>
+              <input type="checkbox" name="{{ row.isFree }}"  id="{{'npor_isfree'+i}}" [(ngModel)]="row.isFree" class="form-check-input" (change)="onCheckFree(row)">
+            </td>
+            <td class="force-no-border">
+              <button
+                class="btn btn-danger"
+                type="button"
+                name="{{'npor_delete'+i}}"
+                (click)="deleteTableValue(i)"
+                [disabled]="tableForm.length == 1"
+                i18n="@@ncrequestviewDelete"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td *ngIf="!phase1">&nbsp;</td>
+            <td colspan="13">
+              <div class="form-row d-flex"><div><h4 i18n="@@ncrequestnewCostObjectInfo">Cost Object Information</h4></div></div>
+              <div class="form-row d-flex">
+                <div class="" *ngIf="chosenPor.glAccountNumber">
+                  <div class="form-group gl-account">
+                    <div class="d-flex">
+                      <label for="coGLAccount"><strong i18n="@@ncrequestnewGLAccount">GL Account </strong>* &nbsp;</label>
+                      <span
+                        class="align-self-center tooltip--right position-relative"
+                        i18n-[attr.data-tooltip]="@@ncrequestnew_TT26"
+                        [attr.data-tooltip]="
+                          'Enter the general ledger account number to be charged for this line item.'
+                        "
+                        ><i class="pe-7s-help1"></i
+                      ></span>
+                    </div>
+                    <ng-select
+                      [items]="glAccountOptions"
+                      bindValue="id"
+                      bindLabel="searchable"
+                      name="{{'npor_cogl'+i}}"
+                      id="coGLAccount"
+                      (change)="onGlAccountChange(row, $event, i)"
+                      i18n-placeholder="@@ncrequestnewChooseGL"
+                      placeholder="Choose a GL Account"
+                      [(ngModel)]="row.glAccountMasterId"
+                      appendTo="body"
+                      [disabled]="!requestDetailsForm.value.requesterCostCenter"
+                    >
+                      <ng-template  ng-option-tmp let-item="item">
+                        <div>{{item.accDesc}} - {{item.accountNumber | glAccount}}</div>
+                      </ng-template>
+                      <ng-template ng-footer-tmp *ngIf="glAccountOptionsPref?.length">
+                        <div (click)="showMore('glaccount')" i18n="@@ncrequestviewShowMore" class="cursor-pointer"  *ngIf="!showFullList.glaccount">Show more...</div>
+                        <div (click)="showLess('glaccount')" i18n="@@ncrequestviewShowLess" class="cursor-pointer"  *ngIf="showFullList.glaccount">Show less...</div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                  <alert id="glAccountMasterIdLocked{{i}}"></alert>
+                </div>
+                <div class="" *ngIf="chosenPor.costCenterCode">
+                  <div class="form-group cost-center">
+                    <div class="d-flex">
+                      <label for="coCostCenter"><strong i18n="@@ncrequestnewCostCenterLine">Cost Center </strong>* &nbsp;</label>
+                      <span
+                        class="align-self-center tooltip--right position-relative"
+                        i18n-[attr.data-tooltip]="@@ncrequestnew_TT27"
+                        name="npor_tt34"
+                        [attr.data-tooltip]="
+                          'Enter the cost  center to be charged for this line item.'
+                        "
+                        ><i class="pe-7s-help1"></i
+                      ></span>
+                    </div>
+                    <ng-select
+                      [items]="costCenterOptions"
+                      id="coCostCenter"
+                      name="{{'npor_cocc'+i}}"
+                      (change)="onItemDetailCCChange($event, i)"
+                      bindValue="id"
+                      bindLabel="searchable"
+                      i18n-placeholder="@@ncrequestnewChooseCCLine"
+                      placeholder="Choose a Cost Center"
+                      [(ngModel)]="row.costCenterId"
+                      appendTo="body"
+                    >
+                      <ng-template ng-option-tmp let-item="item">
+                        <div>{{item.name}} - {{item.code}}</div>
+                      </ng-template>
+                      <ng-template ng-footer-tmp *ngIf="costCenterOptionsPref?.length">
+                        <div (click)="showMore('costCenter')" i18n="@@ncrequestviewShowMore" class="cursor-pointer"  *ngIf="!showFullList.costCenter">Show more...</div>
+                        <div (click)="showLess('costCenter')" i18n="@@ncrequestviewShowLess" class="cursor-pointer"  *ngIf="showFullList.costCenter">Show less...</div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                  <alert id="costCenterLocked{{i}}"></alert>
+                </div>
+                <div class="" *ngIf="chosenPor.assetClass">
+                  <div class="form-group asset-type">
+                    <div class="d-flex">
+                      <label for="coAssetClass"><strong i18n="@@ncrequestnewAssetTypeLine">Asset Type</strong> * &nbsp;</label>
+                      <span
+                        class="align-self-center tooltip--right position-relative"
+                        i18n-[attr.data-tooltip]="@@ncrequestnew_TT28"
+                        name="npor_tt35"
+                        [attr.data-tooltip]="
+                          'Select asset type from dropdown menu. '
+                        "
+                        ><i class="pe-7s-help1"></i
+                      ></span>
+                    </div>
+                    <ng-select
+                      [items]="assetClassOptions"
+                      bindValue="id"
+                      bindLabel="searchable"
+                      (change)="onItemDetailAssetChange($event, i)"
+                      id="coAssetClass"
+                      name="{{'npor_coassettype'+i}}"
+                      i18n-placeholder="@@ncrequestnewChooseAssetTypeLine"
+                      placeholder="Choose Asset Type"
+                      [(ngModel)]="row.assetClass"
+                      appendTo="body"
+                    >
+                    <ng-template ng-option-tmp let-item="item">
+                      <div>{{item.description}} - {{item.classCode}}</div>
+                    </ng-template>
+                    </ng-select>
+                  </div>
+                  <alert id="assetClassLocked{{i}}"></alert>
+                </div>
+                <div class="" *ngIf="chosenPor.assetNumber">
+                  <div class="form-group asset-number d-none">
+                    <div class="d-flex">
+                      <label for="coAssetNumber"><strong i18n="@@ncrequestnewAssetNoLine">Asset Number &nbsp;</strong></label>
+                      <span
+                        class="align-self-center tooltip--right position-relative"
+                        i18n-[attr.data-tooltip]="@@ncrequestnew_TT29"
+                        [attr.data-tooltip]="
+                          'Asset number will be entered by fixed asset reviewer.'
+                        "
+                        ><i class="pe-7s-help1"></i
+                      ></span>
+                    </div>
+                    <ng-select
+                      [items]="assetNumberOptions"
+                      bindValue="id"
+                      bindLabel="searchable"
+                      id="coAssetNumber"
+                      name="{{'nporAssetNo'+i}}"
+                      (change)="onFormChange()"
+                      i18n-placeholder="@@ncrequestnewOptAssetNoLine"
+                      placeholder="(Optional) - Provide Asset Number"
+                      [(ngModel)]="row.assetNumber"
+                      appendTo="body"
+                    >
+                    <ng-template ng-option-tmp let-item="item">
+                      <div>{{item.classDescription}} - {{item.assetNumber}}</div>
+                    </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="" *ngIf="chosenPor.ioNumber">
+                  <div class="form-group internal-order">
+                    <div class="d-flex">
+                      <label for="coInternalOrder"><strong i18n="@@ncrequestnewIOLine">Internal Order </strong><ng-container *ngIf="row.ioOptions && row.ioOptions.internalOrderFlag">*</ng-container> &nbsp;</label>
+                      <span
+                        class="align-self-center tooltip--right position-relative"
+                        i18n-[attr.data-tooltip]="@@ncrequestnew_TT30"
+                        [attr.data-tooltip]="
+                          'Enter an internal order number to be charged if known.'
+                        "
+                        ><i class="pe-7s-help1"></i
+                      ></span>
+                    </div>
+                    <ng-select
+                      [items]="row.ioOptions?.internalOrder || []"
+                      bindValue="id"
+                      bindLabel="searchable"
+                      id="coInternalOrder"
+                      name="{{'npor_ionumber'+i}}"
+                      (change)="onItemDetailsIOChange($event, i)"
+                      i18n-placeholder="@@ncrequestnewChooseIO"
+                      placeholder="Choose IO number"
+                      [(ngModel)]="row.ioNumber"
+                      appendTo="body"
+                      [disabled]="ioDisabledHelper(chosenPor.glAccountNumber, row.glAccountMasterId)"
+                    >
+                      <ng-template  ng-option-tmp let-item="item">
+                        <div>{{item.orderDes}} - {{item.orderNumber}}</div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                  <alert id="ioNumberLocked{{i}}"></alert>
+                </div>
+                <div class="" *ngIf="chosenPor.profitCenter">
+                  <div class="form-group profit-center">
+                    <div class="d-flex">
+                      <label for="coProfitCenter"><strong i18n="@@ncrequestnewPCLine">Profit Center</strong><ng-container *ngIf="this.requestDetailsForm.value.purchaseCategory == 10"> *</ng-container> &nbsp;</label>
+                      <span
+                        class="align-self-center tooltip--right position-relative"
+                        i18n-[attr.data-tooltip]="@@ncrequestnew_TT31"
+                        [attr.data-tooltip]="
+                          'Required for purchases to be charged to cost of sales.'
+                        "
+                        ><i class="pe-7s-help1"></i
+                      ></span>
+                    </div>
+                    <ng-select
+                      [items]="profitCenterOptions"
+                      bindValue="id"
+                      bindLabel="name"
+                      name="{{'npor_profit'+i}}"
+                      id="coProfitCenter"
+                      (change)="onItemDetailsPCChange($event, i)"
+                      i18n-placeholder="@@ncrequestnewChoocePCLine"
+                      placeholder="Choose a Profit Center"
+                      [(ngModel)]="row.profitCenter"
+                      appendTo="body"
+                    >
+                    <ng-template ng-option-tmp let-item="item">
+                      <div>{{item.name}} - {{item.code}}</div>
+                    </ng-template>
+                    </ng-select>
+                  </div>
+                  <alert id="profitCenterLocked{{i}}"></alert>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="phase1 || row.extraOpen">
+            <td *ngIf="!phase1">&nbsp;</td>
+            <td colspan="7">
+              <div class="form-row">
+                <div class="d-flex">
+                  <p><strong i18n="@@ncrequestnewAdditionalText">Additional Text: &nbsp;</strong></p>
+                  <span
+                  class="align-self-center tooltip--right position-relative"
+                  i18n-[attr.data-tooltip]="@@ncrequestnew_TT32"
+                  [attr.data-tooltip]="
+                    'Provides additional space to describe or explain line item for vendor.'
+                  "
+                  ><i class="pe-7s-help1"></i
+                ></span>
+                </div>
+
+                <input
+                  type="text"
+                  autocomplete="off"
+                  id="tableExtraText"
+                  name="{{ row.extraText }}"
+                  class="form-control"
+                  [(ngModel)]="row.extraText"
+                  (change)="onFormChange()"
+                />
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="row.extraOpen && !phase1">
+            <td>
+              &nbsp;
+            </td>
+            <td colspan="7">
+              <div class="form-row">
+                <p><strong i18n="@@ncrequestnewDistributionBasis">Distribution Basis:</strong></p>
+                <select
+                  type="select"
+                  id="tableExtraDistributionBasis"
+                  name="{{ row.tableExtraDistributionBasis }}"
+                  class="form-control"
+                  [(ngModel)]="row.tableExtraDistributionBasis"
+                  (change)="onFormChange()"
+                >
+                  <option value="1" i18n="@@ncrequestnewQuantity">Quantity</option>
+                  <option value="2" i18n="@@ncrequestnewPercentage">Percentage</option>
+                </select>
+              </div>
+            </td>
+          </tr>
+          <!-- <tr *ngIf=(row.extra)>
+              <td>
+                <p>placeholder</p>
+              </td>
+            </tr> -->
+          <ng-container *ngIf="row.extraOpen && !phase1">
+            <tr *ngFor="let extraRow of tableForm[i].extraTable; let j = index">
+              <td>&nbsp;</td>
+              <td colspan="13">
+                <div class="row align-items-baseline align-content-baseline">
+                  <div class="col-sm-auto align-self-center">
+                    <button
+                      class="btn btn-dark bg-smartbuy shape-square-sm custom-circle"
+                      (click)="addTableExtra(row)"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <div class="col-sm-auto">
+                    <p><strong i18n="@@ncrequestnewSr">Sr. #</strong></p>
+                    <!-- <span class="form-control">{{ j + 1 }}</span> -->
+                    <input
+                      type="text"
+                      autocomplete="off"
+                      class="form-control"
+                      value="{{ j + 1 }}"
+                      readonly
+                      style="width:3em;"
+                    />
+                  </div>
+                  <div class="col-sm-auto">
+                    <div class="">
+                      <p class="text-left" i18n="@@ncrequestnewQty"><strong>Qty:</strong></p>
+                      <input
+                        type="number"
+                        autocomplete="off"
+                        min="0"
+                        id="extraRowQty"
+                        name="{{ extraRow.extraRowQty }}"
+                        class="form-control"
+                        max="9999999999999"
+                        onkeypress="if(this.value.length==13) return false;"
+                        [(ngModel)]="extraRow.extraRowQty"
+                        [disabled]="row.tableExtraDistributionBasis != 1"
+                        style="width:6.8em;"
+                        (change)="onFormChange()"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-sm-auto">
+                    <div class="">
+                      <p class="text-left"><strong i18n="@@ncrequestnewPercentage">Percentage:</strong></p>
+                      <input
+                        type="number"
+                        autocomplete="off"
+                        min="0"
+                        max="100"
+                        onkeypress="if(this.value.length==3) return false;"
+                        id="extraRowPercentage"
+                        name="{{ extraRow.extraRowPercentage }}"
+                        class="form-control"
+                        [(ngModel)]="extraRow.extraRowPercentage"
+                        [disabled]="row.tableExtraDistributionBasis != 2"
+                        style="width:6em;"
+                        (change)="onFormChange()"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-sm-auto" *ngIf="chosenPor.costCenterCode">
+                    <div class="cost-center">
+                      <p class="text-left"><strong i18n="@@ncrequestnewCC1">Cost Center:</strong></p>
+                      <ng-select
+                        [items]="costCenterOptions"
+                        [attr.name]="extraRow.extraRowCostCenter"
+                        id="extraRowCostCenter"
+                        [(ngModel)]="extraRow.extraRowCostCenter"
+                        (change)="onFormChange()"
+                        bindValue="id"
+                        bindLabel="searchable"
+                        i18n-placeholder="@@ncrequestnewChooseCC1"
+                        placeholder="Choose a Cost Center"
+                        appendTo="body"
+                      >
+                        <ng-template ng-option-tmp let-item="item">
+                          <div>{{item.name}} - {{item.code}}</div>
+                        </ng-template>
+                        <ng-template ng-footer-tmp *ngIf="costCenterOptionsPref?.length">
+                          <div (click)="showMore('costCenter')" i18n="@@ncrequestviewShowMore" class="cursor-pointer"  *ngIf="!showFullList.costCenter">Show more...</div>
+                          <div (click)="showLess('costCenter')" i18n="@@ncrequestviewShowLess" class="cursor-pointer"  *ngIf="showFullList.costCenter">Show less...</div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div class="col-sm-auto" *ngIf="chosenPor.glAccountNumber">
+                    <div class="gl-account">
+                      <p class="text-left"><strong i18n="@@ncrequestnewGLAcc1">G/L Account:</strong></p>
+                      <ng-select
+                        [items]="glAccountOptions"
+                        bindValue="id"
+                        bindLabel="searchable"
+                        [(ngModel)]="extraRow.extraRowGlAccount"
+                        id="extraRowGlAccount"
+                        (change)="onFormChange()"
+                        [attr.name]="extraRow.extraRowGlAccount"
+                        i18n-placeholder="@@ncrequestnewChooseGLAcc1"
+                        placeholder="Choose a GL Account"
+                        appendTo="body"
+                      >
+                        <ng-template  ng-option-tmp let-item="item">
+                          <div>{{item.accDesc}} - {{item.accountNumber | glAccount}}</div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-auto" *ngIf="chosenPor.assetClass">
+                    <div class="asset-type">
+                      <p class="text-left"><strong i18n="@@ncrequestnewAssetType1">Asset Type:</strong></p>
+                      <ng-select
+                        [items]="assetClassOptions"
+                        bindValue="id"
+                        bindLabel="searchable"
+                        [(ngModel)]="extraRow.extraRowAssetclass"
+                        (change)="onFormChange()"
+                        id="extraRowAssetclass"
+                        [attr.name]="extraRow.extraRowAssetclass"
+                        i18n-placeholder="@@ncrequestnewChooseAssetType1"
+                        placeholder="Choose Asset Type"
+                        appendTo="body"
+                      >
+                        <ng-template ng-option-tmp let-item="item">
+                          <div>{{item.description}} - {{item.classCode}}</div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-auto d-none" *ngIf="chosenPor.assetNumber">
+                    <div class="asset-number">
+                      <p class="text-left"><strong i18n="@@ncrequestnewAssetNo1">Asset Number:</strong></p>
+                      <ng-select
+                        [items]="assetNumberOptions"
+                        bindValue="id"
+                        bindLabel="searchable"
+                        id="extraRowAssetnumber"
+                        [(ngModel)]="extraRow.extraRowAssetnumber"
+                        [attr.name]="extraRow.extraRowAssetnumber"
+                        (change)="onFormChange()"
+                        i18n-placeholder="@@ncrequestnewRrovideAsset1"
+                        placeholder="(Optional) - Provide Asset Number"
+                        appendTo="body"
+                      >
+                        <ng-template ng-option-tmp let-item="item">
+                          <div>{{item.classDescription}} - {{item.assetNumber}}</div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div class="col-sm-auto" *ngIf="chosenPor.ioNumber">
+                    <div class="internal-order">
+                      <p class="text-left"><strong i18n="@@ncrequestnewIO1">Internal Order:</strong></p>
+                      <ng-select
+                        [items]="internalOrderOptions"
+                        bindValue="id"
+                        bindLabel="searchable"
+                        id="extraInternalOrder"
+                        (change)="onFormChange()"
+                        [(ngModel)]="extraRow.extraInternalOrder"
+                        [attr.name]="extraRow.extraInternalOrder"
+                        i18n-placeholder="@@ncrequestnewChooseIO1"
+                        placeholder="(optional) - Choose IO number"
+                        appendTo="body"
+                      >
+                        <ng-template  ng-option-tmp let-item="item">
+                          <div>{{item.orderDes}} - {{item.orderNumber}}</div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-auto" *ngIf="chosenPor.profitCenter">
+                    <div class="profit-center">
+                      <p class="text-left"><strong i18n="@@ncrequestnewPC1">Profit Center:</strong></p>
+                      <ng-select
+                        [items]="profitCenterOptions"
+                        bindValue="id"
+                        bindLabel="name"
+                        [attr.name]="extraRow.extraProfitCenter"
+                        [(ngModel)]="extraRow.extraProfitCenter"
+                        id="extraProfitCenter"
+                        (change)="onFormChange()"
+                        i18n-placeholder="@@ncrequestnewChoocePC1"
+                        placeholder="Choose a Profit Center"
+                        appendTo="body"
+                      >
+                        <ng-template ng-option-tmp let-item="item">
+                          <div>{{item.name}} - {{item.code}}</div>
+                        </ng-template>
+                    </ng-select>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-auto align-self-center">
+                    <button
+                      class="btn btn-danger shape-square-sm custom-circle"
+                      (click)="deleteExtraValue(row, j)"
+                    >
+                      -
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="7">
+              <button
+                type="button"
+                class="btn btn-primary btn-sm"
+                id="addrow"
+                i18n="@@ncrequestnewAddRow"
+                (click)="addTableValue()"
+              >
+                Add Row
+
+              </button>
+            </td>
+            <td colspan="6">
+              <span class="text-left">
+                <strong>{{ displayTotalCost() }}</strong>
+              </span>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+
+<form autocomplete="off"
+  *ngIf="
+    typeForm.value.reqRadios &&
+    isApprovedForm.value.budgetApproved != 0 &&
+    isApprovedForm.value.contractInPlace != 0
+  "
+  [formGroup]="commentsForm"
+>
+  <div class="card p-4 m-5 shadow-lg">
+    <div class="form-group">
+      <div class="d-flex">
+        <label for="specialInstructions"><strong i18n="@@ncrequestnewSpecialInstructionToVendor">Special Instructions to Vendor &nbsp;</strong></label>
+        <span
+          class="align-self-center tooltip--right position-relative"
+          i18n-[attr.data-tooltip]="@@ncrequestnew_TT33"
+          [attr.data-tooltip]="
+            'These instructions will appear on the PO sent to the vendor.'
+          "
+          ><i class="pe-7s-help1"></i
+        ></span>
+      </div>
+      <textarea
+        name="specialInstructions"
+        id="specialInstructions"
+        formControlName="specialInstructions"
+        class="form-control"
+        (change)="onFormChange()"
+      ></textarea>
+      <div class="d-flex">
+        <div class="custom-file w-25 mr-1">
+
+          <input
+            type="file"
+            class="custom-file-input"
+            id="customFile"
+            formControlName="uploadFile"
+            (change)="onFileUpload($event.target.files)"
+            multiple
+          />
+          <label
+            class="custom-file-label"
+            for="customFile"
+            id="uploadFileLabel"
+            i18n-[innerText]="@@ncrequestviewAttachFile"
+            [innerText]="'Attach a file...'"
+          ></label>
+
+        </div>
+        <span
+        class="align-self-center tooltip--right position-relative"
+        i18n-[attr.data-tooltip]="@@ncrequestnew_TT134"
+        [attr.data-tooltip]="
+          'Attach any document (Word, Excel, PDF) that helps explain or support the purchase, such as a vendor quote or contract summary.'
+        "
+        ><i class="pe-7s-help1"></i
+      ></span>
+      </div>
+      <div *ngFor="let file of filesToDisplay; let i = index" class="badge m-1 ml-2">
+        <span>{{ file }}</span
+        ><a name="{{'npor_removefile'+i}}" (click)="onRemoveSelectedFile(file)"
+          ><i class="pe-7s-close custom-close-me"></i
+        ></a>
+      </div>
+      <ng-container *ngIf="orderId != 0 && uploadedFiles[0]">
+        <div class="custom-table-wrapper">
+          <div class="custom-table-scroll mt-0">
+          <table class="table file-table mb-0">
+          <thead>
+            <tr>
+              <th class="text-left" i18n="@@ncrequestnewFile">File</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let file of uploadedFiles; let i = index">
+              <td>
+                <span class="text-primary mr-4">
+                  {{ file }}
+                </span>
+                <span class="badge badge-primary-fix cursor-pointer" id="{{'filedownload'+i}}"
+                  (click)="onFileDownloadClick(file)">
+                  <i class="pe-7s-download"></i>
+                </span>
+                <span class="badge badge-danger-fix cursor-pointer" id="{{'filedelete'+i}}"
+                  (click)="onFileDeleteClick(file)">
+                  <i class="pe-7s-trash"></i>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+          </table>
+
+        </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</form>
+
+<div
+  *ngIf="
+    typeForm.value.reqRadios &&
+    isApprovedForm.value.budgetApproved != 0 &&
+    isApprovedForm.value.contractInPlace != 0
+  "
+>
+  <button
+    class="btn btn-primary custom-button-fix"
+    type="submit"
+    name="por_review"
+    (click)="onReviewClick()"
+    i18n="@@ncrequestnewReviewOrder"
+    [disabled]="canSeeApprovers"
+  >
+    Review Order
+
+  </button>
+</div>
+
+<div *ngIf="canSeeApprovers">
+  <div class="card p-4 m-5 shadow-lg">
+    <div class="form-row">
+      <!-- <div class="col-lg">
+        <div>
+          <h1 *ngIf="debug">This section does stuff now</h1>
+          <h1 *ngIf="!debug">Approvers</h1>
+          <form class="form-group" [formGroup]="aduserForm">
+            <label for="f1f2">F1 F2</label>
+            <select class="form-control" name="f1f2" formControlName="f1f2">
+              <option value = "" disabled hidden selected>-</option>
+              <option *ngFor="let person of adUsers" value="{{ person.ID }}"
+                >{{ person.firstname }} {{ person.lastname }}</option
+              >
+            </select>
+            <label for="cfo">CFO</label>
+            <select name="cfo" class="form-control" formControlName="cfo">
+              <option value="" disabled hidden selected>-</option>
+              <option *ngFor="let person of adUsers" value="{{ person.ID }}"
+                >{{ person.firstname }} {{ person.lastname }}</option
+              >
+            </select>
+            <label for="appr1">Appr1</label>
+            <select name="appr1" class="form-control" formControlName="appr1">
+              <option value="" disabled hidden selected>-</option>
+              <option *ngFor="let person of adUsers" value="{{ person.ID }}"
+                >{{ person.firstname }} {{ person.lastname }}</option
+              >
+            </select>
+            <label for="finalAppr">Final Approver</label>
+            <select
+              name="finalAppr"
+              class="form-control"
+              formControlName="finalAppr"
+            >
+              <option value="" disabled hidden selected>-</option>
+              <option *ngFor="let person of adUsers" value="{{ person.ID }}"
+                >{{ person.firstname }} {{ person.lastname }}</option
+              >
+            </select>
+          </form>
+        </div>
+      </div> -->
+      <div class="col-lg">
+        <div>
+          <h1 i18n="@@ncrequestnewApprovers">Approvers</h1>
+          <form class="approvers" autocomplete="off">
+            <ng-container *ngFor="let entry of approverOptions.approvers">
+              <div [ngClass]="{'d-none': entry.fieldname === 'IT' ||
+              entry.fieldname === 'A1' ||
+              entry.fieldname === 'F1' ||
+              entry.fieldname === 'F2' ||
+              entry.fieldname === 'CFO' ||
+              entry.fieldname === 'TAX/OTHERS' ||
+              entry.fieldname === 'FG' ||
+              entry.fieldname === 'Requester' ||
+              entry.fieldname === 'Buyer',
+              'd-flex' : !(entry.fieldname === 'IT' ||
+              entry.fieldname === 'A1' ||
+              entry.fieldname === 'F1' ||
+              entry.fieldname === 'F2' ||
+              entry.fieldname === 'CFO' ||
+              entry.fieldname === 'TAX/OTHERS' ||
+              entry.fieldname === 'FG' ||
+              entry.fieldname === 'Requester' ||
+              entry.fieldname === 'Buyer')}">
+                <label
+                for="{{ entry.fieldname }}"
+                >{{ approverFieldDisplay(entry.fieldname) }} &nbsp;</label
+              >
+                <span
+                  class="align-self-center tooltip--right position-relative"
+
+                  ><i class="pe-7s-help1"></i
+                ></span>
+              </div>
+
+              <!-- <select
+                type="select"
+                class="form-control"
+                id="{{ entry.fieldname }}"
+                name="{{ entry.fieldname }}"
+                [(ngModel)]="approverFormInfo[entry.fieldname]"
+                (change)="onApproversChange(false, $event.target.value)"
+                [hidden]="
+                  entry.fieldname === 'IT' ||
+                  entry.fieldname === 'Asset' ||
+                  entry.fieldname === 'F1' ||
+                  entry.fieldname === 'F2' ||
+                  entry.fieldname === 'CFO'
+                "
+              >
+                <option value="undefined" disabled hidden selected>-</option>
+                <option
+                  value="{{ item.id }}"
+                  *ngFor="let item of entry.users"
+                  >{{ item.displayname }}</option
+                >
+              </select> -->
+              <ng-select
+                [items]="entry.showMore || entry.users"
+                bindValue="id"
+                bindLabel="displayname"
+                i18n-placeholder="@@ncrequestnewSelectAnApprover"
+                placeholder="Select an Approver"
+                id="{{ entry.fieldname }}"
+                [attr.name]="entry.fieldname"
+                [(ngModel)]="approverFormInfo[entry.fieldname]"
+                [ngModelOptions]="{standalone: true}"
+                (change)="onApproversChange(false, $event)"
+                class="approver"
+                [hidden]="
+                entry.fieldname === 'IT' ||
+                entry.fieldname === 'A1' ||
+                entry.fieldname === 'F1' ||
+                entry.fieldname === 'F2' ||
+                entry.fieldname === 'CFO' ||
+                entry.fieldname === 'TAX/OTHERS' ||
+                entry.fieldname === 'FG'||
+                entry.fieldname === 'Requester' ||
+                entry.fieldname === 'Buyer'
+              "
+              >
+
+            </ng-select>
+              <br [hidden]="
+              entry.fieldname === 'IT' ||
+              entry.fieldname === 'A1' ||
+              entry.fieldname === 'F1' ||
+              entry.fieldname === 'F2' ||
+              entry.fieldname === 'CFO' ||
+              entry.fieldname === 'TAX/OTHERS' ||
+              entry.fieldname === 'FG'||
+              entry.fieldname === 'Requester' ||
+              entry.fieldname === 'Buyer'
+              ">
+            </ng-container>
+            <div *ngFor="let approver of additionalApprover; let i = index">
+              <div class="d-flex">
+                <label for="additionalApprover{{ i }}" i18n="@@ncrequestnewAdditionalApprover"
+                >Additional Approver {{ i + 1 }}&nbsp;
+                <i class="pe-7s-close" id="{{'addapp'+i}}" (click)="onRemoveApprover(approver)"></i>
+                <span>&nbsp;</span>
+              </label>
+                <span
+                  class="align-self-center tooltip--right position-relative"
+                  ><i class="pe-7s-help1"></i
+                ></span>
+              </div>
+              <ng-select
+                [items]="approver.users"
+                bindValue="id"
+                bindLabel="displayname"
+                id="additionalApprover{{ i }}"
+                name="{{'addappselect'+ i}}"
+                [attr.name]="'additionalApprover'+i"
+                [(ngModel)]="approver.value"
+                [ngModelOptions]="{standalone: true}"
+                (change)="onApproversChange($event)"
+                i18n-placeholder="@@ncrequestnewSelectAdditionalApprover"
+                placeholder="Select Additional Approver"
+                class="approver"
+              >
+              </ng-select>
+              <br>
+              <!-- <select
+                type="select"
+                class="form-control"
+                id="additionalApprover{{ i }}"
+                name="additionalApprover{{ i }}"
+                [(ngModel)]="approver.value"
+                (change)="onApproversChange($event.target.value)"
+              >
+                <option value="undefined" disabled hidden>None Selected...</option>
+                <option value="0" selected disabled hidden>None Selected...</option>
+                <option value="{{ user.id }}" *ngFor="let user of approverOptions.additionalapprovers[0].users"
+                  >{{ user.displayname }}</option
+                >
+              </select> -->
+            </div>
+            <button
+              class="btn btn-primary button-fix"
+              name="npor_addappbtn"
+              (click)="onAddApprover()" i18n="@@ncrequestnewAddApprover"
+            >
+              Add Approver
+            </button>
+          </form>
+        </div>
+      </div>
+      <div class="col-lg" *ngIf="canSeeHierarchy">
+        <!-- Experimental HTML -->
+        <div>
+          <h1 *ngIf="debug">Turn debug value to FALSE to see real api data</h1>
+          <h1 *ngIf="!debug">&nbsp;</h1>
+          <div class="row">
+            <div class="timeline-centered">
+              <ng-container>
+                <article
+                  class="timeline-entry"
+                  *ngFor="let name of hierarchy; let i = index"
+                >
+                  <div class="timeline-entry-inner">
+                    <div
+                      class="timeline-icon"
+                      [ngClass]="{
+                        'bg-success': name.name.includes('@'),
+                        'bg-danger':
+                          name.name.includes('^') && !name.name.includes('@'),
+                        'bg-gold':
+                          (name.name.includes('#') &&
+                            !name.name.includes('^') &&
+                            !name.name.includes('@')) ||
+                          (!name.name.includes('@') &&
+                            !name.name.includes('^') &&
+                            !name.name.includes('#'))
+                      }"
+                    >
+                      <i
+                        class="entypo-feather bigger-font"
+                        [ngClass]="{ 'pe-7s-angle-down': hierarchy[i + 1] }"
+                      ></i>
+                    </div>
+                    <div class="timeline-label">
+                      <h2 [innerHTML]="name.name | approverHierarchy"></h2>
+                      <h6 *ngIf="name.fieldName" class="text-smartbuy" [innerText]="name.fieldName"></h6>
+                      <p
+                        class="text-sm"
+                        *ngIf="name.title"
+                        [innerHTML]="name.title"
+                      ></p>
+                    </div>
+                  </div>
+                </article>
+              </ng-container>
+
+              <article class="timeline-entry begin">
+                <div class="timeline-entry-inner">
+                  <div
+                    class="timeline-icon"
+                    style="-webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg); transform: rotate(-90deg);"
+                  >
+                    <i class="entypo-flight"></i>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pt-5 d-flex justify-content-around">
+      <button
+        class="btn btn-primary button-fix btn-lg"
+        name="npor_approverPreview"
+        i18n="@@ncrequestnewPreview"
+        (click)="onApproverPreviewClick()"
+      >
+        Preview
+
+      </button>
+
+    </div>
+  </div>
+</div>
+
+<div *ngIf="canSeeApprovers">
+  <div class="card p-4 m-5 shadow-lg">
+    <div class="d-flex">
+      <h1 i18n="@@ncrequestnewAdditionalReaders">Additional Readers &nbsp;</h1>
+      <span
+        class="align-self-center tooltip--right position-relative"
+        name="npor_tt40"
+        i18n-[attr.data-tooltip]="@@ncrequestnew_TT35"
+        [attr.data-tooltip]="
+          'Additional readers can see the POR but cannot approve.'
+        "
+        ><i class="pe-7s-help1"></i
+      ></span>
+    </div>
+    <div class="form-row">
+      <div class="col-lg">
+        <div class="form-group">
+          <ng-select
+            [items]="adUsers"
+            [virtualScroll]="true"
+            bindValue="ID"
+            bindLabel="firstname"
+            id="addWatchers"
+            name="npor_addreader"
+            (change)="onAddWatcher()"
+            [(ngModel)]="chosenWatcher"
+            [attr.name]="'addWatcher'"
+            class="approver"
+            i18n-placeholder="@@ncrequestnewSelectDesiredReader"
+            placeholder="Select your desired reader"
+            [searchFn]="watcherSearchFn"
+          >
+          <ng-template ng-option-tmp let-item="item">
+            <div>{{item.firstname}} {{item.lastname}}</div>
+          </ng-template>
+          <ng-template ng-label-tmp let-item="item">
+            <span>{{item.firstname}} {{item.lastname}}</span>
+          </ng-template>
+          </ng-select>
+        </div>
+      </div>
+      <div class="col-lg">
+        <div>
+          <span class="btn btn-secondary m-2" *ngFor="let person of watchers"
+            >{{ person.firstname }} {{ person.lastname }}
+            <a name="{{person.firstname + 'remove'}}" (click)="onRemoveWatcher(person)"><i class="pe-7s-close"></i></a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card p-4 m-5 shadow-lg">
+    <div class="d-flex justify-content-around">
+
+      <button
+        class="btn btn-primary button-fix btn-lg"
+        (click)="disableSubmit=true; onNoPreviewSubmit()"
+        name="npor_nopreview"
+        i18n="@@ncrequestnewSubmit"
+        [hidden]="canSeeHierarchy"
+        [disabled]="disableSubmit || validateApproverSelection() || filesUploading"
+      >
+        Submit
+      </button>
+      <button
+        class="btn btn-primary button-fix btn-lg"
+        (click)="disableSubmit=true; onSumbit()"
+        name="npor_submitbtn"
+        i18n="@@ncrequestnewSubmit"
+        [hidden]="!canSeeHierarchy"
+        [disabled]="disableSubmit || validateApproverSelection() || filesUploading"
+      >
+        Submit
+      </button>
+      <button
+        class="btn btn-primary"
+        (click)="onCancelDraft()"
+        name="npor_cancelbtn1"
+        i18n="@@ncrequestnewCancelPOR"
+        [hidden]="canSeeHierarchy"
+      >
+        Cancel POR
+      </button>
+      <button
+        class="btn btn-primary"
+        (click)="onCancelDraft()"
+        name="npor_cancelbtn2"
+        i18n="@@ncrequestnewCancelPOR"
+        [hidden]="!canSeeHierarchy"
+      >
+        Cancel POR
+      </button>
+
+    </div>
+  </div>
+</div>
+<!-- <button *ngIf="debug" (click)="sendAllData('test', true)">
+  Debug: Test submit of order
+</button> -->

@@ -1,0 +1,43 @@
+* {
+  display: block;
+  box-sizing: border-box;
+}
+
+.cardcontainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-content {
+  background-image: url("../../../assets/images/ameriWallpaper.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display:flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+@media(max-width: 575px) {
+  .page-content {
+    display: flex;
+    justify-content: center;
+  }
+
+  /* #okta-signin-container {
+    width: 100%;
+    height: auto;
+  } */
+}
+
+.text-small {
+  font-size: 0.6em;
+}
+
+.button-fix {
+  float: none;
+}

@@ -1,0 +1,65 @@
+<div class="jumbofix jumbotron bg-light align-items-center">
+  <div class="jumbo-content">
+    <!-- <span class="float-left clearfix" ><i class="pe-7s-box2"></i></span> -->
+    <div class="icon float-left clearfix shadow-lg">
+      <i class="pe-7s-refresh-2"></i>
+    </div>
+    <div class="jumbo-info">
+      <h4 class="text-dark" i18n="@@reprocessTitle">SAP Reprocess Messages</h4>
+      <p class="text-secondary" i18n="@@reprocessSubTitle">
+        List of purchase orders that can be reprocessed
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="card p-4 m-5 shadow-lg custom-overflow">
+  <table class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th i18n="@@reprocessMessageID">Message ID</th>
+        <th i18n="@@reprocessPORID">Purchase Request ID</th>
+        <th i18n="@@reprocessCategory">Category</th>
+        <th i18n="@@reprocessMsg">Message</th>
+        <th i18n="@@reprocessStatus">Status</th>
+        <th i18n="@@reprocessCreationDate">Creation Date</th>
+        <th i18n="@@reprocessChangeDate">Change Date</th>
+        <th i18n="@@reprocessAction" class="text-left">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let message of messageList; let i = index">
+        <td>
+          {{ message.id }}
+        </td>
+        <td>
+          {{ message.prid }}
+        </td>
+        <td>
+          {{ displayCategory(message.category) }}
+        </td>
+        <td>
+          <div *ngFor="let msg of message.message | keyvalue">
+            <small>{{msg.key}}: {{msg.value}}</small>
+          </div>
+        </td>
+        <td>
+          {{ displayStatus(message.status) }}
+        </td>
+        <td>
+          {{ message.createdat | date}}
+        </td>
+        <td>
+          <span *ngIf="message?.changedat">{{ message.changedat | date }}</span>
+        </td>
+        <td>
+          <button class="btn btn-primary"
+            i18n="@@reprocessReprocess"
+            (click)="onReprocessClick(message.id)"
+            [disabled]="message.status != 2"
+          >Reprocess</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,99 @@
+<div class="jumbotron">
+  <div class="jumbo-content">
+    <!-- <img
+      src="https://image.flaticon.com/icons/svg/73/73364.svg"
+      class="icon float-left clearfix shadow-lg"
+    /> -->
+    <div class="icon float-left clearfix shadow-lg">
+      <i class="pe-7s-display1"></i>
+    </div>
+
+    <div class="jumbo-info">
+      <h5>Analytics</h5>
+      <p>Data analytics based on the requisitions and User role</p>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div>
+    <h5 class="ml-1">PR Types submitted this month:</h5>
+    <div class="chart">
+      <canvas
+        baseChart
+        [data]="pieChartData"
+        [labels]="pieChartLabels"
+        [chartType]="pieChartType"
+        [options]="pieChartOptions"
+        [plugins]="pieChartPlugins"
+        [colors]="pieChartColors"
+        [legend]="pieChartLegend"
+      >
+      </canvas>
+    </div>
+  </div>
+</div>
+<div class="btn-group" role="group" aria-label="chart">
+  <button class="btn btn-primary" (click)="pieChartLegend = !pieChartLegend">
+    Toggle Legend
+  </button>
+  <button class="btn btn-primary" (click)="changeLegendPosition()">
+    Change Legend Position
+  </button>
+</div>
+<span class="text-muted"
+  >This data is currently static, but will be grabbed from API later.</span
+>
+
+<div class="card p-2 m-2 container text-light bg-midnight-bloom req-card">
+  <div class="row align-items-center">
+    <div class="col col-md-auto">
+      <h5>Pending Requisitions</h5>
+      <p>Waiting for your approval</p>
+    </div>
+    <span class="col text-right"><h1>#1</h1></span>
+  </div>
+</div>
+
+<div class="card p-2 m-2 container req-card">
+  <div class="row align-items-center">
+    <div class="col col-md-auto text-muted">
+      <h5>Total Requisitions Approved</h5>
+      <p>This month</p>
+    </div>
+    <span class="col text-right text-success"><h1>#10</h1></span>
+  </div>
+</div>
+
+<div class="card-deck container">
+  <div class="card p-2 m-2 req-card">
+    <div class="progress" style="height: 2em">
+      <div
+        class="progress-bar bg-success"
+        role="progressbar"
+        style="width: 30%"
+        aria-valuenow="30"
+        aria-valuemin="0"
+        aria-valuemax="100"
+      >
+        <span>30%</span>
+      </div>
+    </div>
+    <span class="text-muted">Allocated Budget (This Year)</span>
+  </div>
+  <div class="card p-2 m-2 req-card">
+      <div class="progress" style="height: 2em">
+        <div
+          class="progress-bar bg-danger"
+          role="progressbar"
+          style="width: 40%"
+          aria-valuenow="40"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        >
+          <span>40%</span>
+        </div>
+      </div>
+      <span class="text-muted">Allocated Budget (Last Year)</span>
+    </div>
+</div>

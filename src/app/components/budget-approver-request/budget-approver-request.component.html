@@ -1,0 +1,499 @@
+<div class=" jumbofix jumbotron bg-light align-items-center">
+  <div class="jumbo-content">
+    <div class="icon float-left clearfix shadow-lg">
+      <i class="pe-7s-add-user"></i>
+    </div>
+    <div class="jumbo-info">
+      <h4 class="text-dark" i18n="@@budgetrequestTitle">Budget Authority Approver Request</h4>
+      <p class="text-secondary" i18n="@@budgetrequestSubTitle">
+        Use this form to request access to create purchase requests or create and approve purchase requests and vendor invoices for payment.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="card p-5 m-4 shadow-lg">
+  <div class="w-100 justify-content-end text-right justify-items-end">
+    <span i18n="@@budgetrequestStatusNew">Status: New</span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<span
+      *ngIf="userFullName" i18n="@@budgetrequestCreatedBy"
+      >Created By: {{ userFullName[0] || 'unauthorized' }} {{ userFullName[1] || 'user' }}</span
+    >&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<span i18n="@@budgetrequestCreatedOn"
+      >Created On: {{ date | date : dateFormat }}</span
+    >
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-md-auto">
+      <label i18n="@@budgetrequestReqFor">Requested For:&nbsp;&nbsp;&nbsp;</label>
+      <ng-select
+        [items]="returnUserList()"
+        [virtualScroll]="true"
+        bindValue="{{returnBindId()}}"
+        bindLabel="{{returnBindLabel()}}"
+        class="aduser-width"
+        i18n-placeholder="@@budgetrequestSelectUser"
+        placeholder="Select a user..."
+        (change)="onRequesterChange($event)"
+        [searchFn]="userSearchFn"
+        #budgetUserSelect
+      >
+        <ng-template ng-option-tmp let-item="item">
+          <div i18n="@@budgetrequestUserSelect">
+            {{ item.employeeID || item.employeeId }} - {{ item.firstName || item.firstname }} {{ item.lastName || item.lastname }},
+            {{ item.title }}
+          </div>
+        </ng-template>
+        <ng-template ng-label-tmp let-item="item">
+          <span i18n="@@budgetrequestUserSelected">{{ item.firstName || item.firstname }} {{ item.lastName || item.lastname }}</span>
+        </ng-template>
+      </ng-select>
+      <div *ngIf="selectedUser" class="mt-4">
+        <label i18n="@@budgetrequestRMgrTitle">Title:&nbsp;&nbsp;&nbsp;</label>
+        <span>{{ selectedUser.title }}</span>
+      </div>
+      <div *ngIf="selectedUserCompany" class="mt-4">
+        <label i18n="@@budgetrequestCompany">Company:&nbsp;&nbsp;&nbsp;</label>
+        <span>{{ selectedUserCompany }}</span>
+      </div>
+      <div *ngIf="selectedUserCostCenter" class="mt-4">
+        <label i18n="@@budgetrequestCostCenter">Cost Center:&nbsp;&nbsp;&nbsp;</label>
+        <span>{{ selectedUserCostCenter }}</span>
+      </div>
+      <div *ngIf="selectedUser" class="mt-4">
+        <label i18n="@@budgetrequestNUserApprovalLevel">Current Approval Level:&nbsp;&nbsp;&nbsp;</label>
+        <span>{{errTransService.returnMsg('upto') + ' $' + (displayEndRangeFromLevel(selectedUserDefaultLevel || 0) | customNumber : numberFormat)}}</span>
+      </div>
+      <div *ngIf="selectedUser" class="mt-4">
+        <label i18n="@@budgetrequestNUserRegionLabel">Current Region Assigned:&nbsp;&nbsp;&nbsp;</label>
+        <span i18n="@@budgetrequestNManagerRegion">{{selectedUserRegion || 'N/A'}}</span>
+      </div>
+    </div>
+    <div class="col-md-auto">
+      <label i18n="@@budgetrequestRManager">Reporting Manager:&nbsp;&nbsp;&nbsp;</label>
+      <span *ngIf="!reportingManager" i18n="@@budgetrequestChooseReq">Choose a requester...</span>
+      <div *ngIf="reportingManager">
+        <span 
+          >{{ reportingManager.employeeID }} - {{ reportingManager.firstName }}
+          {{ reportingManager.lastName }}</span
+        >
+      </div>
+      <div *ngIf="reportingManager" class="mt-4">
+        <label i18n="@@budgetrequestRMgrTitle">Title:&nbsp;&nbsp;&nbsp;</label>
+        <span>{{ reportingManager.title }}</span>
+      </div>
+      <div *ngIf="reportingManagerCompany" class="mt-4">
+        <label i18n="@@budgetrequestCompany">Company:&nbsp;&nbsp;&nbsp;</label>
+        <span>{{ reportingManagerCompany }}</span>
+      </div>
+      <div *ngIf="reportingManager" class="mt-4">
+        <label i18n="@@budgetrequestNUserApprovalLevel">Current Approval Level:&nbsp;&nbsp;&nbsp;</label>
+        <span>{{errTransService.returnMsg('upto') + ' $' + (displayEndRangeFromLevel(reportingManagerLevel || 0) | customNumber : numberFormat)}}</span>
+      </div>
+      <div *ngIf="reportingManager" class="mt-4">
+        <label i18n="@@budgetrequestNUserRegionLabel">Current Region Assigned:&nbsp;&nbsp;&nbsp;</label>
+        <span i18n="@@budgetrequestNManagerRegion">{{reportingManagerRegion || 'None'}}</span>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col p-0">
+      <form [formGroup]="authorityRequestForm" class="row" *ngIf="selectedUser">
+        <div class="col-lg-auto mr-5">
+          <div class="form-group mt-4">
+            <label i18n="@@budgetRequestNAuthAccess">Authorization Access</label>
+            <ng-select
+              [items]="authDisplayOptsRequired || authDisplayOpts"
+              bindValue="value"
+              placeholder="choose..."
+              i18n-placeholder="@@ncrequestnewChoose"
+              formControlName="authForDisplay"
+              (change)="onFormChange()"
+            >
+              <ng-template ng-option-tmp let-item="item">
+                <div i18n="@@budgetrequestAuthLabel">{{item.label}}</div>
+                <small *ngIf="item.desc" i18n="@@budgetrequestAuthDesc">{{item.desc}}</small>
+              </ng-template>
+            </ng-select>
+          </div>
+          <div class="row mt-4" [hidden]="authorityRequestForm.controls.authForDisplay.value === 0">
+            <label i18n="@@budgetrequestNNeedRegionAccess">Do you need access beyond your company?&nbsp;&nbsp;&nbsp;</label>
+            <div class="form-check form-check-inline mr-5">
+              <input class="form-check-input" type="radio" formControlName="needRegion" id="needRegionRadio1" value="1">
+              <label class="form-check-label" for="needRegionRadio1" i18n="@@budgetrequestYes">Yes</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="needRegion" id="needRegionRadio2" value="2">
+              <label class="form-check-label" for="needRegionRadio2" i18n="@@budgetrequestNo">No</label>
+            </div>
+          </div>
+          <div class="form-group mt-4" [hidden]="authorityRequestForm.controls.needRegion.value == 2 || authorityRequestForm.controls.authForDisplay.value === 0">
+            <label for="regionS" i18n="@@budgetrequestSelectRegion"
+              >Select the region for the required access</label
+            >
+            <ng-select
+              id="regionS"
+              [items]="regionOptions"
+              formControlName="authRegion"
+              (change)="onFormChange()"
+            >
+            </ng-select>
+          </div>
+        </div>
+      </form>
+      <br>
+      <form [formGroup]="authorityRequestForm" class="row" *ngIf="selectedUser && authorityRequestForm.controls.authForDisplay.value === 'A'">
+        <div class="col-lg-auto">
+          <div class="form-group mt-4">
+            <label i18n="@@budgetrequestDoNeedSpcl">Do you need special functional authority</label>
+            <div class="row">
+              <div class="col-md-auto form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="needExceptional"
+                  formControlName="needExceptional"
+                  id="needExceptional1"
+                  value="1"
+                  (change)="onFormChange()"
+                />
+                <label class="form-check-label" for="needExceptional1" i18n="@@budgetrequestYes">
+                  Yes
+                </label>
+              </div>
+              <div class="col-md-auto form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="needExceptional"
+                  formControlName="needExceptional"
+                  id="needExceptional2"
+                  value="2"
+                  (change)="onFormChange()"
+                />
+                <label class="form-check-label" for="needExceptional2" i18n="@@budgetrequestNo">
+                  No
+                </label>
+              </div>
+            </div>
+          </div>
+          <ng-container *ngFor="let entry of specialAuths; let i = index">
+            <div
+              class="form-group mt-4"
+              *ngIf="authorityRequestForm.value.needExceptional == 1"
+            >
+              <label for="specialneeded{{i}}" class="mt-4 clearfix" i18n="@@budgetrequestCategory"
+                >Category
+                <button
+                  (click)="onRemoveSpecialRow(i)"
+                  class="float-right btn btn-sm btn-danger"
+                  [disabled]="specialAuths.length === 1"
+                  [hidden]="specialAuths.length === 1"
+
+                >
+                  <i class="pe-7s-close"></i>
+                  Remove
+                </button>
+              </label>
+              <ng-select
+                id="specialneeded{{i}}"
+                [items]="categoryOptions"
+                bindLabel="Category"
+                bindValue="ID"
+                i18n-placeholder="@@budgetrequestChooseCat"
+                placeholder="Choose a category"
+                [(ngModel)]="entry.category"
+                [ngModelOptions]="{standalone: true}"
+                (change)="getCurrentLevelFromCategory(entry, $event)"
+              >
+              </ng-select>
+              <label for="spcAuthLv{{i}}" class="mt-4" i18n="@@budgetrequestAuthLevel">Authority Level</label>
+              <div class="d-inline-flex">
+                <ng-select
+                  id="spcAuthLv{{i}}"
+                  [items]="rangeOptions"
+                  bindLabel="endrange"
+                  i18n-placeholder="@@budgetrequestSelectTitle"
+                  placeholder="select a title"
+                  [(ngModel)]="entry.level"
+                  [ngModelOptions]="{standalone: true}"
+                  [disabled]="!entry.category"
+                  class="auth-level"
+                  (change)="onFormChange()"
+                >
+                  <ng-template ng-label-tmp let-item="item">
+                    <span>{{errTransService.returnMsg('upto') + ' $' + (item.endrange | customNumber : numberFormat)}}</span>
+                  </ng-template>
+                  <ng-template ng-option-tmp let-item="item">
+                    <span>{{errTransService.returnMsg('upto') + ' $' + (item.endrange | customNumber : numberFormat)}}</span>
+                  </ng-template>
+                </ng-select>
+                <small
+                  *ngIf="entry.category && displayUserCurrentCatLevel(entry.category)"
+                  i18n="@@budgetrequestNUptoEndRangeCurrent"
+                >
+                  &nbsp;&nbsp;&nbsp;Current Level: Up to $ {{displayUserCurrentCatLevel(entry.category) | customNumber : numberFormat}}
+                </small>
+                <!-- <select id="spcAuthLv" class="form-control auth-level">
+                </select> -->
+                <!-- <div class="col">
+                  <small class="w-100 row" i18n="@@budgetrequestUpTo1" *ngIf="entry.level">&nbsp;{{'Up to $' +  entry.level?.endrange || 'Select a title'}}</small>
+                  <small class="row" i18n="@@budgetrequestCurrentLevel1" *ngIf="this.authorityRequestForm.value.authType == 3">&nbsp;Current Level: {{handleTitleDisplay(entry)}}</small>
+                </div> -->
+              </div>
+              <!-- <br>
+              <label for="whyAuth" class="mt-4" i18n="@@budgetrequestChangeReason">Reasons for the change:</label>
+              <textarea id="whyAuth" class="form-control" [(ngModel)]="entry.reasons" [ngModelOptions]="{standalone: true}" (change)="onFormChange()"></textarea> -->
+            </div>
+          </ng-container>
+          <button
+            *ngIf="authorityRequestForm.value.needExceptional == 1"
+            (click)="onAddSpecialRow()"
+            class="btn btn-sm btn-primary"
+            i18n="@@budgetrequestAddAnother"
+          >
+            Add another
+          </button>
+        </div>
+      </form>
+      <!-- <form [formGroup]="authorityRequestForm" class="row" *ngIf="selectedUser">
+        <div class="col-lg-auto">
+          <h4><strong>Budget Authority</strong></h4>
+          <ng-select
+            [items]="yesNoDisplay"
+            bindValue="value"
+            placeholder="choose..."
+            formControlName="budgetAuthority"
+            (change)="onBudgetAuthChange()"
+          >
+          </ng-select>
+          <ng-container>
+            <div class="form-group mt-4">
+              <label for="authNeeded">Level</label>
+              <div class="d-inline-flex">
+                <ng-select
+                  [items]="titleOptions"
+                  bindLabel="title"
+                  placeholder="select a title"
+                  formControlName="levelNeeded"
+                  class="auth-level"
+                  (change)="onAuthLevelChange()"
+                >
+                  <ng-template ng-footer-tmp *ngIf="selectedUserDefaultLevel">
+                    <span>{{'Current Level: Up to $' + displayEndRangeFromLevel(selectedUserDefaultLevel || 0)}}</span>
+                  </ng-template>
+                  <ng-template ng-footer-tmp *ngIf="!selectedUserDefaultLevel">
+                    <span>{{'Current Level: No Authorization'}}</span>
+                  </ng-template>
+                </ng-select>
+                <div class="col">
+                  <small class="row w-100" *ngIf="this.authorityRequestForm.value.levelNeeded">&nbsp;{{'Up to $' +  this.authorityRequestForm.value.levelNeeded?.endrange || 'Select a title'}}</small>
+                  <small class="row" *ngIf="this.authorityRequestForm.value.authType == 3">&nbsp;Current Level: {{ displayTitleFromLevel(selectedUserDefaultLevel) }}</small>
+                </div>
+              </div>
+            </div>
+            <div class="form-group mt-4">
+              <label for="needExceptional">Does the user need special authority?</label>
+              <ng-select
+                [items]="yesNoDisplay"
+                bindValue="value"
+                placeholder="choose..."
+                formControlName="needExceptional"
+                id="needExceptional"
+                (change)="onFormChange()"
+              >
+              </ng-select>
+            </div>
+            <div class="mt-4" [hidden]="!this.authorityRequestForm.controls.needExceptional.value || !this.authorityRequestForm.controls.budgetAuthority.value">
+              <div class="card m-1 overflow-auto shadow-lg">
+                <table class="table table-striped table-main table-bordered m-0">
+                  <thead>
+                    <tr>
+                      <th>
+                        &nbsp;
+                      </th>
+                      <th>Requested Range</th>
+                    </tr>
+                  </thead>
+                  <tr
+                    *ngFor="let category of categoryOptions; let i = index"
+                  >
+                    <th>{{ category?.Category }}</th>
+                    <td class="width-12-em">
+                      <ng-select
+                        [items]="titleOptions"
+                        bindLabel="title"
+                        bindValue="id"
+                        [(ngModel)]="chosenLevels[i]"
+                        [ngModelOptions]="{ standalone: true }"
+                        [virtualScroll]="true"
+                        appendTo="body"
+                        class="dropdown-width-15"
+                        (change)="onFormChange()"
+                      >
+                        <ng-template ng-label-tmp let-item="item">
+                          <span>{{ "Up to $" + (item.endrange || 0) }}</span>
+                        </ng-template>
+                        <ng-template ng-footer-tmp *ngIf="userCurrentLevels && userCurrentLevels[i]">
+                          <span>{{ "Current: Up to $" + (userCurrentLevels[i]?.endRange || 0) }}</span>
+                        </ng-template>
+                      </ng-select>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </form> -->
+      <br>
+      <!-- <form [formGroup]="authorityRequestForm" class="row" *ngIf="selectedUser">
+        <div class="col-lg-auto mr-5">
+          <h4><strong>Create Access</strong></h4>
+          <ng-select
+            [items]="yesNoDisplay"
+            bindValue="value"
+            placeholder="choose..."
+            formControlName="createAccess"
+            (change)="onFormChange()"
+          >
+          </ng-select>
+        </div>
+      </form>
+      <br> -->
+      <form [formGroup]="authorityRequestForm" class="row" *ngIf="selectedUser">
+        <div class="col-lg-auto mr-5">
+          <div class="form-group mt-4">
+            <label for="commentsAO" i18n="@@budgetrequestComments">Comments:</label>
+            <textarea class="form-control width-30-em" id="commentsAO" formControlName="authComments" (change)="onFormChange()"></textarea>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col p-0">
+      <div *ngIf="hierarchy[0]" class="col-lg-auto ml-5">
+        <div class="row">
+          <div>
+            <div class="row">
+              <div class="timeline-centered">
+                <ng-container *ngFor="let name of hierarchy; let i = index">
+                  <article class="timeline-entry remove-last">
+                    <div class="timeline-entry-inner">
+                      <div
+                        class="timeline-icon"
+                        [ngClass]="{
+                          'bg-success': name.name.includes('@'),
+                          'bg-danger':
+                            name.name.includes('^') &&
+                            !name.name.includes('@'),
+                          'bg-gold':
+                            (name.name.includes('#') &&
+                              !name.name.includes('^') &&
+                              !name.name.includes('@')) ||
+                            (!name.name.includes('@') &&
+                              !name.name.includes('^') &&
+                              !name.name.includes('#'))
+                        }"
+                      >
+                        <i
+                          class="entypo-feather bigger-font"
+                          [ngClass]="{
+                            'pe-7s-angle-down': hierarchy[i + 1]
+                          }"
+                        ></i>
+                      </div>
+                      <div class="timeline-label"
+                        [ngClass]="{'custom-pending-approval': name.name.includes('#') &&
+                          !name.name.includes('^') &&
+                          !name.name.includes('@')}"
+                      >
+                        <h2
+                          [innerHTML]="name.name | budgetHierarchy:{sub: name.substitutor}"
+                        ></h2>
+                        <h6
+                          *ngIf="name.fieldName"
+                          class="text-smartbuy"
+                          [innerText]="name.fieldName"
+                        ></h6>
+                        <!-- <div
+                          *ngIf="
+                            !name.name.includes('^') &&
+                            name.name.includes('@')
+                          "
+                        >
+                          Approved
+                        </div>
+                        <div
+                          *ngIf="
+                            name.name.includes('^') &&
+                            !name.name.includes('@')
+                          "
+                        >
+                          Reject
+                        </div>
+                        <div
+                          *ngIf="
+                            name.name.includes('#') &&
+                            !name.name.includes('^') &&
+                            !name.name.includes('@')
+                          "
+                        >
+                          Pending Approval
+                        </div> -->
+                        <!--<div
+                          *ngIf="
+                            !name.name.includes('#') &&
+                            !name.name.includes('^') &&
+                            !name.name.includes('@')
+                          "
+                        >
+                          Pending
+                        </div>-->
+                        <p
+                          class="text-sm"
+                          *ngIf="name.title"
+                          [innerHTML]="name.title"
+                        ></p>
+                        <!-- <span
+                          *ngIf="
+                            name.name.includes('^') ||
+                            name.name.includes('@')
+                          "
+                        >
+                          <span
+                            class="text-sm"
+                            *ngIf="name.displayDt"
+                            [innerHTML]="name.displayDt"
+                          ></span>
+                        </span> -->
+                      </div>
+                    </div>
+                  </article>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<div *ngIf="selectedUser">
+  <br />
+  <br />
+  <br />
+  <div class="row justify-content-between justify-items-between mt-4">
+    <button i18n="@@budgetrequestReview" class="btn btn-warning" (click)="onReviewClick()">
+      Review
+    </button>
+    <button i18n="@@viewbudgetrequestCancel1" class="btn btn-danger" *ngIf="requestId" (click)="onCancelClick()">
+      Cancel
+    </button>
+    <button i18n="@@budgetrequestSubmit" class="btn btn-success" [disabled]="!hierarchy[0]" (click)="onSubmitClick()">
+      Submit
+    </button>
+  </div>
+</div>
